@@ -1,0 +1,205 @@
+<h1>Programmation de jeux avec SDL</h1>
+
+<p>SDL (Simple DirectMedia Layer) est une API (Application Program Interface) multimédia multi-plateforme libre. Certains vous diront que c'est un produit concurrent de DirectX, ce qui n'est pas tout à fait vrai. SDL est une API de bas niveau, et ne permet pas tout ce que DirectX permet. Mais si l'on prend en compte un certain nombre d'extension de SDL, il est vrai que les possibilités se rapprochent de celles offertes par DirectX.</p> 
+
+<p>Avant de commencer, quelques rappels sur les commandes qui pourront être utiles :</p> 
+<ul>
+<li>Pour désarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
+<li>Pour compiler lorsqu'il y a un Makefile : <span class="commande">make</span></li>
+<li>Pour nettoyer les sources (supprimer les fichiers objets) : <span class="commande">make clean</span></li>
+</ul>
+
+<h2>1 - Initialisation de SDL</h2>
+
+<p>Pour utiliser SDL, il faut tout d'abord inclure le fichier SDL.h. L'initialisation se fait à l'aide de la fonction <span class="inline">SDL_Init</span> qui prend en argument un drapeau indiquant les modules à initialiser. Ce drapeau peut-être une combinaison (à l'aide de l'opérateur | ) de : <span class="inline">SDL_INIT_VIDEO</span>, <span class="inline">SDL_INIT_AUDIO</span>, <span class="inline">SDL_INIT_TIMER</span>, <span class="inline">SDL_INIT_CDROM</span>, <span class="inline">SDL_INIT_JOYSTICK</span> qui initialisent chacun la partie de SDL correspondant. Il existe aussi le drapeau <span class="inline">SDL_INIT_EVERYTHING</span> qui initialise tout, <span class="inline">SDL_INIT_NOPARACHUTE</span> qui demande à SDL de ne pas gérer les erreurs et <span class="inline">SDL_INIT_EVENTTHREAD</span> qui crée un thread supplémentaire pour gérer les évenements.</p>
+
+<p>Il existe aussi une fonction <span class="inline">SDL_InitSubSystem</span> qui utilise les même drapeaux et qui permet, une fois SDL initialisé, de rajouter un des modules non initialisé.</p>
+
+<p>Une fois SDL initialisé, la fonction <span class="inline">SDL_GetError</span> permet de récupérer la dernière erreur produite par SDL sous forme de chaine de caractère.</p>
+
+<p>Enfin, les fonction <span class="inline">SDL_QuitSubSystem</span> (qui prend pour paramètre les mêmes drapeaux que <span class="inline">SDL_Init</span> et <span class="inline">SDL_InitSubSystem</span>) et <span class="inline">SDL_Quit</span> permettent de fermer un ou tous les modules.</p>
+
+<p>Je vous propose <a href="src/SDL-Ex1.tar.gz">cet exemple</a> qui illustre l'utilisation de ces fonctions : </p>
+
+<p class="code">
+#include &lt;SDL/SDL.h&gt;<br/>
+#include &lt;stdio.h&gt;<br/>
+<br/>
+int main()<br/>
+{<br/>
+&nbsp;&nbsp;  printf("Initialisation de SDL.\n");<br/>
+<br/>
+&nbsp;&nbsp;  if(SDL_Init(SDL_INIT_VIDEO) == -1)<br/>
+&nbsp;&nbsp;  {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;    printf("Impossible d'initaliser SDL : %s.\n", SDL_GetError());<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;    return -1;<br/>
+&nbsp;&nbsp;  }<br/>
+<br/>
+&nbsp;&nbsp;  printf("SDL est initialisé.\n");<br/>
+<br/>
+&nbsp;&nbsp;  printf("Quitte SDL.\n");<br/>
+&nbsp;&nbsp;  SDL_Quit();<br/>
+<br/>
+&nbsp;&nbsp;  return 0;<br/>
+}
+</p>
+
+<p>Dans la mesure ou <span class="inline">SDL_Quit()</span> doit être appelée de manière systématique avant la terminaison du programme, il peut être judicieux d'insérer la ligne <span class="inline">atexit(SDL_Quit);</span> juste après l'initialisation de SDL. Il est aussi souvent interessant de placer toutes les initialisations dans une fonction séparée, ce qui n'est pas pour autant une raison d'abuser des variables globales.</p>
+
+<h2>2 - Dessiner à l'écran</h2>
+
+<p>Avant de pouvoir afficher quoi que ce soit à l'écran, il faut créer votre fenêtre. Cela se fait à l'aide de la fonction <span class="inline">SDL_SetVideoMode</span> qui renvoi un pointeur sur une surface représentant le contenu de la fenêtre. Les paramètres de cette fonction sont dans l'ordre : la largeur et la hauteur en pixel, le nombre de bits par pixel et les drapeaux. Parmi les drapeaux, on trouvera <span class="inline">SDL_DOUBLEBUF</span> qui permet d'avoir un backbuffer, <span class="inline">SDL_ANYFORMAT</span> qui permet d'utiliser une autre résolution que celle demandé si cela est nécessaire et <span class="inline">SDL_FULLSCREEN</span> qui permet d'avoir une fenêtre en plein écran. Il existe de nombreuses autres options. Je vous renvoi à <a href="http://sdldoc.csn.ul.ie/">la documentation de SDL</a> pour plus de détails.</p>
+
+<p>Une fois que nous avons récupéré notre surface principale, nous allons pouvoir dessiner dessus. Il est possible d'avoir un accès direct à la surface pour écrire pixel par pixel, mais ce n'est pas la technique la plus utilisée. Nous allons utiliser d'autres surfaces que nous positionnerons sur cette surface. Une des fonctions permettant de créer une surface est <span class="inline">SDL_CreateRGBSurface</span>. Elle renvoi un pointeur vers une surface vide (ou plutôt remplie de noir). Nous allons la remplir à l'aide de la fonction <span class="inline">SDL_FillRect()</span> qui permet de tracer un rectangle plein dans une surface.</p>
+
+<p>Nous copions ensuite cette surface dans la surface principale à l'aide de la fonction <span class="inline">SDL_BlitSurface</span> qui copie une partie d'une surface dans une autre. Nous affichons ensuite le tout à l'écran à l'aide de la fonction <span class="inline">SDL_Flip()</span> qui permet d'afficher le résultat à l'écran. Cette fonction permute le backbuffer et la surface primaire si l'on à utilisé <span class="inline">SDL_DOUBLEBUF</span>, ou appelle la fonction <span class="inline">SDL_UpdateRect</span> sur la totalité de l'écran dans le cas contraire.</p>
+
+<p>Voici les parties importantes de <a href="src/SDL-Ex2.tar.gz">cet exemple</a> :</p>
+
+<p class="code">
+SDL_Rect rect;<br/>
+SDL_Surface *Screen, *rectangle;<br/>
+<br/>
+void affichage()<br/>
+{<br/>
+&nbsp;&nbsp;  SDL_FillRect(rectangle, NULL, SDL_MapRGB(rectangle-&gt;format, 0, 255, 0));<br/>
+&nbsp;&nbsp;  SDL_FillRect(Screen, NULL, 0);<br/>
+<br/>
+&nbsp;&nbsp;  rect.x = (Screen-&gt;w / 2) - (rect.w / 2);<br/>
+&nbsp;&nbsp;  rect.y = (Screen-&gt;h / 2) - (rect.h / 2);<br/>
+&nbsp;&nbsp;  rect.w = Screen-&gt;w / 2;<br/>
+&nbsp;&nbsp;  rect.h = Screen-&gt;h / 2;<br/>
+<br/>
+&nbsp;&nbsp;  SDL_BlitSurface(rectangle, NULL, Screen, &amp;rect);<br/>
+&nbsp;&nbsp;  SDL_Flip(Screen);<br/>
+}<br/>
+<br/>
+void InitSDL()<br/>
+{<br/>
+<br/>
+...<br/>
+<br/>
+&nbsp;&nbsp;  Screen = SDL_SetVideoMode (640, 480, 16, SDL_SWSURFACE | SDL_DOUBLEBUF);<br/>
+&nbsp;&nbsp;  if (Screen == NULL)<br/>
+&nbsp;&nbsp;    {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  fprintf (stderr, "Erreur d'initialisation du mode video: %s\n", SDL_GetError ());<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  exit(-1);<br/>
+&nbsp;&nbsp;  }<br/>
+&nbsp;&nbsp;  rectangle = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, 0, 0, 0, 0);<br/>
+}
+</p>
+
+<h2>3 - Chargement d'images</h2>
+
+<p>Maintenant que nous savons comment afficher des surfaces à l'écran, il s'agit de savoir comment charger des choses interessantes dans des surfaces. Nous allons commencer par de simples images au format BMP. SDL fournit une fonction très pratique et simple d'utilisation : <span class="inline">SDL_LoadBMP</span> qui prend comme paramètre un nom de fichier, et renvoi une surface contenant l'image.</p>
+
+<p>Voici <a href="src/SDL-Ex3.tar.gz">un exemple</a> d'utilisation de cette fonction :</p>
+
+<p class="code">
+SDL_Surface *image;<br/>
+<br/>
+image = SDL_LoadBMP(fileName);<br/>
+if(image == NULL)<br/>
+{<br/>
+&nbsp;&nbsp;  fprintf(stderr, "Impossible de charger %s : %s\n", fileName, SDL_GetError());<br/>
+&nbsp;&nbsp;  return NULL;<br/>
+}<br/>
+</p>
+
+<p>Cette fonction est cependant très limité puisqu'elle ne permet pas de charger d'autres format que le format BMP. Heureusement, il existe une extension de SDL qui permet de charger n'importe quel type d'image : <a href="http://www.libsdl.org/projects/SDL_image/">SDL_image</a>. On peut alors utiliser la fonction <span class="inline">IMG_Load</span> exactement de la même façon que SDL_LoadBMP comme le montre <a href="src/SDL-Ex4.tar.gz">cet exemple</a> : </p>
+
+<p class="code">
+SDL_Surface *image;<br/>
+<br/>
+image = IMG_Load(fileName);<br/>
+if(image == NULL)<br/>
+{<br/>
+&nbsp;&nbsp;  fprintf(stderr, "Impossible de charger %s : %s\n", fileName, SDL_GetError());<br/>
+&nbsp;&nbsp;  return NULL;<br/>
+}<br/>
+</p>
+
+<p>Une fois l'image chargée, il est possible de définir une couleur qui sera transparente, c'est à dire qui ne sera pas affichée lors de la copie de la surface sur une autre. Cela se fait à l'aide de la fonction <span class="inline">SetColorKey()</span> qui prend comme arguments la surface, un drapeau qui sera placé à <span class="inline">SDL_SRCCOLORKEY</span> et la couleur. Il existe aussi la fonction <span class="inline">SetAlpha()</span> qui permet de définir un taux d'opacité pour la surface. Ici encore, les arguments sont : la surface, un drapeau placé à <span class="inline">SDL_SRCALPHA</span> et la valeur de la transparence entre 0 (totalement transparent) et 255 (totalement opaque)</p>
+
+<h2>4 - Ecriture de texte</h2>
+
+<p>SDL ne permet pas d'écrire de texte directement sur une surface, contrairement à ce qu'on pourrait faire avec DirectX. Par contre, il existe une extension de SDL appelé <a href="http://www.libsdl.org/projects/SDL_ttf/">SDL_ttf</a> qui permet d'obtenir une surface contenant du texte. Cette extension doit être installée en supplément de SDL.</p>
+
+<p>Il faut d'abord bien penser à inclure le fichier SDL_ttf.h. Il faut ensuite rajouter quelques lignes à notre fonction d'initialisation de SDL. On peut alors utiliser la fonction <span class="inline">TTF_OpenFont</span> pour charger une police, puis les fonctions <span class="inline">TTF_RenderText_Solid</span>, <span class="inline">TTF_RenderText_Shaded</span> et <span class="inline">TTF_RenderText_Blended</span> pour créer une surface contenant le texte.</p>
+
+<p>La première fonction permet d'obtenir du texte aliasé sur un fond transparent. La deuxième méthode produit un texte anti-aliasé sur un fond de couleur. La troisième méthode produit un texte anti-aliasé sur un fond transparent avec un canal alpha.</p>
+
+<p>Voici un comparatif de ces trois méthodes :</p>
+
+<table class="tableau">
+<tr><th>Methode</th><th>Création</th><th>Blit</th><th>Fond</th><th>Qualité</th></tr>
+<tr><td>TTF_RenderText_Solid</td><td>Rapide</td><td>Rapide</td><td>Transparent</td><td>Médiocre</td></tr>
+<tr><td>TTF_RenderText_Shaded</td><td>Lente</td><td>Rapide</td><td>Coloré</td><td>Bonne</td></tr>
+<tr><td>TTF_RenderText_Blended</td><td>Lente</td><td>Lente</td><td>Transparent</td><td>Bonne</td></tr>
+</table>
+
+<p>Voici le type de code qu'il faut rajouter pour créer une surface contenant "Hello World !". Je vous propose <a href="src/SDL-Ex5.tar.gz">un exemple similaire</a>. Notez que si vous utilisez beaucoup de texte, il peut être judicieux de ne pas charger/fermer la police à chaque fois, mais de la conserver en mémoire tant que vous en avez besoin.</p>
+
+<p class="code">
+#include &lt;SDL/SDL.h&gt;<br/>
+#include &lt;SDL/SDL_ttf.h&gt;<br/>
+<br/>
+...<br/>
+<br/>
+void SDL_Init()<br/>
+{<br/>
+  ...<br/>
+    <br/>
+    &nbsp;&nbsp;  if (TTF_Init() &lt; 0)<br/>
+    &nbsp;&nbsp;  {<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;  fprintf(stderr, "Impossible d'initialiser SDL_TTF: %s\n",SDL_GetError());<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;  exit(-1);<br/>
+        &nbsp;&nbsp;  }<br/>
+}<br/>
+...<br/>
+<br/>
+&nbsp;&nbsp;  TTF_Font *font = TTF_OpenFont("babelfish.ttf", 40);<br/>
+&nbsp;&nbsp;  if (!font)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  fprintf(stderr, "Impossible de charger la taille %dpt depuis %s: %s\n", font_size, font_face, SDL_GetError());<br/>
+<br/> 
+&nbsp;&nbsp;  SDL_Surface *text = TTF_RenderText_Shaded(font, "Hello World !", fgColor, bgColor);<br/>
+&nbsp;&nbsp;  if (text==NULL)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  fprintf(stderr, "Impossible de créer la surface contenant le texte : %s\n", SDL_GetError());<br/>
+<br/>
+&nbsp;&nbsp;  TTF_CloseFont(font);<br/>
+</p>
+
+<p>Dans ce code, <span class="inline">fgcolor</span> et <span class="inline">bgcolor</span> sont des variables de type <span class="inline">SDL_Color</span> représentant respectivement la couleur du texte et la couleur du fond de la texture.</p>
+
+<h2>5 - Une classe pour des animations</h2>
+
+<p>Nous allons illustrer nos connaissances en créant une classe en C++ permettant de charger et d'afficher assez facilement des animations. Nous proposerons dans un premier temps deux constructeurs : l'un chargeant les images à partir de fichiers, l'autre prenant des surfaces existantes. Nous proposerons aussi quelques methodes permettant de traiter d'un seul coup toute l'animation plutôt que d'avoir à traiter séparement chaque image. Voici le squelette de notre classe : </p>
+
+<p class="code">
+class animPict<br/>
+{<br/>
+  public:<br/>
+         &nbsp;&nbsp;  animPict(int num, char **fichiers, int delay);<br/>
+           &nbsp;&nbsp;  animPict(int num, SDL_Surface **images, int delay);<br/>
+           &nbsp;&nbsp;  ~animPict();<br/>
+           &nbsp;&nbsp;  void setColorKey(Uint32 flags, Uint32 key);<br/>
+           &nbsp;&nbsp;  void setAlpha(Uint32 flags, Uint32 alpha);<br/>
+           &nbsp;&nbsp;  SDL_Surface *getPicture() { animer(); return Pictures[animPos % nbPict]; };<br/>
+           &nbsp;&nbsp;  void animer();<br/>
+           <br/>
+  private:<br/>
+          &nbsp;&nbsp;  SDL_Surface **Pictures;<br/>
+            &nbsp;&nbsp;  int nbPict;<br/>
+            &nbsp;&nbsp;  int animPos;<br/>
+            &nbsp;&nbsp;  int delay;<br/>
+            &nbsp;&nbsp;  Uint32 nextTime;<br/>
+};
+</p>
+
+<p>Notre classe est donc composée d'un tableau de surfaces, l'une d'entre elles étant la surface courante (désignée par animPos). Le delai entre les images peut-être défini pour chaque animation. On peut regler certains parametres (couleur transparente, canal alpha) de la même manière que sur une simple surface.</p>
+
+<p>Le principe de fonctionnement est donc de créer une animation à l'aide d'un des deux constructeurs, puis d'appeler la fonction getPicture dans la routine d'affichage pour obtenir la bonne image. Vous pouvez télécharger <a href="src/SDL-Ex6.tar.gz">la classe avec un programme d'exemple</a>.</p>
+
+<h1>A suivre ...</h1>
+
+<br />

@@ -1,0 +1,896 @@
+<h1>L'assembleur sous GNU/Linux</h1>
+
+<p>La page &eacute;tant un peu longue, voici ce que vous trouverez, avec des raccourcis pour faciliter la navigation :</p>
+<ul>
+<li><a href="#theorie">L'indispensable th&eacute;orie</a></li>
+<li>  
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#data">Repr&eacute;sentation des donn&eacute;es</a></li>
+    <li><a href="#archi">Architecture d'un ordinateur</a></li>
+  </ul>
+</li>
+<li><a href="#instructions">Les principales instructions</a></li>
+<li>  
+  <ul>
+    <li><a href="#copie">Copier des donn&eacute;es</a></li>
+    <li><a href="#operations">Effectuer des op&eacute;rations</a></li>
+    <li><a href="#sauts">Sauter</a></li>
+    <li><a href="#autres">D'autres instructions utiles</a></li>
+  </ul>
+</li>
+<li><a href="#premiers">Les premiers pas</a></li>
+<li>
+  <ul>
+    <li><a href="#bonjour">Bonjour !</a></li>
+    <li><a href="#horloge">Horloge</a></li>
+    <li><a href="#addition">Addition de deux nombres</a></li>
+    <li><a href="#exercices">Exercices</a></li>
+  </ul>
+</li>
+<li><a href="#librairie">Cr&eacute;er une librairie</a></li>
+<li>
+  <ul>
+    <li><a href="#simple">Exemple simpliste</a></li>
+  </ul>
+</li>
+</ul>
+
+<a name="theorie"></a>
+<h2>1 - L'indispensable th&eacute;orie</h2>
+
+<a name="introduction"></a>
+<h3>1.1 - Introduction</h3>
+
+<p>L'assembleur est un langage de programmation proche du langage machine. Il necessite donc un minimum de connaissances &agrave; propos du fonctionnement d'un ordinateur.
+Contrairement &agrave; certains languages plus &eacute;volu&eacute;s (Pascal, Java, C...) l'assembleur ne peut &ecirc;tre interpr&eacute;t&eacute; instruction par instruction. Par exemple, en pascal, pour &eacute;crir un message on tape &quot;write ('Voici un message');&quot; et l'ordinateur affiche &quot;Voici un message&quot; quand on lance le programme. En assembleur, la tache n'est pas aussi simple et n&eacute;cessite au moins trois instructions. Avant d'utiliser l'assembleur, il faut comprendre les concepts d'interruption, de registres...</p>
+
+<p>Certes l'assembleur est un language complexe, mais il pr&eacute;sente beaucoup d'avantages :</p>
+<ul class="liste">
+<li>on peut l'inserer dans des langages de plus haut niveau pour les parties n&eacute;cessitant d'&ecirc;tre optimis&eacute;es soigneusement en fonction de l'architecture cibl&eacute;e</li>
+<li>il permet d'acc&eacute;der &agrave; la totalit&eacute; des capacit&eacute;s de la machine, et est donc <strong>potentiellement</strong> plus puissant que n'importe quel autre langage</li>
+<li>c'est le seul language permettant de modifier un programme compil&eacute; dont on a pas les sources (utile pour le reverse-engineering entre autres)</li>
+</ul>
+
+<p>Globalement, il y a peu de raison de choisir de programmer en assembleur de nos jours mis &agrave; part &agrave; des fins p&eacute;dagogiques. Il est utile de l'apprendre et de le pratiquer pour mieux comprendre comment fonctionne un ordinateur et comment est execut&eacute; un programme.</p>
+
+<a name="data"></a>
+<h3>1.2 - Repr&eacute;sentation des donn&eacute;es</h3>
+
+<h4>Les nombres entiers positifs</h4>
+
+<p>Il faut savoir que si l'homme utilise la base math&eacute;matique 10, c'est parce qu'il &agrave; dix doigts et que si l'ordinateur utilise la base 2, c'est qu'il n'a que deux &eacute;tats accessibles (tous ceux qui ont pens&eacute; que c'&eacute;tait parce que le processeur n'a que deux doigts ont perdu).  Avant toute chose, revenons sur la base 10. Le nombre 4532 peut
+&ecirc;tre d&eacute;compos&eacute; en :</p>
+
+<p>4 * 1000 + 5 * 100 + 3 * 10 + 2 * 1<br/>
+<br/>
+ou encore : </p>
+
+<p>4 * (10^3) + 5 * (10^2) + 3 * (10^1) + 2 * (10^0)<br/>
+<br/>
+Ceci pour amener que pour toute base N :</p>
+
+<p>VWXYZ = V * (N^4) + W * (N^3) + X * (N^2) + Y * (N^1) + Z * (N^0)<br/>
+<br/>
+avec V,W,X,Y et Z qui sont tous inferieurs &agrave; N.</p>
+
+<p>Cette definition n'utilise que 5 facteurs, mais si le nombre de facteurs augmente, elle ne change pas. L'exposant de N continu de croître vers la gauche. Dans la base 2 :</p>
+
+<p>100 = 1 * (2^2) + 0 * (2^1) + 0 * (2^0) = 4</p>
+
+<p>Cela paraît simple, diront certains, &agrave; quoi nous r&eacute;pondrons qu'il n'y a aucun vice cach&eacute; et qu'il suffit de faire attention pour ne pas se tromper. Exercez-vous et vous verrez, c'est en buchant qu'on devient bucheron (proverbe bien connu).</p>
+
+<p>Maintenant, sachez que le processeur travaille avec des registres de 8, 16, 32 chiffres (ou bits) et m&ecirc;me 64 (avec le MMX). Cela veut dire que pour affecter une valeure &agrave; un registre, vous devrez envoyer une suite de 8, 16, 32 ou 64 bits. Maintenant, si je dis &quot; J'ai mis la valeure 1110011000101101 &agrave; l'adresse 0110010011011000:1111011010100101&quot;, vous me r&eacute;pondrez que vous n'aimer pas la cuisine japonaise car vous vous &ecirc;tes d&eacute;ja cass&eacute;s les dents en mangeant les baguettes. C'est pour cela que des personnes tr&egrave;s sens&eacute;es ont d&eacute;cid&eacute; d'utiliser l'hexadecimal (ou base 16). En effet, chaque chiffre permet de stocker autant d'informations que quatres bits. Je vous vois d&eacute;j&agrave; venir. Vous vous dites &quot;Mais qu'est-ce qui va nous sortir... J'connais que 10 chiffres moi. Comment il veut faire une base 16 avec 10 chiffres ???&quot; He ben les m&ecirc;mes gars pas b&ecirc;tes que tout &agrave; l'heure ont utilis&eacute;s les lettres. On &agrave; donc:</p>
+
+<div class="centre">
+
+<table class="tableau">
+    <tr>
+        <td class="red">Hexa</td>
+        <td class="yellow">Decimal</td>
+        <td class="green">Binaire</td>
+        <td class="red">Hexa</td>
+        <td class="yellow">Decimal</td>
+        <td class="green">Binaire</td>
+        <td class="red">Hexa</td>
+        <td class="yellow">Decimal</td>
+        <td class="green">Binaire</td>
+        <td class="red">Hexa</td>
+        <td class="yellow">Decimal</td>
+        <td class="green">Binaire</td>
+    </tr>
+    <tr>
+        <td class="red">0</td>
+        <td class="yellow">0</td>
+        <td class="green">0</td>
+        <td class="red">4</td>
+        <td class="yellow">4</td>
+        <td class="green">100</td>
+        <td class="red">8</td>
+        <td class="yellow">8</td>
+        <td class="green">1000</td>
+        <td class="red">C</td>
+        <td class="yellow">12</td>
+        <td class="green">1100</td>
+    </tr>
+    <tr>
+        <td class="red">1</td>
+        <td class="yellow">1</td>
+        <td class="green">1</td>
+        <td class="red">5</td>
+        <td class="yellow">5</td>
+        <td class="green">101</td>
+        <td class="red">9</td>
+        <td class="yellow">9</td>
+        <td class="green">1001</td>
+        <td class="red">D</td>
+        <td class="yellow">13</td>
+        <td class="green">1101</td>
+    </tr>
+    <tr>
+        <td class="red">2</td>
+        <td class="yellow">2</td>
+        <td class="green">10</td>
+        <td class="red">6</td>
+        <td class="yellow">6</td>
+        <td class="green">110</td>
+        <td class="red">A</td>
+        <td class="yellow">10</td>
+        <td class="green">1010</td>
+        <td class="red">E</td>
+        <td class="yellow">14</td>
+        <td class="green">1110</td>
+    </tr>
+    <tr>
+        <td class="red">3</td>
+        <td class="yellow">3</td>
+        <td class="green">11</td>
+        <td class="red">7</td>
+        <td class="yellow">7</td>
+        <td class="green">111</td>
+        <td class="red">B</td>
+        <td class="yellow">11</td>
+        <td class="green">1011</td>
+        <td class="red">F</td>
+        <td class="yellow">15</td>
+        <td class="green">1111</td>
+    </tr>
+</table>
+</div>
+
+<p>On a donc pour r&eacute;caituler FA = 15 * (16^1) + 10 * (16^0) =
+250 en d&eacute;cimal, soit en binaire 11111010 ce qui est quand m&ecirc;me
+moins convivial...</p>
+
+<p>On utilise aussi parfois l'octal qui est une base 8 et qui
+permet de regrouper les bits par trois, mais je n'en parlerai pas
+ici, et je vous laisserai m&eacute;diter tout seul.</p>
+
+<p>Maintenant que vous savez passer d'un nombre hexadecimal &agrave; un
+nombre decimal, pourquoi ne pas apprendre &agrave; le faire dans
+l'autre sens? Et m&ecirc;me apprendre &agrave; passer de d&eacute;cimal &agrave;
+binaire. Pour cela c'est simple : pour toute base N, passer de
+base 10 &agrave; base N reviens &agrave; faire une suite de divisions
+euclidiennes par N, et &agrave; &quot;lire&quot; les restes &agrave;
+l'envers:</p>
+
+<p>Pour passer la valeure decimale 243 en hexad&eacute;cimal, il faut
+faire 243 / 16. Comme en primaire, il y va 15 fois et il reste 3.
+On regarde dans le tableau et on voit que 15 en decimal vaut F en
+hexadecimal. On pose le reste, puis le resultat de la division &agrave;
+gauche du reste et on obtient : 243 = F3. Hyper simple non? On
+recommence avec 1563 :</p>
+
+<p>1563 / 16 = 97 reste 11 (soit B) que l'on pose &agrave; droite.</p>
+
+<p>97 / 16 = 6 reste 1 que l'on pose &agrave; gauche de B. Puis on met
+le 6 tout &agrave; gauche et on obtient 1563 = 61B.</p>
+
+<p>J'en entends d&eacute;j&agrave; qui ralent : &quot;C'est hyper-chiant. On
+est oblig&eacute; d'utiliser l'hexadecimal ? Moi j'aime bien le vieux
+decimal...&quot;</p>
+
+<p>Ben non, on est pas <strong>oblig&eacute;</strong> d'utiliser
+l'hexadecimal. On peut aussi utiliser le binaire et le decimal.
+En fait, on peut pr&eacute;ciser la base utilis&eacute;e en
+faisant suivre le nombre d'un b en binaire, d'un d en decimal et
+d'un h en hexadecimal (ainsi que d'un o en octal). 
+Certains assembleurs ont d'autres mani&egrave;res possibles (un nombre commençant par 0
+est en octal, un nombre commençant par 0x en hexadecimal ...), mais ces notations
+sont g&eacute;n&eacute;ralement admises par tous les assembleurs. Ainsi, 243
+s'&eacute;crit :</p>
+
+<p>243d = F3h = 11110011b</p>
+
+<h4>Les nombres entiers negatifs</h4>
+
+<p>Jusqu'ici, nous n'avons pas abord&eacute; les nombres sign&eacute;s. Nous avons en effet vu que nous pouvions coder l'information dans des octets, mots, doubles mots ... Nous avons vu comment stocker des nombres entiers positifs, dont on peut d'ailleurs se servir pour coder des caract&egrave;res. Mais comment coder les nombres n&eacute;gatifs ?</p>
+
+<p>La premi&egrave;re chose &agrave; se demander est combien de bits sont n&eacute;cessaires pour coder le signe. C'est simple, puisqu'il y a deux signes possibles, 1 seul bit est n&eacute;cessaire.  Nous le nommerons dor&eacute;navant bit de signe, et ce sera le premier bit consid&eacute;r&eacute;, c'est &agrave; dire le bit de poids le plus fort.</p>
+
+<p>Notez que le probl&egrave;me n'est pas d'ordre math&eacute;matique, mais que c'est bien un probl&egrave;me de codage de l'information. Dans une &eacute;tude math&eacute;matique, le signe serait simplement marqu&eacute; par le symbole -, quelle que soit la base.</p>
+
+<p><strong>Op&eacute;rations sur les nombres sign&eacute;s</strong></p>
+
+<p>Essayons d'appliquer ceci &agrave; l'addition de nombres sign&eacute;s. Nous allons additionner 4 et -1, et devrions donc obtenir 3. rappelons que 4 = 00000100, 3 = 00000011 et -1 = 10000001 avec la notation choisie pour les nombres n&eacute;gatifs. On &agrave; donc :</p>
+
+<p>00000100</p>
+<p>10000001</p>
+<p>-----------</p>
+<p>10000101 = -5</p>
+
+<p>L'utilisation du bit de poids fort comme bit de signe, sans modifier le codage du reste du nombre n'est pas compatible avec l'addition que nous utilisions avec les nombres positifs.</p>
+
+<p>Pour r&eacute;soudre ce probl&egrave;me, le codage du signe est un peu plus complexe. On utilise pour coder un nombre n&eacute;gatif le compl&eacute;ment &agrave; 1 de ce nombre (on inverse tous les bits) au quel on ajoute 1 (on appelle cette op&eacute;ration le compl&eacute;ment &agrave; 2, et l'instruction NEG permet de l'effectuer). Voici quelques exemples :</p>
+
+<table class="tableau">
+  <tbody class="centre">
+    <tr>
+        <td class="yellow">Nombre</td> 
+        <td class="red">Repr&eacute;sentation binaire<br/> 
+                                  (octet)</td>
+        <td class="green">Compl&eacute;ment &agrave; 1</td>
+        <td class="red">Compl&eacute;ment &agrave; 2</td>
+        <td class="yellow">Oppos&eacute;</td>
+    </tr>
+    <tr>
+        <td class="yellow">0</td>
+        <td class="red">00000000</td>
+        <td class="green">11111111</td>
+        <td class="red">00000000</td>
+        <td class="yellow">0</td>
+    </tr>
+    <tr>
+        <td class="yellow">1</td>
+        <td class="red">00000001</td>
+        <td class="green">11111110</td>
+        <td class="red">11111111</td>
+        <td class="yellow">-1</td>
+    </tr>
+    <tr>
+        <td class="yellow">2</td>
+        <td class="red">00000010</td>
+        <td class="green">11111101</td>
+        <td class="red">11111110</td>
+        <td class="yellow">-2</td>
+    </tr>
+    <tr>
+        <td class="yellow">3</td>
+        <td class="red">00000011</td>
+        <td class="green">11111100</td>
+        <td class="red">11111101</td>
+        <td class="yellow">-3</td>
+    </tr>
+    <tr>
+        <td class="yellow">4</td>
+        <td class="red">00000100</td>
+        <td class="green">11111011</td>
+        <td class="red">11111100</td>
+        <td class="yellow">-4</td>
+    </tr>
+    <tr>
+        <td class="yellow">8</td>
+        <td class="red">00001000</td>
+        <td class="green">11110111</td>
+        <td class="red">11111000</td>
+        <td class="yellow">-8</td>
+    </tr>
+    <tr>
+        <td class="yellow">15</td>
+        <td class="red">00001111</td>
+        <td class="green">11110000</td>
+        <td class="red">11110001</td>
+        <td class="yellow">-15</td>
+    </tr>
+    <tr>
+        <td class="yellow">20</td>
+        <td class="red">00010100</td>
+        <td class="green">11101011</td>
+        <td class="red">11101100</td>
+        <td class="yellow">-20</td>
+    </tr>
+    <tr>
+        <td class="yellow">127</td>
+        <td class="red">01111111</td>
+        <td class="green">10000000</td>
+        <td class="red">10000001</td>
+        <td class="yellow">-127</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Notez que sur un octet, on peut coder un nombre sign&eacute; compris entre -128 et +127.</p>
+
+<p>V&eacute;rifions sur quelques exemples que cette notation est compatible avec l'addition :</p>
+
+<p>00000100 + 11111111 = 00000011 ( 4 - 1 = 3 )</p>
+<p>00010100 + 10000001 = 10010101 ( 20 - 127 = -107 )</p>
+
+<p>Voila donc pour l'addition et la soustraction.</p>
+
+<p><strong>Multiplications et divisions sign&eacute;es</strong></p>
+
+<p>M&ecirc;me si nous n'avons pas vraiment &eacute;tudi&eacute; les multiplications et divisions en arithm&eacute;tique non sign&eacute;e, on peut remarquer que cela ne fonctionnera pas en arithm&eacute;tique sign&eacute;e. L'assembleur propose des instructions d&eacute;di&eacute;es : imul et idiv. Nous verrons cela plus tard</p>
+
+<p>Ce sera donc tout concernant cette introduction au nombres sign&eacute;s ;)</p>
+
+<h4>Les nombres "r&eacute;els"</h4>
+
+<!-- TODO -->
+
+<h4>Les caract&egrave;res et les chaines de caract&egrave;res</h4>
+
+<!-- TODO -->
+
+<a name="archi"></a>
+<h3>1.3 - Architecture d'un ordinateur</h3>
+
+<p>Il faut savoir que l'ordinateur ne travaille qu'avec des &quot;paquets&quot; de bits. Un octet (ou byte) regroupe 8 bits. Un mot (ou word) regroupe 2 octets, soit 16 bits. Un double mot (ou dword) regroupe 4 octets, soit 32 bits.</p>
+
+<p>Une suite de 1024 octets est un kilo octet (ou Ko). De m&ecirc;me, un mega octet (Mo) vaut 1024 Ko, et un giga octet (Go) vaut 1024 Mo. Les disques durs feront peut &ecirc;tre plusieurs tera octets (To) d'ici quelques ann&eacute;es ( 1 To = 1024 Go ).</p>
+
+<p>Pourquoi 1024 au lieu de 1000? C'est simple, en informatique, tout tourne autour de la base 2. La valeure 1024 correspond &agrave; 2^10, c'est la puissance de 2 la plus proche de 1000.</p>
+
+<h4>La m&eacute;moire (ou plutôt les m&eacute;moires)</h4>
+
+<p>La memoire sert &agrave; stocker des informations en vue d'un traitement ulterieur. Certaines memoires permettent de modifier ces informations, d'autres seulement de les consulter.  La <abbr title="Random Access Memory">RAM</abbr>, aussi appel&eacute;e m&eacute;moire vive, est une m&eacute;moire &agrave; laquelle on peut acc&eacute;der soit en lecture, soit en ecriture. C'est dans cette m&eacute;moire que seront charg&eacute;s les programmes et les donn&eacute;es. Elle pr&eacute;sente l'inconvenient de se vider de son contenu d&egrave;s qu'on ne l'alimente plus (interruption du courant).</p> 
+
+<p>Avant toute chose, l'ordinateur doit savoir que faire quand on l'allume. Le programme de lancement ne peut se trouver dans la RAM puisqu'elle est vide &agrave; ce moment. Il se trouve dans la <abbr title="Read Only Memory">ROM</abbr> de l'ordinateur. C'est une m&eacute;moire destin&eacute;e seulement &agrave; la lecture : il est impossible d'&eacute;crire dedans. Cette ROM comprend le BIOS ; c'est lui qui permettra notamment de charger les premiers secteurs du disque dur (le fameux <abbr title="Master Boot Record">MBR</abbr> qui contient le boot loader) dans la RAM et de l'executer.</p>
+
+<p>Le disque dur est lui aussi une m&eacute;moire, qui peut &ecirc;tre acc&eacute;d&eacute;e en lecture/&eacute;criture, mais qui contrairement &agrave; la RAM n'est pas volatile (les informations sont conserv&eacute;es lorsque l'on &eacute;teint l'ordinateur). C'est un support fixe par opposition aux supports amovibles : disquettes, CD, DVD, bandes magn&eacute;tiques ... Le disque dur peut &ecirc;tre utilis&eacute; par le syst&egrave;me afin d'&eacute;tendre virtuellement la capacit&eacute; de la RAM, mais les acc&egrave;s aux disques dur sont beaucoup plus lents que les acc&egrave;s &agrave; la m&eacute;moire vive.</p>
+
+<p>Le processeur, mais aussi certains peripheriques sont munis de m&eacute;moire cache. Ce sont de petites m&eacute;moires comparables &agrave; de la m&eacute;moire vive destin&eacute;es &agrave; accelerer les acc&egrave;s aux donn&eacute;es. En effet, un certain nombre d'acc&egrave;s aux donn&eacute;es peuvent &ecirc;tre pr&eacute;vus &agrave; l'avance, et les donn&eacute;es &agrave; charger peuvent donc &ecirc;tre plac&eacute;es dans le cache avant que l'on doive y acc&eacute;der. L'acceleration qui en r&eacute;sulte peut &ecirc;tre consid&eacute;rable.</p>
+
+<h4>La pile</h4>
+
+<p>C'est un tableau de type <abbr title="Last In First Out">LIFO</abbr>. On peut le comparer &agrave; une pile d'assiettes o&ugrave; chaque assiette serait une donn&eacute;e. On peut empiler les assiettes, et les desempiler. On est donc obliger de poser et de prendre les assiettes sur le haut de la pile. Pour prendre une assiette au milieu de cette pile, il faut d'abord enlever toutes celles qui sont au dessus (En fait, moi je fais pas comme ça, mais bon ce n'est qu'une image). Le registre de segment SS (<em>voir plus loin</em>) pointe au d&eacute;but de la pile et le registre SP indique le premier emplacement libre de la pile.</p>
+
+<p>Ainsi, quand on rajoute un element sur la pile, le registre SP est decr&eacute;ment&eacute; de 2 (pour un mot) ou 4 (double-mot) afin de pointer apres ce dernier element. De m&ecirc;me, quand on enleve un element de la pile, SP est incr&eacute;ment&eacute; de 2 ou 4. On ne peut pas placer des donn&eacute;es plus petites que des mots sur la pile. Le registre SP sera donc toujours pair.</p>
+
+<div class="centre">
+<table>
+    <tr>
+        <td class="centre">&nbsp;</td>
+        <td class="centre yellow">Adresse</td>
+        <td class="centre grey">Valeure</td>
+        <td class="centre">&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="centre">&nbsp;</td>
+        <td class="centre yellow">SS:03FE</td>
+        <td class="centre grey">142F</td>
+        <td class="centre">derniere donn&eacute;e de la pile</td>
+    </tr>
+    <tr>
+        <td class="centre blue">SP &gt;</td>
+        <td class="centre yellow">SS:03FC</td>
+        <td class="centre grey">??</td>
+        <td class="centre">emplacement libre</td>
+    </tr>
+    <tr>
+        <td class="centre">&nbsp;</td>
+        <td class="centre yellow">SS:03FA</td>
+        <td class="centre grey">??</td>
+        <td class="centre">emplacement libre</td>
+    </tr>
+    <tr>
+        <td class="centre">&nbsp;</td>
+        <td class="centre yellow">SS:03F8</td>
+        <td class="centre grey">??</td>
+        <td class="centre">emplacement libre</td>
+    </tr>
+    <tr>
+        <td class="centre">&nbsp;</td>
+        <td class="centre yellow">SS:03F6</td>
+        <td class="centre grey">??</td>
+        <td class="centre">emplacement libre</td>
+    </tr>
+</table>
+</div>
+
+<p>Dans cet exemple, SP pointe juste apres le dernier element de la pile qui vaut 142F.</p>
+
+<h4>Le processeur</h4>
+
+<p>Les 386,486 et 586 (couramment appell&eacute;s Pentium) sont des puces electroniques comportants plusieurs millions de transistors. Ce sont des processeurs 32 bits, ils peuvent donc travailler avec des doubles mots. Bien que leur bus de donn&eacute;es soit en 32 bits, l'acc&egrave;s aux peripheriques se fait rarement sur 32 bits. La fr&eacute;quence de ces processeurs peut varier de 16 MHz jusqu'&agrave; 1GHz. Une fr&eacute;quence de 1 GHz signifie que le processeur tourne &agrave; une vitesse de 1 Milliard de cycles par seconde ! Mais les peripheriques doivent suivre le processeur pour que celui-ci soit utilis&eacute; pleinement : si le bus est trop lent ou si la carte graphique rame, l'ordinateur sera ralentit.</p>
+
+<h5>Les registres</h5>
+
+<p>Le processeur contient des registres dont les fonctions sont bien precises :<br/>
+- traiter les donn&eacute;es en provenance de la memoire<br/>
+- contenir les adresses de d&eacute;but de programme, de d&eacute;but de donn&eacute;es<br/>
+- indiquer le r&eacute;sultat d'operations arithm&eacute;tiques<br/>
+- ...</p>
+
+<h6>Les registres generaux</h6>
+
+<p>Ils servent &agrave; manipuler des donn&eacute;es, &agrave; transferer des
+donn&eacute;es lors de l'appel d'interruptions, &agrave; stocker des
+r&eacute;sultats intermediaires ...</p>
+
+<p>Ces registres sont :</p>
+
+<p>EAX, EBX, ECX, EDX, ESI, EDI, ESP, EBP. Ce sont des registres
+de 32 bits. Leurs 16 bits de poids faible forment respectivement
+les registres AX, BX, CX, DX, SI, DI, SP, BP. Les registres 16
+bits se terminant en X se divisent encore en deux registres de 8
+bits chacun : </p>
+
+<p>- AH, BH, CH et DH sont les registres compos&eacute;s des 8 bits de
+poids fort de AX, BX, CX et DX (H pour high)</p>
+
+<p>- AL, BL, CL et DL sont les registres compos&eacute;s des 8 bits de
+poids faible de AX, BX, CX et DX. (L pour low)</p>
+
+<p>Avant les 386, les registres 32 bits n'existaient pas. Ils ont
+&eacute;t&eacute;s rajout&eacute;s quand les processeurs sont pass&eacute;s &agrave; 32 bits.
+On les a appell&eacute;s E-- pour Extended (etendu)</p>
+
+<p>Par exemple, si EAX = A8C9BF31 on &agrave; : AX = BF31, AL = 31 et
+AH = BF. Pour modifier les 16 bits de poids fort de EAX, il faut
+manipuler EAX en entier. Modifier AL ou AH modifie aussi AX et
+EAX. Mais AL et AH peuvent &ecirc;tre modifi&eacute;s ind&eacute;pendaments.</p>
+
+<h6>Les registres de segment</h6>
+
+<p>Ils sont utilis&eacute;s pour stocker l'adresse de d&eacute;but d'un
+segment. Il peut s'agir de l'adresse du d&eacute;but des instructions
+du programme, du d&eacute;but des donn&eacute;es ou du d&eacute;but de la pile. Ce sont :<br/>
+<br/>
+    CS : <span class="green">Code Segment </span>/ Segment
+    de code : <span class="blue">Debut des instructions du
+    programme ou d'une sous routine</span><br/>
+    DS : <span class="green">Data Segment</span> / Segment
+    de donn&eacute;es : <span class="blue">Addresse de d&eacute;but de
+    donn&eacute;es du programme</span><br/>
+    ES : <span class="green">Extra segment</span> / Segment
+    extra : <span class="blue">Utilis&eacute; par certaines
+    instructions de copie de bloc.</span><br/>
+    SS : <span class="green">Stack segment</span> / Segment
+    de pile : <span class="blue">Pointe sur le debut de la
+    pile</span><br/>
+    FS : Segment suppl&eacute;mentaire (386 et +) :<br/>
+    GS : Segment suppl&eacute;mentaire (386 et +) :<br/>
+</p>
+
+<h6>Le registre IP</h6>
+
+<p>IP signifie <em>Instruction Pointer.</em> C'est ce registre de
+16 bits qui contient l'offset (d&eacute;placement &agrave; effectuer) par
+rapport au d&eacute;but de segment CS pour se positionner sur la
+prochaine instruction &agrave; effectuer. Il est donc modifi&eacute;
+automatiquement lors de l'appel de procedure ou pendant le
+d&eacute;roulement du programme. Le programmeur n'a pas &agrave; se soucier
+de ce registre, il est entierement g&eacute;r&eacute; par le processeur.
+Depuis les 386, ce registre est le registre EIP et fait 32 bits.</p>
+
+<h6>Le registre de Flag</h6>
+
+<p>C'est un registre qui comporte plusieurs informations
+contenues sur un bit (aussi appell&eacute; indicateur) : <br/>
+<br/>
+    CF : <span class="green">Carry Flag</span> / Indicateur
+    de retenue : <span class="blue">1 si une retenue se
+    produit dans une instruction arithm&eacute;tique</span><br/>
+    PF : <span class="green">Parity Flag</span> / Indicateur
+    de parit&eacute; : <span class="blue">1 si un nombre pair de
+    bits est &agrave; 1 apr&egrave;s une operation arithm&eacute;tique</span><br/>
+    ZF : <span class="green">Zero Flag</span> / Indicateur
+    de resultat nul : <span class="blue">1 si le resultat de
+    la derniere operation arithmetique est 0</span><br/>
+    SF : <span class="green">Sign Flag </span>/ Indicateur
+    de signe : <span class="blue">En arithmetique sign&eacute;e,
+    indique si le resultat d'une operation est negatif</span><br/>
+    OF : <span class="green">Overflow Flag</span> /
+    Indicateur de debordement : <span class="blue">1 si le
+    resultat en arithmetique sign&eacute;e a donn&eacute; un signe different
+    de celui attendu.</span><br/>
+</p>
+
+<a name="instructions"></a>
+<h2>2 - Les principales instructions</h2>
+
+<p>L'assembleur est un langage qui est en bijection avec le langage machine. C'est &agrave; dire qu'il est possible de passer de l'un &agrave; l'autre simplement en connaissant la table de conversion et l'endroit o&ugrave; d&eacute;bute le programme. Le langage machine est la suite d'octet qui compose un programme. On peut le consid&eacute;rer comme une suite de 1 et de 0 (des bits), mais en fait ces bits sont toujours regroup&eacute;s, au moins par huit (un octet). Une commande peut contenir un seul ou plusieurs octets, cel&agrave; d&eacute;pend de la commande et peut &ecirc;tre d&eacute;termin&eacute; en regardant le premier octet. Des tables d&eacute;crivant ces opcodes peuvent &ecirc;tre trouv&eacute;es sur internet, par exemple sur <a href="http://ref.x86asm.net/">http://ref.x86asm.net/</a>.</p>
+
+<p>L'assembleur est une fa&ccedil;on plus lisible, plus facile &agrave; retenir et semblable pour diff&eacute;rents types de processeurs (pour lesquels les opcodes peuvent &ecirc;tre totalement diff&eacute;rents) d'&eacute;crire les opcodes. Le langage offre aussi des facilit&eacute;s pour programmer de mani&egrave;re un peu plus efficace (macros, labels, fonctions, variables ...). Mais l'assembleur et le langage machine restent tr&egrave;s proches, ce qui oblige le programmeur &agrave; savoir pas mal de choses sur le fonctionnement de l'ordinateur et ce qui rend les programmes non-portables mais qui permet potentiellement d'obtenir les meilleurs performances. Je dis bien potentiellement car d'une part, les compilateurs moderne sont tr&egrave;s bon pour g&eacute;n&eacute;rer du code optimis&eacute;, donnant un r&eacute;sultat bien meilleur que du code &eacute;crit par un humain, d'autre part, la complexit&eacute; du langage fait que des optimisations de plus haut niveau (au niveau de l'algorithme lui m&ecirc;me par exemple) peuvent &ecirc;tre rendues plus difficiles.</p>
+
+<a name="copie"></a>
+<h3>2.1 - Copier des donn&eacute;es !</h3>
+
+mov movl ...
+
+<a name="operations"></a>
+<h3>2.2 - Effectuer des op&eacute;rations</h3>
+
+inc dec
+add sub mul div
+
+<a name="sauts"></a>
+<h3>2.3 - Sauter</h3>
+
+cmp cmpb 
+jmp ja jae jb je jne jnz jz
+
+<a name="autres"></a>
+<h3>2.4 - D'autres instructions utiles</h3>
+
+int
+pop push
+xor
+
+<a name="premiers"></a>
+<h2>3 - Les premiers pas</h2>
+
+<p>Avant de commencer, quelques rappels sur les commandes qui pourront &ecirc;tre utiles :</p> 
+<ul>
+  <li>Pour d&eacute;sarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
+  <li>Pour compiler lorsqu'il y a un Makefile : <span class="commande">make</span></li>
+  <li>Pour nettoyer les sources (supprimer les fichiers objets) : <span class="commande">make clean</span></li>
+</ul>
+
+<a name="bonjour"></a>
+<h3>3.1 - Bonjour !</h3>
+
+<p>Nous allons commencer par un programme simple qui affiche un message. Cela va nous permettre de voir plusieurs points. D'une part comment assembler nos sources en fichiers objets, puis comment lier ces fichiers objets, mais aussi comment faire un appel syst&egrave;me sous Linux. Voyons tout de suite la source du fichier <span class="commande">Bonjour.S</span>.</p>
+
+<p class="code">
+.section .text<br/>
+.global _start<br/>
+_start:<br/>
+  &nbsp;&nbsp;mov $4, %eax<br/>
+  &nbsp;&nbsp;mov $1, %ebx<br/>
+  &nbsp;&nbsp;mov $texte, %ecx<br/>
+  &nbsp;&nbsp;mov length, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+  &nbsp;&nbsp;xor %ebx, %ebx<br/>
+  &nbsp;&nbsp;mov $1, %eax<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+.section .data<br/>
+texte:<br/>
+  &nbsp;&nbsp;.string "Bonjour !\n"<br/>
+length:<br/>
+  &nbsp;&nbsp;.int length - texte
+</p>
+
+<p>La premi&egrave;re partie du programme consiste en l'appel de l'interruption 0x80 (c'est l'interruption permettant d'utiliser les appels syst&egrave;mes propos&eacute;s par Linux). La fonction d&eacute;sir&eacute;e est pr&eacute;cis&eacute;e dans eax. En l'occurence, nous appelons la fonction 4, qui correspond &agrave; l'&eacute;criture. Les param&egrave;tres de l'appel sont pass&eacute;s dans les autres registre. On pr&eacute;cise dans ebx le descripteur de fichier correspondant &agrave; la sortie standard (0 correspond &agrave; l'entr&eacute;e standard, 1 correspond &agrave; la sortie standard, 2 &agrave; la sortie d'erreur), on place dans ecx un pointeur sur le texte &agrave; afficher, et on indique la longueur du texte dans edx. La deuxi&egrave;me partie du programme consiste en l'appel de la fonction 1 qui correspond &agrave; l'appel syst&egrave;me de sortie de programme.</p> 
+
+<p>Vous pouvez trouver la liste des appels syst&egrave;mes sous Linux dans le manuel syscalls: <span class="commande">man 2 syscalls</span>. On peut aussi trouver sur internet des sites int&eacute;ressants pour en parcourir la liste, comme par exemple <a href="http://syscalls.kernelgrok.com/">kernelgrok</a> qui offre la possibilit&eacute; de rechercher un appel syst&egrave;me et offre des liens vers le code source correspondant.</p>
+
+<p>Concernant la syntaxe, on remarquera que les noms de registres sont pr&eacute;c&eacute;d&eacute;s du symbole %, que les valeurs imm&eacute;diates sont pr&eacute;c&eacute;d&eacute;es d'un $ (dans le cas d'une &eacute;tiquette, la valeur correspondant est l'adresse point&eacute;e) et que les &eacute;tiquettes utilis&eacute;es telles quelles permettent d'acc&eacute;der &agrave; la valeur point&eacute;e.</p>
+
+<p>Il reste maintenant &agrave; compiler ce fichier. Il est possible de le faire avec gcc en utilisant les options adequates, mais gcc attend g&eacute;n&eacute;ralement une fonction main pour pouvoir cr&eacute;er un executable, et lie par d&eacute;faut &agrave; des biblioth&egrave;ques standards. C'est pourquoi je pr&eacute;f&egrave;re utiliser <span class="commande">as</span> pour g&eacute;n&eacute;rer les fichiers objets, puis <span class="commande">ld</span> pour la phase de liaison lorsque le programme est enti&egrave;rement en assembleur. Ainsi, <span class="commande">as Bonjour.S -o Bonjour.o</span>, puis <span class="commande">ld Bonjour.o -o Bonjour</span> devrait permettre de cr&eacute;er l'executable <span class="commande">Bonjour</span>.</p>
+
+<p>On peut aussi utiliser un Makefile pour simplifier la phase de compilation pour des programmes de taille plus importantes. Un Makefile est disponible dans <a href="src/ASM-Ex1.tar.gz">l'archive disponible en t&eacute;l&eacute;chargement</a></p> 
+
+<a name="horloge"></a>
+<h3>3.2 - Horloge</h3>
+
+<p>Voici un programme un peu plus complexe qui affiche le timestamp UNIX courant, c'est &agrave; dire le nombre de secondes &eacute;coul&eacute;es depuis le 1er janvier 1970 &agrave; minuit. Vous pouvez v&eacute;rifier le r&eacute;sultat en comparant &agrave; celui de la commande UNIX <span class="commande">date +%s</span>.</p>
+
+<p class="code">
+.section .text<br/>
+.global _start<br/>
+_start:<br/>
+  &nbsp;&nbsp;<span class="comment">/* R&eacute;cup&egrave;re le timestamp UNIX et les microsecondes avec l'appel syst&egrave;me gettimeofday */</span><br/>
+  &nbsp;&nbsp;mov $0x4e, %eax<br/>
+  &nbsp;&nbsp;mov $timestamp, %ebx<br/>
+  &nbsp;&nbsp;xor %ecx, %ecx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Convertit le r&eacute;sultat en chaine de caract&egrave;re et l'affiche</span><br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- eax contient le timestamp &agrave; afficher<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- esi est l'index du caract&egrave;re courant<br/>
+  &nbsp;&nbsp; */<br/>
+  &nbsp;&nbsp;mov timestamp, %eax<br/>
+  &nbsp;&nbsp;xor %esi, %esi<br/>
+  &nbsp;&nbsp;<span class="comment">/* Pr&eacute;vois un retour chariot &agrave; la fin du nombre et incr&eacute;mente la taille en cons&eacute;quence */</span><br/>
+  &nbsp;&nbsp;push $10<br/>
+  &nbsp;&nbsp;inc %esi<br/>
+convertit:<br/>
+  &nbsp;&nbsp;xor %edx, %edx<br/>
+  &nbsp;&nbsp;mov $10, %ecx<br/>
+  &nbsp;&nbsp;div %ecx<br/>
+  &nbsp;&nbsp;add $48, %edx<br/>
+  &nbsp;&nbsp;push %edx<br/>
+  &nbsp;&nbsp;inc %esi<br/>
+  &nbsp;&nbsp;cmp $0, %eax<br/>
+  &nbsp;&nbsp;jnz convertit<br/>
+<br/>
+affiche:<br/>
+  &nbsp;&nbsp;cmp $0, %esi<br/>
+  &nbsp;&nbsp;jz fin<br/>
+  &nbsp;&nbsp;dec %esi<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Affiche un caract&egrave;re */</span><br/>
+  &nbsp;&nbsp;mov $4, %eax<br/>
+  &nbsp;&nbsp;mov $1, %ebx<br/>
+  &nbsp;&nbsp;mov %esp, %ecx<br/>
+  &nbsp;&nbsp;mov $1, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+  &nbsp;&nbsp;add $4, %esp<br/>
+  &nbsp;&nbsp;jmp affiche<br/>
+<br/>
+fin:<br/>
+  &nbsp;&nbsp;<span class="comment">/* Quitte */</span><br/>
+  &nbsp;&nbsp;xor %ebx, %ebx<br/>
+  &nbsp;&nbsp;mov $1, %eax<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+.section .data<br/>
+timestamp:<br/>
+  &nbsp;&nbsp;.int 0<br/>
+microsecondes:<br/>
+  &nbsp;&nbsp;.int 0
+</p>
+
+<p>Le timestamp est r&eacute;cup&eacute;r&eacute; en utilisant l'appel syst&egrave;me gettimeofday qui correspond &agrave; la fonction 0x4E de l'interruption 0x80. Cette fonction renvoi le nombre de seconde &eacute;coul&eacute; depuis le 1er janvier 1970 mais aussi les microsecondes. En C, on utiliserait une structure <span class="commande">timeval</span> qui est compos&eacute;e de deux champs, un de type <span class="commande">timeval</span> et un autre de type <span class="commande">suseconds_t</span>. Ces deux types sont des entiers sur 32 bits. On obtient le m&ecirc;me r&eacute;sultat en d&eacute;clarant deux variables de type <span class="command">int</span> &agrave; la suite. La variable <span class="commande">microsecondes</span> n'est pas utilis&eacute;e dans le code ci-dessus mais pourrait l'&ecirc;tre.</p>
+
+<p>Le gros du code, entre l'appel &agrave; la fonction <span class="commande">gettimeofday</span> et l'appel &agrave; la fonction <span class="commande">quit</span> sert &agrave; convertir l'entier obtenu dans timestamp en caract&egrave;res pour l'afficher. Vous pouvez, en exercice, faire de m&ecirc;me avec les microsecondes afin d'afficher les deux informations.</p>
+
+<p>Le principe est le suivant: le nombre est divis&eacute; par 10 jusqu'&agrave; atteindre 0. A chaque fois, le reste est pouss&eacute; sur la pile apr&egrave;s avoir ajout&eacute; 48 pour obtenir le caract&egrave;re correspondant et un compteur est incr&eacute;ment&eacute; dans esi. On d&eacute;pile ensuite tous les caract&egrave;res pour les afficher un par un. Le passage par la pile permet d'avoir les nombres dans le bon ordre puisque la division par 10 donne les chiffres composant le nombre de droite &agrave; gauche.</p>
+
+<p>Vous pouvez retrouver cet exemple dans <a href="src/ASM-Ex2.tar.gz">l'archive disponible en t&eacute;l&eacute;chargement</a></p> 
+
+<a name="addition"></a>
+<h3>3.3 - Addition de deux nombres</h3>
+
+<p>Voici un programme encore plus complexe qui demande deux nombres et renvoi leur somme en r&eacute;sultat. Vous pouvez remarquer qu'il est un peu long, principalement &agrave; cause de la duplication de code qui pourrait &ecirc;tre &eacute;vit&eacute;e par l'utilisation de fonctions. Nous verrons plus tard comment faire cela. Voyons tout de suite la source du fichier <span class="commande">Addition.S</span>.</p>
+
+<p class="code">
+.section .text<br/>
+.global _start<br/>
+_start:<br/>
+  &nbsp;&nbsp;<span class="comment">/* Demande un 1er nombre */</span><br/>
+  &nbsp;&nbsp;mov $4, %eax<br/>
+  &nbsp;&nbsp;mov $1, %ebx<br/>
+  &nbsp;&nbsp;mov $texte1, %ecx<br/>
+  &nbsp;&nbsp;mov length1, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Lit le 1er nombre depuis l'entr&eacute;e standard (descripteur de fichier 0) */</span><br/>
+  &nbsp;&nbsp;mov $3, %eax<br/>
+  &nbsp;&nbsp;mov $0, %ebx<br/>
+  &nbsp;&nbsp;mov $nombre1_texte, %ecx<br/>
+  &nbsp;&nbsp;mov $24, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Demande un 2nd nombre */</span><br/>
+  &nbsp;&nbsp;mov $4, %eax<br/>
+  &nbsp;&nbsp;mov $1, %ebx<br/>
+  &nbsp;&nbsp;mov $texte2, %ecx<br/>
+  &nbsp;&nbsp;mov length2, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Lit le 2nd nombre depuis l'entr&eacute;e standard (descripteur de fichier 0) */</span><br/>
+  &nbsp;&nbsp;mov $3, %eax<br/>
+  &nbsp;&nbsp;mov $0, %ebx<br/>
+  &nbsp;&nbsp;mov $nombre2_texte, %ecx<br/>
+  &nbsp;&nbsp;mov $24, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Convertit le 1er nombre <br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- eax contient le r&eacute;sultat<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- ebx pointe sur la chaine de caract&egrave;re<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- esi est l'index du caract&egrave;re courant<br/>
+  &nbsp;&nbsp; */</span><br/>
+  &nbsp;&nbsp;xor %eax, %eax<br/>
+  &nbsp;&nbsp;mov $nombre1_texte, %ebx<br/>
+  &nbsp;&nbsp;xor %esi, %esi<br/>
+convertit1:<br/>
+  &nbsp;&nbsp;mov $10, %ecx<br/>
+  &nbsp;&nbsp;mul %ecx<br/>
+  &nbsp;&nbsp;mov (%ebx, %esi, 1), %dl<br/>
+  &nbsp;&nbsp;<span class="comment">/* On arr&ecirc;te d&egrave;s qu'un caract&egrave;re rencontr&eacute; n'est pas un chiffre */</span><br/>
+  &nbsp;&nbsp;cmp $48, %edx<br/>
+  &nbsp;&nbsp;jb finished1<br/>
+  &nbsp;&nbsp;cmp $57, %edx<br/>
+  &nbsp;&nbsp;ja finished1<br/>
+  &nbsp;&nbsp;sub $48, %edx<br/>
+  &nbsp;&nbsp;add %edx, %eax<br/>
+  &nbsp;&nbsp;inc %esi<br/>
+  &nbsp;&nbsp;jmp convertit1<br/>
+finished1:<br/>
+  &nbsp;&nbsp;xor %edx, %edx<br/>
+  &nbsp;&nbsp;mov $10, %ecx<br/>
+  &nbsp;&nbsp;div %ecx<br/>
+  &nbsp;&nbsp;mov %eax, nombre1<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Convertit le 2nd nombre <br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- eax contient le r&eacute;sultat<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- ebx pointe sur la chaine de caract&egrave;re<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- esi est l'index du caract&egrave;re courant<br/>
+  &nbsp;&nbsp; */</span><br/>
+  &nbsp;&nbsp;xor %eax, %eax<br/>
+  &nbsp;&nbsp;mov $nombre2_texte, %ebx<br/>
+  &nbsp;&nbsp;xor %esi, %esi<br/>
+convertit2:<br/>
+  &nbsp;&nbsp;mov $10, %ecx<br/>
+  &nbsp;&nbsp;mul %ecx<br/>
+  &nbsp;&nbsp;mov (%ebx, %esi, 1), %dl<br/>
+  &nbsp;&nbsp;<span class="comment">/* On arr&ecirc;te d&egrave;s qu'un caract&egrave;re rencontr&eacute; n'est pas un chiffre */</span><br/>
+  &nbsp;&nbsp;cmp $48, %edx<br/>
+  &nbsp;&nbsp;jb finished2<br/>
+  &nbsp;&nbsp;cmp $57, %edx<br/>
+  &nbsp;&nbsp;ja finished2<br/>
+  &nbsp;&nbsp;sub $48, %edx<br/>
+  &nbsp;&nbsp;add %edx, %eax<br/>
+  &nbsp;&nbsp;inc %esi<br/>
+  &nbsp;&nbsp;jmp convertit2<br/>
+finished2:<br/>
+  &nbsp;&nbsp;xor %edx, %edx<br/>
+  &nbsp;&nbsp;mov $10, %ecx<br/>
+  &nbsp;&nbsp;div %ecx<br/>
+  &nbsp;&nbsp;mov %eax, nombre2<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Additionne les deux nombres */</span><br/>
+  &nbsp;&nbsp;add nombre1, %eax<br/>
+  &nbsp;&nbsp;mov %eax, resultat<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Convertit le r&eacute;sultat en chaine de caract&egrave;re et l'affiche<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- eax contient le r&eacute;sultat<br/>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;- esi est l'index du caract&egrave;re courant<br/>
+  &nbsp;&nbsp; */</span><br/>
+  &nbsp;&nbsp;xor %esi, %esi<br/>
+  &nbsp;&nbsp;<span class="comment">/* Pr&eacute;vois un retour chariot &agrave; la fin du nombre et incr&eacute;mente la taille en cons&eacute;quence */</span><br/>
+  &nbsp;&nbsp;push $10<br/>
+  &nbsp;&nbsp;inc %esi<br/>
+convertit3:<br/>
+  &nbsp;&nbsp;xor %edx, %edx<br/>
+  &nbsp;&nbsp;mov $10, %ecx<br/>
+  &nbsp;&nbsp;div %ecx<br/>
+  &nbsp;&nbsp;add $48, %edx<br/>
+  &nbsp;&nbsp;push %edx<br/>
+  &nbsp;&nbsp;inc %esi<br/>
+  &nbsp;&nbsp;cmp $0, %eax<br/>
+  &nbsp;&nbsp;jnz convertit3<br/>
+<br/>
+convertit4:<br/>
+  &nbsp;&nbsp;cmp $0, %esi<br/>
+  &nbsp;&nbsp;jz fin<br/>
+  &nbsp;&nbsp;dec %esi<br/>
+<br/>
+  &nbsp;&nbsp;<span class="comment">/* Affiche un caract&egrave;re */</span><br/>
+  &nbsp;&nbsp;mov $4, %eax<br/>
+  &nbsp;&nbsp;mov $1, %ebx<br/>
+  &nbsp;&nbsp;mov %esp, %ecx<br/>
+  &nbsp;&nbsp;mov $1, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+  &nbsp;&nbsp;add $4, %esp<br/>
+  &nbsp;&nbsp;jmp convertit4<br/>
+<br/>
+fin:<br/>
+  &nbsp;&nbsp;<span class="comment">/* Quitte */</span><br/>
+  &nbsp;&nbsp;xor %ebx, %ebx<br/>
+  &nbsp;&nbsp;mov $1, %eax<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+<br/>
+.section .data<br/>
+texte1:<br/>
+  &nbsp;&nbsp;.string "Entrez le 1er nombre: "<br/>
+length1:<br/>
+  &nbsp;&nbsp;.int length1 - texte1<br/>
+texte2:<br/>
+  &nbsp;&nbsp;.string "Entrez le 2nd nombre: "<br/>
+length2:<br/>
+  &nbsp;&nbsp;.int length2 - texte2<br/>
+texte3:<br/>
+  &nbsp;&nbsp;.string "J'ai lu "<br/>
+length3:<br/>
+  &nbsp;&nbsp;.int length3 - texte3<br/>
+nombre1:<br/>
+  &nbsp;&nbsp;.int 0<br/>
+nombre2:<br/>
+  &nbsp;&nbsp;.int 0<br/>
+resultat:<br/>
+  &nbsp;&nbsp;.int 0<br/>
+<br/>
+.section .bss<br/>
+<span class="comment">/* On permet jusqu'&agrave; 24 caract&egrave;res pour chaque nombre */</span><br/>
+  &nbsp;&nbsp;.lcomm nombre1_texte, 24<br/>
+  &nbsp;&nbsp;.lcomm nombre2_texte, 24<br/>
+</p>
+
+<p>L'affichage des messages et la sortie du programme se font de la m&ecirc;me mani&egrave;re que dans le premier exemple. La lecture des entr&eacute;es de l'utilisateur se font en utilisant l'appel syst&egrave;me 3 avec comme descripteur de fichier le num&eacute;ro 0 qui est l'entr&eacute;e standard.</p> 
+
+<p>Comme l'utilisateur rentre une chaine de caract&egrave;res, il faut la convertir en entier, ce qui est fait en bouclant sur chaque caract&egrave;re, en le convertissant en sa valeur d&eacute;cimale (en soustrayant 48, le code ASCII de 0, les autres chiffres le suivant). Le premier caract&egrave;re n'&eacute;tant pas un chiffre est consid&eacute;r&eacute; comme la fin du nombre. On peut ensuite les additioner. Une fois l'addition effectu&eacute;e, l'op&eacute;ration inverse est n&eacute;cessaire pour pouvoir afficher le r&eacute;sultat. C'est le m&ecirc;me proc&eacute;d&eacute; que dans l'exemple pr&eacute;c&eacute;dent.</p>
+
+<p>Vous pouvez retrouver cet exemple dans <a href="src/ASM-Ex3.tar.gz">l'archive disponible en t&eacute;l&eacute;chargement</a></p> 
+
+<a name="exercices"></a>
+<h3>3.4 - Exercices</h3>
+
+<p>Afin de pratiquer un peu, voici quelques exercices:</p>
+
+<ul>
+    <li> - Ecrivez un programme qui lit un nombre en d&eacute;cimal et affiche sa conversion en hexad&eacute;cimal (et/ou inversement - vous pouvez &eacute;tendre &agrave; d'autres bases)</li>
+    <li> - En regardant la documentation des appels syst&egrave;mes <span class="commande">sys_mknod</span>, <span class="commande">sys_unlink</span>, <span class="commande">sys_mkdir</span> et <span class="commande">sys_rmdir</span> ecrivez un programme qui cr&eacute;e ou supprime un r&eacute;pertoire ou un fichier.</li>
+    <li> - Ecrivez un programme qui d&eacute;termine si l'utilisateur courant est l'utilisateur root.</li>
+</ul>
+
+<a name="librairie"></a>
+<h2>4 - Cr&eacute;er une librairie</h2>
+
+<p>Pour nos exemples simples, nous avons pu mettre la totalit&eacute; de nos programmes dans un seul fichier. Mais si l'on veut pouvoir &eacute;crire des programmes plus complexes, il faut pouvoir les d&eacute;couper en sous parties ind&eacute;pendantes et r&eacute;utilisables. Pour cel&agrave;, il nous faut pouvoir &eacute;crire des fonctions dans un fichier et les appeler depuis un autre fichier. Voyons comment faire ...</p>
+
+<a name="simple"></a>
+<h3>4.1 - Exemple simpliste</h3>
+
+<p>Pour ce premier exemple, nous allons revenir sur notre exemple affichant &quot;Bonjour&quot; et le d&eacute;couper en deux parties: un fichier contenant une fonction <span class="commande">affiche_bonjour</span> affichant &quot;Bonjour&quot; et un fichier contenant le symbole <span class="commande">_start</span> et appelant la fonction <span class="commande">affiche_bonjour</span>.</p>
+
+<p>Voici le premier fichier <span class="commande">affiche_bonjour.S</span> qui contient la fonction <span class="commande">affiche_bonjour</span> et les donn&eacute;es dont elle a besoin:</p>
+
+<p class="code">
+.section .text<br/>
+.global affiche_bonjour<br/>
+_start:<br/>
+  &nbsp;&nbsp;mov $4, %eax<br/>
+  &nbsp;&nbsp;mov $1, %ebx<br/>
+  &nbsp;&nbsp;mov $texte, %ecx<br/>
+  &nbsp;&nbsp;mov length, %edx<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+  &nbsp;&nbsp;ret<br/>
+<br/>
+.section .data<br/>
+texte:<br/>
+  &nbsp;&nbsp;.string "Bonjour !\n"<br/>
+length:<br/>
+  &nbsp;&nbsp;.int length - texte
+</p>
+
+<p>Voici le second fichier <span class="commande">SimpleLib.S</span> qui appelle <span class="commande">affiche_bonjour</span> puis quitte:</p>
+
+<p class="code">
+.section .text<br/>
+.global _start<br/>
+_start:<br/>
+  &nbsp;&nbsp;call affiche_bonjour<br/>
+<br/>
+  &nbsp;&nbsp;xor %ebx, %ebx<br/>
+  &nbsp;&nbsp;mov $1, %eax<br/>
+  &nbsp;&nbsp;int $0x80<br/>
+</p>
+
+<p>Pour g&eacute;n&eacute;rer l'executable, il ne reste plus qu'&agrave; assembler les deux fichier s&eacute;par&eacute;ment (sic !) puis &agrave; les lier ensemble &agrave; l'aide de ld afin de produire l'executable <span class="commande">SimpleLib</span>:</p>
+
+<p class="code">
+$ as affiche_bonjour.S -o affiche_bonjour.o<br/>
+$ as SimpleLib.S -o SimpleLib.o<br/>
+$ ld SimpleLib.o affiche_bonjour.o -o SimpleLib<br/>
+</p>
+
+<p>La commande <span class="commande">nm</span> permet de voir les symboles contenus dans chaque fichier:</p>
+
+<p class="code">
+$ nm affiche_bonjour.o <br/>
+00000000 T affiche_bonjour<br/>
+0000000b d length<br/>
+00000000 d texte<br/>
+<br/>
+$ nm SimpleLib.o <br/>
+U affiche_bonjour<br/>
+00000000 T _start<br/>
+<br/>
+$ nm SimpleLib<br/>
+08048082 T affiche_bonjour<br/>
+080490a9 D __bss_start<br/>
+080490a9 D _edata<br/>
+080490ac D _end<br/>
+080490a5 d length<br/>
+08048074 T _start<br/>
+0804909a d texte<br/>
+</p>
+
+<p>On voit que le fichier affiche_bonjour.o contient le symbole affiche_bonjour dans la section text (d'o&ugrave; le T), c'est &agrave; dire dans le code et les symboles length et texte dans les donn&eacute;es initialis&eacute;es (d'o&ugrave; le d). Les minuscules indiquent des symboles locaux alors que les majuscules indiquent des symboles globaux (utilisables depuis un autre fichier). Si le mot clef <span class="commande">.global</span> n'&eacute;tait pas utilis&eacute; pour exporter le symbole affiche_bonjour, la commande ld &eacute;chouerait avec l'erreur &quot;r&eacute;f&eacute;rence ind&eacute;finie&quot;. </p>
+
+<p>Dans le fichier SimpleLib.o, affiche_bonjour apparait avec un U, qui signifie undefined. Cel&agrave; signifie qu'un symbole est utilis&eacute; dans ce fichier mais n'est pas pr&eacute;sent. Il devra donc &ecirc;tre trouv&eacute; par ld au moment de l'&eacute;dition de liens pour produire un executable. Il contient aussi le symbole _start qui est le point d'entr&eacute;e de notre programme.</p>
+
+<p>Enfin, l'executable final contient les symboles _start, affiche_bonjour, texte et length, ainsi que 3 symboles ajout&eacute;s par <span class="commande">ld</span>:</p>
+<ul>
+<li><span class="commande">__bss_start</span> pointe sur le d&eacute;but du segment de donn&eacute;es non-initialis&eacute;es (BSS)</li>
+<li><span class="commande">_end</span> est l'adresse de fin de l'espace d'adressage</li>
+<li><span class="commande">_edata</span> est l'adresse de fin de la zone des donn&eacute;es initialis&eacute;es</li>
+</ul>
+
+<p>Vous pouvez retrouver cet exemple dans <a href="src/ASM-Ex4.tar.gz">l'archive disponible en t&eacute;l&eacute;chargement</a></p> 

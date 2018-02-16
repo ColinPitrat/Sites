@@ -1,0 +1,54 @@
+diff -r -P -u AlThreat/Makefile AlThreat.FBSD/Makefile
+--- AlThreat/Makefile Sat Jan 8 14:40:41 2005
++++ AlThreat.FBSD/Makefile Sat Jan 15 03:13:44 2005
+@@ -4,14 +4,13 @@
+
+APPNAME = AlThreat
+
+-####### Compilateurr, outils et options
++####### Compilateur, outils et options
+
+CC = g++
+-CFLAGS = -ggdb -pg #-pipe -Wall -W -O2 -DQT_NO_DEBUG
+-INCPATH = -I/usr/include/SDL
++CFLAGS = -ggdb -pg -DREENTRANT #-pipe -Wall -W -O2 -DQT_NO_DEBUG
+LINK = g++
+-LDFLAGS = -pg
+-LIBS = $(SUBLIBS) -Wl,-rpath,/usr/lib -L/usr/lib -L/usr/X11R6/lib -lXext -lX11 -lm -lSDL -lSDL_ttf -lSDL_image -lSDL_mixer
++INCPATH = -I/usr/local/include/SDL11 -I/usr/local/include
++LIBS = -L/usr/local/lib -L/usr/lib -L/usr/X11R6/lib -lXext -lX11 -lm -lSDL_ttf -lSDL_image -lSDL_mixer `sdl11-config --libs`
+
+####### Fichiers
+
+diff -r -P -u AlThreat/animPict.h AlThreat.FBSD/animPict.h
+--- AlThreat/animPict.h Fri Jan 7 11:08:30 2005
++++ AlThreat.FBSD/animPict.h Sat Jan 15 03:08:12 2005
+@@ -1,8 +1,8 @@
+#ifndef _ANIMATED_PICTURES
+#define _ANIMATED_PICTURES
+
+-#include <SDL/SDL.h>
+-#include <SDL/SDL_image.h>
++#include <SDL11/SDL.h>
++#include <SDL11/SDL_image.h>
+#include
+
+class animPict
+diff -r -P -u AlThreat/graphics.h AlThreat.FBSD/graphics.h
+--- AlThreat/graphics.h Sat Jan 8 00:52:58 2005
++++ AlThreat.FBSD/graphics.h Sat Jan 15 03:08:05 2005
+@@ -1,10 +1,10 @@
+#ifndef _T3F_GRAPHICS
+#define _T3F_GRAPHICS
+
+-#include <SDL/SDL.h>
+-#include <SDL/SDL_image.h>
+-#include <SDL/SDL_ttf.h>
+-#include <SDL/SDL_mixer.h>
++#include <SDL11/SDL.h>
++#include <SDL11/SDL_image.h>
++#include <SDL11/SDL_ttf.h>
++#include <SDL11/SDL_mixer.h>
+#include
+
+#define SCREEN_WIDTH 800

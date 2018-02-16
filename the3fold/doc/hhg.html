@@ -1,0 +1,2732 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 2  2004 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>Le guide du hacker sous Hurd: </TITLE>
+
+<META NAME="description" CONTENT="Le guide du hacker sous Hurd: ">
+<META NAME="keywords" CONTENT="Le guide du hacker sous Hurd: ">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC_Top"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>Le guide du hacker sous Hurd</H1></P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>           +------+
+           |      |
+      ,--- |      | &#60;----.     ``The GNU Hurd is the GNU project's
+    ,'     |      |       `-.     replacement for the Unix kernel.
+    |      +------+          `.    The Hurd is a collection of servers
+    v         |                `.   that run on the Mach micro-kernel to
++------+      |      +------+   |    implement file systems, network
+|      |      `.     |      |   |    protocols, file access control, and
+|      |        `--&#62; |      |   |    other features that are implemented
+|      |             |      |   |   by the Unix kernel or similar kernels
++------+             +------+  ,'  (such as Linux).''
+    ^                    |  _,'
+    |      +------+      +-'             --- <A HREF="http://hurd.gnu.org/">http://hurd.gnu.org/</A>
+    |      |      |   ,-'|
+    `.     |      | -'  ,'    This is the
+     |     |      |     |
+     `.    +------+    ,'       H u r d   H a c k i n g   G u i d e
+       `.            ,'
+         `----------'       Version 0.2_1 - Mar 25, 2002
+
+</pre></td></tr></table></P><P>
+
+Copyright (C) 2001, 2002 Wolfgang J&auml;hrling <A HREF="mailto:wolfgang@pro-linux.de">wolfgang@pro-linux.de</A>
+<BR>Traduction 2004 Colin Pitrat <A HREF="mailto:colin.pitrat@rez-gif.supelec.fr">colin.pitrat@rez-gif.supelec.fr</A>
+</P><P>
+
+Vous avez le droit de copier, distribuer et/ou modifier ce document selon les termes
+de la GNU Free Documentation License, Version 1.1 ou supérieure, publiée par la Free
+Software Foundation. Pour plus de détails, consultez
+<A HREF="http://www.gnu.org/copyleft/fdl.html">http://www.gnu.org/copyleft/fdl.html</A>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC1">1. A propos de ce document</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Information importante (?)</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC5">2. Prérequis</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Ce que vous devriez savoir</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC6">3. Courte introduction au Hurd et à Mach</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les raisons pour lesquelles le Hurd rox</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC7">4. Les bases de Mach et MiG</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Hurd utilise le micro-noyau Mach</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC11">5. Les interfaces du Hurd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les fichiers *.defs</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC12">6. A quoi ça ressemble vraiment ?</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Exemples de codes source</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC16">7. Les librairies du Hurd (Aperçu)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les librairies facilitent la vie</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC17">8. Un exemple utilisant trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Notre premier translator</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC23">9. Debugger un translator</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Comment debugger un translator</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC24">10. Un exemple comprehensible de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC25">11. Un exemple utilisant netfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC26">12. Un exemple utilisant diskfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC27">13. Foire Aux Questions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les questions souvent posées par les nouveaux hackers.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC28">14. Annexes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Annexes originales : non traduites</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<HR SIZE=1>
+<A NAME="SEC1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<A NAME="A propos de ce document"></A>
+<H1> 1. A propos de ce document </H1>
+<!--docid::SEC1::-->
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC2">1.1 Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les conventions utilisées dans ce document.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC3">1.2 Sujet</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Sujet de ce document</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC4">1.3 Contributions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">N'hésitez pas à contribuer</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Conventions"></A>
+<HR SIZE="6">
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.1 Conventions </H2>
+<!--docid::SEC2::-->
+Le numéro de version de ce document suit la convention 
+&#60;hurd version&#62;_&#60;document release&#62;.
+Cela signifie que la version 0.2_7 est la septième version depuis le Hurd 0.2 et que
+la version 0.4_1 serait la première version pour Hurd 0.4 (qui n'est bien sûr pas encore
+disponible :)).
+<P>
+
+<CODE>$(HURD)</CODE>     désigne le repertoire des sources du `Hurd'.
+<CODE>$(GNUMACH)</CODE>  désigne le repertoire des sources de `GNU Mach'.
+<CODE>$(MIG)</CODE>      désigne le repertoire des sources de `MiG'.
+<CODE>$(GLIBC)</CODE>    désigne le repertoire des sources de la `GNU Libc'.
+</P><P>
+
+Une commande du shell commence par <CODE>$</CODE> pour une commande d'un utilisateur normal et par
+<CODE>#</CODE> pour une commande de l'utilisateur root :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ diff -u libtrivfs.old/open.c libtrivfs/open.c
+# reboot
+</pre></td></tr></table></P><P>
+
+Les prompts des autres programmes sont représentés de la manière dont
+ils apparaissent dans l'application. Par exemple, le prompt de GDB est
+représenté par <CODE>(gdb)</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(gdb) break trivfs_S_io_write
+</pre></td></tr></table></P><P>
+
+J'essaierai de suivre les GNU Coding Standards dans mes exemples en C :
+<A HREF="http://www.gnu.org/prep/standards_toc.html">http://www.gnu.org/prep/standards_toc.html</A>
+</P><P>
+
+<A NAME="Sujet"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.2 Sujet </H2>
+<!--docid::SEC3::-->
+<P>
+
+Ce document est une introduction à la programmation pour Hurd et GNU/Mach.
+Le but de ce guide est d'aider les personnes interessées pour débuter à hacker le Hurd 
+ou pour l'etendre (en ecrivant des translators). Il utilise beaucoup de references aux
+sources de Hurd et de GNU/Mach. Il est donc reccomandé de les parcourir avant de le lire.
+En fait, les sources du Hurd sont bien écrites et suffisement commentées pour pouvoir être lues
+sans trop de difficultées.
+</P><P>
+
+Le Hurd semble très compliqué et difficile à maitriser au premier coup d'oeil.
+Mais il ne l'est pas car vous n'avez pas besoin de tout comprendre pour débuter, vous
+pouvez le faire petit à petit at utiliser à chaque étape ce que vous savez.
+Il y a aussi des librairies qui rendent la création de certain translators classique
+assez facile. Je pense que le seul problème est l'abscence d'une bonne documentation comme
+"Linux Module Programming Guide" ou autre, qui rend possible l'apprentissage étape par étape.
+Ce document tente de combler ce manque.
+</P><P>
+
+Mach et MiG ne sont pas décrits en détail ici, donc si vous désirez des informations spécifiques
+les concernant, je vous reccomande la lecture du GNU Mach Reference Manual
+<A NAME="DOCF1" HREF="hhg.html#FOOT1">(1)</A>
+et la documentation sur MiG disponible sur internet.
+</P><P>
+
+Le Hurd Hacking Guide n'est pas supposé être une réference complete mais
+aider à débuter. La seule veritable reference pour l'instant est ce que l'on peut
+trouver d'écrit dans les sources du Hurd.
+</P><P>
+
+L'ordre des chapitres de ce document était à l'origine basé sur un mail de
+Farid Hajji
+<A NAME="DOCF2" HREF="hhg.html#FOOT2">(2)</A>,
+qui semble basé sur <CODE>$(HURD)/doc/navigating</CODE>.
+</P><P>
+
+<A NAME="Contributions"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.3 Contributions </H2>
+<!--docid::SEC4::-->
+<P>
+
+N'hésitez pas à m'envoyer vos améliorations, corrections et extensions.
+(NdT : Vous êtes bien sûr invités à corriger mes erreurs de traduction, et il y en a surement).
+Merci à Alfred M. Szmidt pour ses corrections.
+</P><P>
+
+Je serais heureux d'avoir des retour quand à la compréhensibilité de ce document (NdT : Moi aussi !!)
+Avez vous tout compris ? Quels points vous semblent confus ?
+</P><P>
+
+En fait, j'ai écrit ce document pour expliquer tout ce que je sais à propos du Hurd
+afin que plus tard, je puisse rapidement me rappeler ce qu j'aurai oublié.
+Cela signifie que si vous m'envoyez des extensions, j'en profiterai aussi ;)
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>         +------+
+         |      |      B e   a
+     ,-&#62; | Hurd | -.      p a r t   o f
+   ,'    |      |   `.         i t
+   |     +------+    v
+</pre></td></tr></table></P><P>
+
+<A NAME="Prérequis"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Prérequis </H1>
+<!--docid::SEC5::-->
+<P>
+
+<OL>
+<LI>
+Vous devriez avoir quelques bases concernant le Hurd
+<A NAME="DOCF3" HREF="hhg.html#FOOT3">(3)</A>.
+<P>
+
+<LI>
+Des connaissances plus précises sont bien sûr les bienvenues.
+<A NAME="DOCF4" HREF="hhg.html#FOOT4">(4)</A>.
+<P>
+
+<LI>
+Savoir ce qu'est un translator est une bonne chose.
+<A NAME="DOCF5" HREF="hhg.html#FOOT5">(5)</A>.
+<P>
+
+<LI>
+Les sources du Hurd et de GNU Mach sont assez utiles :
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#! /bin/sh
+
+cd $HOME
+mkdir hurd-cvs
+cd hurd-cvs/
+
+# Use the empty string password:
+cvs -d:pserver:anoncvs@subversions.gnu.org:/cvsroot/hurd login
+
+for module in hurd gnumach
+do
+  cvs -z3 -d:pserver:anoncvs@subversions.gnu.org:/cvsroot/hurd \
+      co $module
+done
+</pre></td></tr></table></P><P>
+
+<LI>
+Avoir GNU/Hurd installé sur votre ordinateur pourrait aider aussi
+<A NAME="DOCF6" HREF="hhg.html#FOOT6">(6)</A>.
+<P>
+
+<LI>
+Se plonger dans les fichiers d'en-tête des librairies du Hurd est dangereux
+parceque vous pouvez vous noyer facilemment car vous ne trouverez pas la logique de
+toutes ces structures. Peut-être qu'une liste de où trouver quoi aidera :
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ cd $(HURD) &#38;&#38; egrep '^struct [^;*]+$' */*.h
+</pre></td></tr></table></P><P>
+
+<LI>
+Si vous connaissez les principes de Mach, ce qu'est MiG, etc..., alors cela vous
+aidera certainement beaucoup, mais ça ne devrait pas être indispensable. Connaitre un peu
+le noyau de Linux peut aussi aider dans une certaine mesure.
+<P>
+
+<LI>
+Oh, vous devez aussi connaitre un peu le langage de programmation C ;)
+</OL>
+<P>
+
+<A NAME="Courte introduction au Hurd et à Mach"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Courte introduction au Hurd et à Mach </H1>
+<!--docid::SEC6::-->
+<P>
+
+<BLOCKQUOTE>
+"We're way ahead of you here. The Hurd has always been on the cutting
+edge of not being good for anything."("Nous avons un train d'avance sur vous.
+Le Hurd a toujours été à la limite de n'être bon à rien.") (Roland McGrath)
+</BLOCKQUOTE>
+<P>
+
+<BLOCKQUOTE>
+"In short: just say NO TO DRUGS, and maybe you won't end up like the
+Hurd people."("Pour faire simple: dites juste non à la drogue, et peut-être
+que vous ne finirez pas comme les fans du Hurd.") (Linus Torvalds)
+</BLOCKQUOTE>
+<P>
+
+Tout logiciel digne de ce nom nécessite un moyen de communication entre 
+ses composants. Actuellement, des moyens comme CORBA ou les composants XPCOM de
+Mozilla sont utilisés à cette fin. L'avantage du Hurd sur les autres systèmes est qu'il
+fournit un tel moyen et ne nécessite pas de modifier les applications existantes pour
+en tirer partie. Comment fait-il ?
+</P><P>
+
+Comme vous le savez peut-être déjà, le Hurd est une collection de serveurs
+tournant avec Mach. Dans un environement Mach, les communications entre programmes
+sont principalement faites par l'envoi de messages à travers ce que l'on appelle des 
+"ports", et qui sont en fait une sorte du file de message. Pour chaque port, il y a
+une tache ayant la receive-permission (cette tache reçois les message envoyés sur ce port).
+D'autres taches peuvent avoir la send-permission (possibilité d'envoyer des messages sur ce port)
+ou la send-once-permission (qui est utilisé pour avoir la réponse d'un serveur car les ports
+sont unidirectionnels) pour ce port, ou même aucune permission.
+</P><P>
+
+Si vous lisez <CODE>$(GNUMACH)/include/mach/port.h</CODE>, vous pourrez noter qu'il y a
+d'autres droits sur les ports: une authorisation send ou send-onceend-once devient
+une "dead name" si la tache ayant le droit de reception est détruite. Ce droit ne peut
+donc être utilisé pour rien d'autre. C'est seulement un remplaçant.
+Un autre droit est le "port set", que Marcus Brinkmann définit comme suit <A NAME="DOCF7" HREF="hhg.html#FOOT7">(7)</A>:
+</P><P>
+
+<BLOCKQUOTE>
+"Un port set est un groupe de ports. Il est interessant de grouper les ports
+si vous voulez le prochain message arrivant sur n'importe lequel des ports pour 
+les quels vous avez la receive-permission. Dans le Hurd, on utilise aussi les classes
+de ports fournies par libports.
+<P>
+
+En fait, on est pas très strict au niveau du vocabulaire lorsque l'on parle de ports.
+[...] Vous pouvez voir les droits sur les ports comme des capacités associées aux ports
+et aux groupes de ports, si vous préferez."
+</BLOCKQUOTE>
+<P>
+
+Comment fait un processus pour trouver un port particulier ? C'est très simple:
+En passant par le système de fichiers. Par exemple, l'utilisation d'un serveur
+pour l'ext2 se fait à travers le noeud ou le système de fichier est "monté"
+(remarquez qu'il n'y a pas la notion de montage dans le monde du Hurd,
+c'est juste la façon dont ce serait nommé sous Unix; le terme correct sous Hurd
+est "mettre en place un translator".
+</P><P>
+
+Votre client mail favoris ne supporte pas les signatures aléatoires ? Ecrivez
+un translator pour signature aléatoire <A NAME="DOCF8" HREF="hhg.html#FOOT8">(8)</A> (qui retourne une nouvelle signature à chaque fois que
+vous le lisez). Et le mieux est : tous les clients mail peuvent utiliser cette fonction !
+Voyez-vous comment le Hurd encourage la réutilisation du code ? Comprenez vous pourquoi
+GNU/Hurd ne nécessite pas de modification des programmes pour profiter des avantages qu'il
+procure ?
+</P><P>
+
+Si vous désirez en savoir plus à propos du système de fichier du Hurd, je vous reccomande chaudement
+de lire cette présentation du Hurd :
+<A NAME="DOCF9" HREF="hhg.html#FOOT9">(9)</A>
+</P><P>
+
+On peut dire que le système de fichier est l'espace de nom pour les services,
+ce qui est aussi vrai dans l'autre sens : l'espace de nom pour les services est
+le système de fichiers. C'est une chose très importante à comprendre. Bien que le
+système de fichiers soit la voie la plus courante pour atteindre un port, il y'en
+a d'autres; par exemple, vous pouvez obtenir le port dans un message.
+</P><P>
+
+Si vous vous demandez pourquoi je compare ce genre de communication
+avec CORBA, la citation suivante provenant de la publication "Vers 
+une nouvelle stratégie de conception des OS" pourrait vous aider à comprendre.
+</P><P>
+
+<BLOCKQUOTE>
+"Avec des translators, le système de fichier peut agir en tant que « point de 
+rendez-vous » pour des applications qui ne sont pas similaires à des fichiers. 
+Considérez un service qui met en oeuvre une certaine version du protocole de X, 
+et utiliserait des messages Mach comme mode de transport fondamental. Pour chaque 
+affichage de X, un fichier peut être créé avec le programme approprié en tant que 
+translator. Les clients X ouvriraient simplement ce fichier. Peu d'opération sur 
+les fichiers seraient utiles (lire et écrire, par exemple, serait inutile), mais 
+les nouvelles opérations (XCreateWindow ou XDrawText) pourraient devenir signicatives. 
+Dans ce cas, le protocole fichier est uniquement utilisé pour manipuler les 
+caractéristiques du node servant de « point de rendez-vous ». Ce node n'a pas 
+besoin de supporter d'opérations E/S, mais il peut répondre à de tels messages 
+par un code « message_not_understood »."
+</BLOCKQUOTE>
+<P>
+
+<A NAME="Les bases de Mach et MiG"></A>
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Les bases de Mach et MiG </H1>
+<!--docid::SEC7::-->
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC8">4.1 Les ports de Mach</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Un port est une file de message</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC9">4.2 Les threads et les taches</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC10">4.3 MiG</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Mach Interface Generator</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Les ports de Mach"></A>
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 Les ports de Mach </H2>
+<!--docid::SEC8::-->
+Nous allons maintenant nous pencher de plus près sur Mach.
+Je sais que vous voudriez commencer à écrire des translators aussi vite que possible
+mais vous aurez vraiment besoin de quelques bases sur Mach
+Les ports de Mach sont beaucoup utilisés dans le Hurd, ce sera donc
+notre point de départ.
+<P>
+
+Tout d'abord, faisons bien la distinction entre les ports, les droits sur les ports
+et les noms de ports. Marcus Brinkmann à écrit (sur IRC):
+</P><P>
+
+<BLOCKQUOTE>
+"<CODE>mach_port_t</CODE> est un nom de port, il désigne une entrée dans l'espace de nom
+des ports, qui est associée à un droit dead name, un droit send-once ou une combinaison 
+de droits receive et send avec éventuellement plusieurs utilisateurs.
+<P>
+
+Suposons que vous ayez un <CODE>mach_port_t 5</CODE>, et que vous vouliez lui envoyer un
+message. Pour ce faire, vous passez la tache <CODE>mach_task_self()</CODE>, le nom de port, 
+l'id du message et les arguments. La tache est utilisée pour récupérer l'espace de nom
+IPC, le nom de port est utilisé pour trouver l'entrée dans cet espace de nom.
+L'entrée renseigne Mach sur les droits que vous avez sur le port qui porte ce nom.
+</P><P>
+
+Il n'y a qu'un seul nom de port pour tous les droits receive/send que vous
+pouvez avoir sur un port. Mais il y a des noms differents pour les droits send-once,
+parceque ça facilite la gestion par le Mach - et par les programmes utilisateurs aussi."
+</BLOCKQUOTE>
+<P>
+
+Mach définit le type natural_t, qui est le type natif pour la machine,
+par exemple 32 bits pour processeur 32-bit. natural_t est toujours
+non-signé, mais il y a une version signée qui s'appelle integer_t. La 
+definition pour une plateforme i386 peut être touvée dans
+<CODE>$(GNUMACH)/i386/include/mach/i386/vm_types.h</CODE>. Dans ce fichier se
+trouvent d'autres types interessants, mais ils ne nous seront pas utiles 
+pour l'instant.
+</P><P>
+
+Comme les descripteurs de fichiers Unix, les noms de port de Mach sont
+de simples et ennuyeux entiers. Dans le fichier <CODE>$(GNUMACH)/include/mach/port.h</CODE> 
+vous pouvez trouver les définitions suivantes :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef natural_t mach_port_t;
+typedef mach_port_t *mach_port_array_t;
+</pre></td></tr></table></P><P>
+
+(Pour la plupart des types de données fournits par le Mach, il existe un type
+*_array_t.) Le numéros de port identifie un unique port (dans l'espace de nom de 
+la tache), ainsi une valeur de mach_port_t est souvent désignée comme un nom de port.
+</P><P>
+
+Une valeure de <CODE>MACH_PORT_DEAD</CODE> (i.e. ~0) represente un droit de port
+qui est mort, alors que <CODE>MACH_PORT_NULL</CODE> (cf port.h)
+"indique l'absence de port ou de droit sur le port."
+</P><P>
+
+Vous pouvez vérifier avec <CODE>MACH_PORT_VALID (port)</CODE> si un port n'a pas l'une
+de ces valeurs.
+</P><P>
+
+Pour les droits sur les ports, il existe les macros suivantes :
+<CODE>MACH_PORT_RIGHT_RECEIVE</CODE>,
+<CODE>MACH_PORT_RIGHT_SEND</CODE>,
+<CODE>MACH_PORT_RIGHT_SEND_ONCE</CODE>,
+<CODE>MACH_PORT_RIGHT_PORT_SET</CODE>,
+<CODE>MACH_PORT_RIGHT_DEAD_NAME</CODE> and
+<CODE>MACH_PORT_RIGHT_NUMBER</CODE>
+qui sont de type <CODE>mach_port_right_t</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef natural_t mach_port_right_t;
+</pre></td></tr></table></P><P>
+
+Ce type est utile lorsque l'on désire agir sur un droit paritculier d'un port.
+Souvent cependant, on désire utiliser un groupe de droits car on peut avoir
+plusieurs droits sur un seul port. Pour cela, on utilisera le type suivant :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef natural_t mach_port_type_t;
+typedef mach_port_type_t *mach_port_type_array_t;
+</pre></td></tr></table></P><P>
+
+Une variable mach_port_type_t peut soit porter la valeur <CODE>MACH_PORT_TYPE_NONE</CODE>,
+qui représente bien sûr un groupe de droits vide, ou un ensemble de macros
+<CODE>MACH_PORT_TYPE_SEND</CODE>, <CODE>MACH_PORT_TYPE_RECEIVE</CODE> etc. combinées avec un 
+OR bit à bit. IL y a aussi plusieurs combinaisons prédéfinies :
+</P><P>
+
+<TABLE>
+<TR><TD>Macro </TD><TD> Combination</TD>
+</TR>
+<TR><TD>MACH_PORT_TYPE_SEND_RECEIVE </TD><TD> MACH_PORT_TYPE_SEND,</TD>
+</TR>
+<TR><TD></TD><TD> MACH_PORT_TYPE_RECEIVE</TD>
+</TR>
+<TR><TD></TD><TD></TD>
+</TR>
+<TR><TD>MACH_PORT_TYPE_SEND_RIGHTS  </TD><TD> MACH_PORT_TYPE_SEND,</TD>
+</TR>
+<TR><TD></TD><TD> MACH_PORT_TYPE_SEND_ONCE</TD>
+</TR>
+<TR><TD></TD><TD></TD>
+</TR>
+<TR><TD>MACH_PORT_TYPE_PORT_RIGHTS  </TD><TD> MACH_PORT_TYPE_SEND_RIGHTS,</TD>
+</TR>
+<TR><TD></TD><TD> MACH_PORT_TYPE_RECEIVE</TD>
+</TR>
+<TR><TD></TD><TD></TD>
+</TR>
+<TR><TD>MACH_PORT_TYPE_PORT_OR_DEAD </TD><TD> MACH_PORT_TYPE_PORT_RIGHTS,</TD>
+</TR>
+<TR><TD></TD><TD> MACH_PORT_TYPE_DEAD_NAME</TD>
+</TR>
+<TR><TD></TD><TD></TD>
+</TR>
+<TR><TD>MACH_PORT_TYPE_ALL_RIGHTS   </TD><TD> MACH_PORT_TYPE_PORT_OR_DEAD,</TD>
+</TR>
+<TR><TD></TD><TD> MACH_PORT_TYPE_PORT_SET</TD>
+</TR></TABLE>
+<P>
+
+Ne confondez pas les <CODE>MACH_PORT_RIGHT_*</CODE> avec les macros <CODE>MACH_PORT_TYPE_*</CODE>.
+Leurs noms sont similaires, mais ont une signification et une valeure differente.
+</P><P>
+
+Vous pourrez trouver plus de détails sur l'IPC (Inter Process Communication : Communication
+Inter Processus) du Mach dans le Manuel de Reference de GNU Mach, Chapître 4
+<A NAME="DOCF10" HREF="hhg.html#FOOT10">(10)</A>.
+</P><P>
+
+<A NAME="Les threads et les taches"></A>
+<HR SIZE="6">
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Les threads et les taches </H2>
+<!--docid::SEC9::-->
+<P>
+
+<A NAME="MiG"></A>
+<HR SIZE="6">
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 MiG </H2>
+<!--docid::SEC10::-->
+<P>
+
+Faire des RPCs (Remote Procedure Calls : Appel de procedures distantes) 
+en envoyant des messages Mach n'est pas trivial. Rendre la tache plus simple
+est le but de MiG (Mach Interface Generator : Generateur d'interfaces pour Mach).
+Vous devez ecrire un fichier de definition de l'interface, le faire traiter par MiG
+et il fournit deux fichiers source C et un fichier d'en-tête, qui s'occupe de la 
+mécanique des ports de Mach pour vous. Dès lors vous pouvez envoyer des messages par
+de simples appels de fonction.
+</P><P>
+
+Bien sûr, vous n'avez à le faire que si vous désirez mettre en place
+votre propre interface. Le Hurd contient déja plusieurs interfaces.
+Les fonctions appropriées sont dans la glibc, et vous n'avez donc rien
+à faire avant de vous en servir.
+</P><P>
+
+La syntaxe des fichiers MiG est similaire au Pascal et ne devrait pas
+être dure à comprendre. Nous verrons quelques détails plus loin.
+</P><P>
+
+<A NAME="Les interfaces du Hurd"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Les interfaces du Hurd </H1>
+<!--docid::SEC11::-->
+<P>
+
+Comprendre les conceptes est une chose importante, mais ça ne suffira pas
+pour faire quoi que ce soit. Vous avez aussi besoin de connaître quelques
+choses à propos des interfaces qui rendent possible l'usage de ces concepts.
+</P><P>
+
+Vous trouverez les definitions des interfaces dans les fichiers
+<CODE>$(HURD)/hurd/*.defs</CODE>. Les plus importantes sont io.defs,
+password.defs, fsys.defs, fs.defs et auth.defs. L'interface login.defs
+est interessante, mais pas encore implémentée et ne le sera peut être jamais
+Les interfaces *_reply.defs sont - bien sûr - pour les réponses.
+</P><P>
+
+Vous devriez vraiment jeter un oeil aux interfaces du Hurd maintenant. Dans le
+prochain chapître, nous verrons comment les utiliser.
+</P><P>
+
+<A NAME="A quoi ça ressemble vraiment ?"></A>
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 6. A quoi ça ressemble vraiment ? </H1>
+<!--docid::SEC12::-->
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC13">6.1 Ecrire un fichier sur la sortie standard</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">dump.c</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC14">6.2 Créer une copie d'un fichier</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">copy.c</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC15">6.3 Notes finales</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Informations supplémentaires</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Ecrire un fichier sur la sortie standard"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.1 Ecrire un fichier sur la sortie standard </H2>
+<!--docid::SEC13::-->
+<P>
+
+Regardons d'un peu plus près un programme qui affiche le contenu d'un fichier
+sur la sortie standard d'une manière "hurdiste". Notez que la manière habituelle
+est toujours utilisable. Glibc fournit toujours les functions comme <CODE>write ()</CODE> 
+pour le Hurd. Les parties specifiques au hurd de la glibc sont dans
+<CODE>$(GLIBC)/hurd/</CODE>, les parties dépendante du Mach sont dans
+<CODE>$(GLIBC)/sysdeps/mach/hurd/</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* dump.c - Dump a file to stdout in a "hurdish" way.
+ * Copyright (C) 2001, 2002 Wolfgang J&auml;hrling &#60;wolfgang@pro-linux.de&#62;
+ * Distributed under the terms of the GNU General Public License.
+ * This is distributed "as is". No warranty is provided at all.
+ */
+
+#define _GNU_SOURCE 1
+
+#include &#60;hurd.h&#62;
+#include &#60;hurd/io.h&#62;
+
+#include &#60;fcntl.h&#62;
+#include &#60;stdio.h&#62;
+#include &#60;errno.h&#62;
+#include &#60;error.h&#62;
+
+int
+main (int argc, char *argv[])
+{
+  file_t f;
+  mach_msg_type_number_t amount;
+  char *buf;
+  error_t err;
+
+  if (argc != 2)
+    error (1, 0, "Usage: %s <filename>", argv[0]);
+
+  /* Open file */
+  f = file_name_lookup (argv[1], O_READ, 0);
+  if (f == MACH_PORT_NULL)
+    error (1, errno, "Could not open %s", argv[1]);
+
+  /* Get size of file (buggy! See below) */
+  err = io_readable (f, &#38;amount);
+  if (err)
+    error (1, err, "Could not get number of readable bytes");
+
+  /* Create buffer */
+  buf = malloc (amount + 1);
+  if (buf == NULL)
+    error (1, 0, "Out of memory");
+
+  /* Read */
+  err = io_read (f, &#38;buf, &#38;amount, -1, amount);
+  if (err)
+    error (1, errno, "Could not read from file %s", argv[1]);
+  buf[amount] = '\0';
+  mach_port_deallocate (mach_task_self (), f);
+
+  /* Output */
+  printf ("%s", buf);
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+Vous pouvez compiler ce programme comme suit :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ gcc -g -o dump dump.c
+</pre></td></tr></table></P><P>
+
+Penchons nous sur les parties interessantes de ce programme :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#define _GNU_SOURCE 1
+</pre></td></tr></table></P><P>
+
+Je vous conseille de toujours définir cette macro pour les programmes
+spécifiques a GNU/Hurd, sans quoi vous ne pourrez même pas les compiler.
+Definissez la avant d'inclure un quelconque fichier d'en-tête. Pour des 
+programmes plus important, vous serez plutôt tentés de passer
+<CODE>-D_GNU_SOURCE</CODE> à gcc.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>file_t f;
+</pre></td></tr></table></P><P>
+
+Un file_t est en fait un mach_port_t, mais nous utilisons un file_t pour montrer 
+clairement que nous allons l'utiliser pour ouvrir un fichier.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>char *buf;
+</pre></td></tr></table></P><P>
+
+Vous aurez peut-être noté que nous allons utiliser ce buffer dans une situation
+où nous devrions passer un data_t (qui est définit comme un char *), mais
+<CODE>$(HURD)/hurd/hurd_types.h</CODE> affirme pour data_t et quelques autres types:
+</P><P>
+
+<BLOCKQUOTE>
+"Ces noms n'existent qu'a cause de defaillances de MiG. Vous ne devriez pas les utiliser
+dans des sources C; utilisez les types C standard à la place."
+</BLOCKQUOTE>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>error_t err;
+</pre></td></tr></table></P><P>
+
+Il y a aussi le type kern_return_t, mais dans le Hurd, error_t est
+le meilleur choix. Marcus Brinkmann explique pourquoi:
+</P><P>
+
+<BLOCKQUOTE>
+"kern_return_t est le type d'erreur mach pour mach_msg par exemple, donc
+si vous faîtes un RPC, et désirez le faire d'une manière compatible avec le
+Mach, utilisez kern_return_t. MAIS pour le Hurd, utilisez error_t, car c'est
+compatible avec les types d'erreur de la glibc. Vous pouvez toujours convertir
+depuis kern_return_t vers un error_t sur les systemes GNU."
+</BLOCKQUOTE>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (argc != 2)
+  error (1, 0, "Usage: %s <filename>", argv[0]);
+</pre></td></tr></table></P><P>
+
+Juste au cas où vous ne seriez pas familier avec la fonction
+<CODE>error ()</CODE> je citerai <CODE>/include/error.h</CODE> (Souvenez vous que l'on utilise pas
+/usr dans le Hurd :-)):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Ecrivez un message avec `fprintf (stderr, FORMAT, ...)';
+   si ERRNUM est non nul, faites suivre de ": " et strerror (ERRNUM).
+   si STATUS est non nul, terminez le programme avec `exit (STATUS)'.  */
+extern void error (int status, int errnum, const char *format, ...);
+</pre></td></tr></table></P><P>
+
+Maintenant l'action arrive vraiment. On essaie d'ouvrir un fichier avec
+la fonction de la glibc <CODE>file_name_lookup ()</CODE>. Cette fonction retourne
+<CODE>MACH_PORT_NULL</CODE> si la tentative à échoué. O_READ est une extension de GNU 
+et est identique à la constante POSIX O_RDONLY. De même, O_WRITE est identique à O_WRONLY.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Open file */
+f = file_name_lookup (argv[1], O_READ, 0);
+if (f == MACH_PORT_NULL)
+  error (1, errno, "Could not open %s", argv[1]);
+</pre></td></tr></table></P><P>
+
+Bien sûr, nous pourrions lire le fichier caractère par caractère, mais
+dans cette exemple, nous supposons que c'est un fichier "normal" et
+que nous pouvons le lire en une fois, donc nous utilisons <CODE>io_readable ()</CODE> 
+pour connaître la taille du fichier (ça ne marchera pas pour des fichiers comme /dev/random !
+<CODE>io_readable ()</CODE> nous dit seulement quelle quantité de donnée est disponible à l'instant
+de son appel). On crée alors un buffer pour le fichier complet:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Get size of file */
+err = io_readable (f, &#38;amount);
+if (err)
+  error (1, err, "Could not get number of readable bytes");
+
+/* Create buffer */
+buf = malloc (amount + 1);
+if (buf == NULL)
+  error (1, 0, "Out of memory");
+</pre></td></tr></table></P><P>
+
+Maintenant, tout ce que nous avons à faire est de lire le fichier dans le buffer.
+On ajoute un octet nul à la fin, afin de pouvoir l'utiliser comme une chaine (on 
+suppose que le fichier ne contient pas de caractère nul, ce qui n'est pas parfait,
+mais pour l'exemple on ne s'en préoccupe pas).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Read */
+err = io_read (f, &#38;buf, &#38;amount, -1, amount);
+if (err)
+  error (1, errno, "Could not read from file %s", argv[1]);
+buf[amount] = '\0';
+</pre></td></tr></table></P><P>
+
+Remarquez que l'on passe "&#38;buf", qui est un poiteur de pointeur. "buf"
+pourrait être modifié, mais cette décision doit être laissée au receveur 
+du message io_read.
+</P><P>
+
+Si vous regardez <CODE>$(HURD)/hurd/io.defs</CODE>, vous vous demanderez sans doute
+pourquoi on passe 5 arguments à io_read qui n'en attend que 4. io_object, data,
+offset et amount sont écrit dans le fichier .defs, alors que 
+<CODE>/include/hurd/io.h</CODE> a un argument supplémentaire (appelé dataCnt)
+après data, qui est tout a fait logique : Nous avons aussi besoin de connaître
+la quantité de données que nous avons. Ajouter cet argument est fait automatiquement
+par MiG.
+</P><P>
+
+Nous en avons terminé avec le fichier, nous pouvons donc le fermer. Cela
+se fait en desallouant le port:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>mach_port_deallocate (mach_task_self (), f);
+</pre></td></tr></table></P><P>
+
+C'est tout.
+</P><P>
+
+<A NAME="Créer une copie d'un fichier"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC15"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.2 Créer une copie d'un fichier </H2>
+<!--docid::SEC14::-->
+<P>
+
+Nous allons maintenant essayer de copier un fichier. Mais cette fois, 
+nous allons le faire correctement: si le translator qui fournit le fichier
+prend un certain temps pour fournir ses données, nous attendrons. Nous allons
+donc lire jusqu'à rencontrer un EOF. Nous saurons que nous aurons atteint
+la fin du fichier si notre appel à <CODE>io_read ()</CODE> nous donne zero octets de
+données.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* copy.c - Copy a file in a "hurdish" way.
+ * Copyright (C) 2001 Wolfgang J&auml;hrling &#60;wolfgang@pro-linux.de&#62;
+ * Distributed under the terms of the GNU General Public License.
+ * This is distributed "as is". No warranty is provided at all.
+ */
+
+#define _GNU_SOURCE 1
+
+#include &#60;hurd.h&#62;
+#include &#60;hurd/io.h&#62;
+
+#include &#60;fcntl.h&#62;
+#include &#60;stdio.h&#62;
+#include &#60;errno.h&#62;
+#include &#60;error.h&#62;
+
+#define BUFLEN 10  /* Arbitrary */
+
+int
+main (int argc, char *argv[])
+{
+  file_t in, out;
+  mach_msg_type_number_t rd_amount, wr_amount;
+  char *buf, *ptr;
+  error_t err;
+
+  if (argc != 3)
+    error (1, 0, "Usage: %s <inputfile> &#60;outputfile&#62;", argv[0]);
+
+  /* Create buffer */
+  buf = malloc (BUFLEN + 1);
+  if (buf == NULL)
+    error (1, 0, "Out of memory");
+
+  /* Open files */
+  in = file_name_lookup (argv[1], O_READ, 0);
+  if (in == MACH_PORT_NULL)
+    error (1, errno, "Could not open %s", argv[1]);
+  out = file_name_lookup (argv[2], O_WRITE | O_CREAT | O_TRUNC, 0640);
+  if (out == MACH_PORT_NULL)
+    error (1, errno, "Could not open %s", argv[2]);
+
+  /* Copy */
+  while (1)
+    {
+      /* Read */
+      err = io_read (in, &#38;buf, &#38;rd_amount, -1, BUFLEN);
+      if (err)
+        error (1, err, "Could not read from file %s", argv[1]);
+
+      if (rd_amount == 0)
+        break;
+
+      /* Write */
+      ptr = buf;
+      do
+        {
+          err = io_write (out, ptr, rd_amount, -1, &#38;wr_amount);
+          if (err)
+            error (1, err, "Could not write to file %s", argv[2]);
+          rd_amount -= wr_amount;
+          ptr += wr_amount;
+        }
+      while (rd_amount);
+    }
+
+  mach_port_deallocate (mach_task_self (), in);
+  mach_port_deallocate (mach_task_self (), out);
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+Les parties interessantes sont :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>out = file_name_lookup (argv[2], O_WRITE | O_CREAT | O_TRUNC, 0640);
+</pre></td></tr></table></P><P>
+
+Ici, nous créons un fichier avec la permission 640 si il n'existe pas, 
+et récupérons sa sortie.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Read */
+err = io_read (in, &#38;buf, &#38;rd_amount, -1, BUFLEN);
+if (err)
+  error (1, err, "Could not read from file %s", argv[1]);
+
+if (rd_amount == 0)
+  break;
+</pre></td></tr></table></P><P>
+
+Comme nous l'avons dit plus haut: si on ne peut lire aucun octet, cela
+signifie que nous avons atteint la fin du fichier. Ca ne veut pas dire
+qu'il n'y a pas de donnée disponible à cet instant: Si nous lisions depuis
+/dev/random par exemple, et qu'il n'y aurait pas de données à lire à cet
+instant, l'appel ne nous dirait pas qu'il n'y a pas de données, mais bloquerait
+jusqu'à l'arrivée de nouvelle donnée.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Write */
+ptr = buf;
+do
+  {
+    err = io_write (out, ptr, rd_amount, -1, &#38;wr_amount);
+    if (err)
+      error (1, err, "Could not write to file %s", argv[2]);
+    rd_amount -= wr_amount;
+    ptr += wr_amount;
+  }
+while (rd_amount);
+</pre></td></tr></table></P><P>
+
+Il n'y a pas de certitude que <CODE>io_write ()</CODE> acceptera immediatement toutes les données
+que nous essaierons de lui envoyer, donc nous devrons sans doute réessayer, mais
+seulement avec les données qui n'ont pas été acceptées.
+</P><P>
+
+<A NAME="Notes finales"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.3 Notes finales </H2>
+<!--docid::SEC15::-->
+<P>
+
+Finalement, je voudrais préciser que sur GNU/Hurd, il n'y a pas
+de raison de ne pas utiliser l'excellente extension non standard de GCC.
+Par exemple, les fonctions imbriquées sont fréquement utilisées dans les
+sources du Hurd. Il peut être très utile d'en savoir un peu sur ces extensions,
+donc vous devriez sans doute faire :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ info gcc "C Extensions"
+</pre></td></tr></table></P><P>
+
+Un bon exemple de code "hurdiste" est <CODE>$(HURD)/init/init.c</CODE>, donc vous devriez
+y jeter un coup d'oeil. Vous ne comprendrez sans doute pas tout, mais ça n'est
+pas genant. Vous trouverez d'autres sources que vous voudrez peut-être lire 
+dans <CODE>$(HURD)/utils/</CODE> et <CODE>$(HURD)/sutils/</CODE>.
+</P><P>
+
+<A NAME="Les librairies du Hurd (Aperçu)"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 7. Les librairies du Hurd (Aperçu) </H1>
+<!--docid::SEC16::-->
+<P>
+
+Il y a un certain nombre de librairies qui rendent l'ecriture d'un
+translator plus facile.
+</P><P>
+
+Libtrivfs est utilisée pour les translators "triviaux". Dans ce cas,
+un translator trivial est un translator qui ne donne accès qu'à un seul 
+fichier (noeud), et non à un répertoire complet ou même un système de 
+fichiers. Comme les premiers translators qu'écrivent tous les nouveaux
+hacker sous le Hurd sont de ce type, cette librairie est la première que 
+vous devriez étudier.
+</P><P>
+
+Libnetfs est la librairie pour des translators donnant accès à un système
+de fichiers complet, et contrôlant pas directement les données sous jacentes, 
+comme c'est le cas dans ftpfs, nfs et shadowfs<A NAME="DOCF11" HREF="hhg.html#FOOT11">(11)</A>, 
+par exemple. Libnetfs sera probablement renommée libfsserver.
+</P><P>
+
+Libdiskfs est aussi destinée aux systèmes de fichiers complets, mais
+est utilisée dans les cas ou le translator controle les données sous 
+jacentes, comme par exemple ext2fs, UFS et tmpfs.
+</P><P>
+
+Libtreefs est morte. Elle n'a jamais été terminée, et personne ne l'utilise.
+Vous ne devriez pas non plus.
+</P><P>
+
+Libports fournit des fonctions pour travailler avec les ports. Elle
+peut aussi être vu comme une abstraction des fonctionnalités que le 
+Hurd attend d'un system transmettant des messages.
+</P><P>
+
+Libstore: L'explication suivante peut être trouvée dans le fichier
+d'en-tête de libstore : "Un `store' (une réserve) est un block de 
+stockage de taille fixe, qui peut être lu et éventuellement écrit. 
+Cette librairie implémente plusieurs interfaces différentes qui autorisent 
+la réserve à être utilisé avec plusieurs types de stockage -- fichiers, 
+mémoire, taches, etc. Elle permet aussi de combiner et de filtrer les 
+réserves de différentes manières."
+            
+</P><P>
+
+Libiohelp: "Librairie fournissant des fonctions utiles aux serveurs 
+d'entrées/sorties."
+</P><P>
+
+Libthreads est la librairie des cthreads. Cette librairie viens du
+micronoyau Mach et à été dévelopée avant que le standard des threads 
+POSIX existe. Les threads POSIX seront disponibles à l'avenir, mais 
+pour l'instant, l'instant, cette librairie est utilisée poru le 
+multithreading.
+</P><P>
+
+Libihash fournit des fonctions destinées aux hash-table à clefs
+entières.
+</P><P>
+
+Libps: "Routines pour récupérer et afficher des informations sur
+les processus."
+</P><P>
+
+Libshouldbeinlibc: Nomen est omen. :-)
+</P><P>
+
+<A NAME="Un exemple utilisant trivfs"></A>
+<HR SIZE="6">
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 8. Un exemple utilisant trivfs </H1>
+<!--docid::SEC17::-->
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC18">8.1 GNU/Linux et GNU/Hurd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Quelle différence ?</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC19">8.2 Implementer les fonctions de rappel de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Implementer une interface hurdiste</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC20">8.3 Autres fonctions de rappel de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Variables qu'il faut définir</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC21">8.4 The main function</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Mise en place du translator</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC22">8.5 La source complete</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">hurd-one.c</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="GNU/Linux et GNU/Hurd"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.1 GNU/Linux et GNU/Hurd </H2>
+<!--docid::SEC18::-->
+<P>
+
+Avant de regarder de plus prêt comment utiliser trivfs, regardons
+comment ce serait fait dans un système GNU/Linux. Je ne vais pas 
+entrer dans les détails de cette exemple, car ce n'est pas très 
+important pour nous, mais comme beaucoup sont familiers avec la
+programmation (noyau) sous Linux, il pourrait être interessant de 
+comparer la façon dont les choses sont faites sous GNU/Linux par
+rapport à GNU/Hurd.
+</P><P>
+
+Ecrire un module pour le noyau de Linux, pour un périphérique comme
+/dev/one (qui bien sur, donne une infinité de 1 si vous la lisez :))
+est facile en théorie. Un module pour le noyau 2.4.x dans un
+fichier dédié ressemblerait à ça :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* linux-one.c - Linux kernel module for /dev/one.
+ * Copyright (C) 2000, 2001 Wolfgang J&auml;hrling &#60;wolfgang@pro-linux.de&#62;
+ * Distributed under the terms of the GNU General Public License.
+ * This is distributed "as is". No warranty is provided at all.
+ */
+
+#include &#60;linux/kernel.h&#62;
+#include &#60;linux/module.h&#62;
+#include &#60;linux/fs.h&#62;
+#include &#60;linux/wrapper.h&#62;
+#include &#60;asm/uaccess.h&#62;
+
+#define ONE_NAME "one"
+#define ONE_MAJOR 100 /* Major device file number */
+
+static int is_opened = 0;
+
+/* Someone wants to open the file */
+static int
+device_open (struct inode *inode, struct file *file)
+{
+  /* We allow only one simultaneous usage */
+  if (is_opened)
+    return -EBUSY;
+
+  is_opened = 1;
+  MOD_INC_USE_COUNT; /* Module can't be unloaded now */
+
+  return 0; /* Could be opened */
+}
+
+/* The file is closed again */
+static int
+device_release (struct inode *inode, struct file *file)
+{
+  is_opened = 0;
+  MOD_DEC_USE_COUNT; /* Module may be unloaded now */
+
+  return 0;
+}
+
+/* Somebody wants to have lots of one's */
+static ssize_t
+device_read (struct file *file, char *buf, size_t len, loff_t *offset)
+{
+  int i;
+  static char one = 1;
+
+  for (i = 0; i &#60; len; i++)
+    if (copy_to_user (&#38;buf[i], &#38;one, 1))
+      return -EFAULT;
+
+  return len;
+}
+
+/* Now he/she wants to write something... */
+static ssize_t
+device_write (struct file *file, const char *buf, size_t len,
+              loff_t *offset)
+{
+  /* ...but we don't care */
+  return len;
+}
+
+/* Let's put the supported operations in a structure */
+struct file_operations one_operations =
+  {
+    NULL, /* Owner module... wonder what this means :-) */
+    NULL, /* seek */
+    device_read,
+    device_write,
+    NULL, /* readdir */
+    NULL, /* poll */
+    NULL, /* ioctl */
+    NULL, /* mmap */
+    device_open
+    NULL, /* flush */
+    device_release,
+    NULL, NULL, NULL, NULL, NULL /* Some others */
+  };
+
+/* This is automatically called when the module is loaded */
+int
+init_module (void)
+{
+  int result = register_chrdev (ONE_MAJOR, ONE_NAME, &#38;one_operations);
+
+  if (result &#60; 0) /* Could not register character device */
+    {
+      printk (KERN_ERR "Couldn't register device: %d.\n", result);
+      return result;
+    }
+  printk (KERN_INFO "Loading the %s module.\n", ONE_NAME);
+  return 0;
+}
+
+/* This gets called when unloading the module */
+void
+cleanup_module (void)
+{
+  int result = unregister_chrdev (ONE_MAJOR, ONE_NAME);
+
+  if (result &#60; 0)
+    printk (KERN_ERR "Couldn't unregister device: %d.\n", result);
+  else
+    printk (KERN_INFO "Unloading the %s module.\n", ONE_NAME);
+}
+</pre></td></tr></table></P><P>
+
+Nous implémentons simplement les opérations habituelles come <CODE>read ()</CODE>,
+<CODE>close ()</CODE> et <CODE>open ()</CODE>, plaçons des pointeurs sur ces fonctions
+dans une structure et enregistrons le tout comme un périphérique de caractères.
+</P><P>
+
+Dans l'étape suivante, nous compilerions ce fichier source en un fichier objet
+que nous chargerions en root grace à insmod(8) et créerions le fichier /dev/one
+avec 
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre># cd /dev &#38;&#38; mknod one c 100 1
+</pre></td></tr></table></P><P>
+
+C'est simple à comprendre - mais difficile à mettre en pratique, pour
+(au moins) quatre raisons : Premièrement, une petite erreur dans le code
+peut causer un kernel panic; deuxièmement, vous avez besoin d'être root
+pour faire tout cela; troisièmement, vous ne pouvez utiliser les fonctions
+de la GNU C librairie, et d'autres librairies utiles comme la GLib; 
+quatrièmement, vous devez utiliser un numéro de périphérique non utilisé
+(J'ai utilisé 100 ci-dessus en esperant que personne n'avait fait de même
+ avant).
+</P><P>
+
+Avec le Hurd, les choses fonctionnent différement. Bien sûr, la structure
+globale est un peu différente, mais aussi (et c'est plus important) 
+l'enfironment du code est plus sympathique : C'est l'environment `normal'
+(user space) que nous connaissons tous. Cela signifie que vous pouvez 
+développer un translator comme n'importe quel autre programme. Le seul 
+désavantage est que l'interface de programmation est un peu plus complexe
+que celle du noyau Linux. Mais si vous comprenez l'exemple ci-dessus, vous
+n'aurez pas de problème à suivre le translator qui vient, qui implémente 
+la même fonctionnalité.
+</P><P>
+
+En fait, il fournit plus de fonctionalités, car libtrivfs nous force
+à en implémenter plus; quand vous implémenterez un vrai translator, 
+vous devriez aussi vous préoccuper des options passées, car parfois,
+l'utilisateur demande seulement "--help", mais j'ai essayé de conserver
+cette exemple aussi simple que possible. Lorsque vous écrivez des 
+programmes pour le système GNU, il est reccomandé de parser les options 
+avec la fonction argp. <A NAME="DOCF12" HREF="hhg.html#FOOT12">(12)</A>
+</P><P>
+
+<A NAME="Implementer les fonctions de rappel de trivfs"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC20"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.2 Implementer les fonctions de rappel de trivfs </H2>
+<!--docid::SEC19::-->
+<P>
+
+Dans le systeme GNU/Hurd, les appels systemes usuels d'Unix sont
+fournis par la GNU C librairie qui les transforme en messages transmis 
+aux ports respectifs. Cela signifie que vous n'écrirez pas 
+d'implémentations directes pour des fonctions comme <CODE>read ()</CODE>, 
+mais des fonctions utilisant des arguments comme par exemple 
+<CODE>io_read ()</CODE>. Lorsque l'on utilise la librairie trivfs,
+nous devons implementer des routines avec des arguments quelque peu 
+différents. Par exemple, les arguments de <CODE>trivfs_S_io_read ()</CODE>,
+sont :
+</P><P>
+
+<TABLE>
+<TR><TD>Type </TD><TD> Name </TD><TD> Description</TD>
+</TR>
+<TR><TD>struct trivfs_protid *</TD>
+</TD><TD> cred
+</TD><TD> Credentials
+</TR>
+<TR><TD>mach_port_t</TD>
+</TD><TD> reply
+</TD><TD> The port where the reply will be sent
+</TR>
+<TR><TD>mach_msg_type_name_t</TD>
+</TD><TD> reply_type
+</TD><TD> The rights we have on the above port
+</TR>
+<TR><TD>vm_address_t *</TD>
+</TD><TD> data
+</TD><TD> Pointer to the place where you should write you reply data to
+</TR>
+<TR><TD>mach_msg_type_number_t</TD>
+</TD><TD> data_len
+</TD><TD> Here you should store, how much data you actually return. Initialy, this
+is set to the size of the already available memory at *data.
+</TR>
+<TR><TD>off_t</TD>
+</TD><TD> offs
+</TD><TD> Seek a position. If offs is -1, use the internal file pointer. Ignore it
+if the object is not seekable.
+</TR>
+<TR><TD>mach_msg_type_number_t</TD>
+</TD><TD> amount
+</TD><TD> How much data you should write
+</TR></TABLE>
+<P>
+
+La fonction <CODE>trivfs_S_io_read ()</CODE> du translator "Hello, world"
+(cf <CODE>$(HURD)/trans/hello.c</CODE>) est un bon exemple de comment 
+implémenter une telle fonction. L'implémentation de notre "one" translator
+sera un exemple un peu moins complet.
+</P><P>
+
+Voilà à quoi ressemble notre fonction :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>error_t
+trivfs_S_io_read (struct trivfs_protid *cred,
+                  mach_port_t reply, mach_msg_type_name_t reply_type,
+                  vm_address_t *data, mach_msg_type_number_t *data_len,
+                  off_t offs, mach_msg_type_number_t amount)
+{
+  /* Deny access if they have bad credentials. */
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (! (cred-&#62;po-&#62;openmodes &#38; O_READ))
+    return EBADF;
+
+  if (amount &#62; 0)
+    {
+      int i;
+
+      /* Possibly allocate a new buffer. */
+      if (*data_len &#60; amount)
+        *data = (vm_address_t) mmap (0, amount, PROT_READ|PROT_WRITE,
+                                     MAP_ANON, 0, 0);
+
+      /* Copy the constant data into the buffer. */
+      for (i = 0; i &#60; amount; i++)
+        ((char *) *data)[i] = 1;
+    }
+
+  *data_len = amount;
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+C'est la fonction de rappel la plus complexe de notre translator. 
+Les autres sont plus simples.
+</P><P>
+
+Vous devriez toujours retourner EOPNOTSUPP (Operation non supportée) si
+"cred" est mauvais, et EBADF (Mauvais descripteur de fichier) se le
+bit nécessaire n'est pas en place.
+</P><P>
+
+Si l'utilisateur veut lire plus d'octets (le nombre dans "amount") que
+le buffer peut contenir, nous devons allouer de la mémoire supplémentaire.
+Souvenez vous que nous avons eu à passer un pointeur sur le pointeur sur 
+notre buffer, lorsque nous avons appelé <CODE>io_read ()</CODE>. C'était pour
+cette raison. Nous allouons de la mémoire avec <CODE>mmap ()</CODE> car nous
+voulons un block mémoire aligné. Maintenant que nous sommes sûrs d'avoir
+assez d'espace où écrire les données, nous pouvons commencer à la remplir
+de uns. Notez que "*data" est une vm_address_t et que nous devons
+déréférencer le pointeur pour pouvoir l'utiliser.
+</P><P>
+
+Si vous comprenez la fonction ci-dessus, je doute que vous ayez un 
+problème avec la routine d'écriture suivante, qui ne fait presque rien :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>kern_return_t
+trivfs_S_io_write (struct trivfs_protid *cred,
+                   mach_port_t reply, mach_msg_type_name_t replytype,
+                   vm_address_t data, mach_msg_type_number_t datalen,
+                   off_t offs, mach_msg_type_number_t *amout)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred-&#62;po-&#62;openmodes &#38; O_WRITE))
+    return EBADF;
+  *amout = datalen;
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+Mis à part pour l'habituel vérification d'erreurs, cette fonction ne
+fait qu'indiquer que toute donnée que l'utilisateur voulait écrire l'a
+été avec succès - ce qui est logique car nous ignorons toute écriture
+sur notre fichier.
+</P><P>
+
+Il y a plusieurs fonctions de rappel que nous implémenterons d'une manière
+similaire à la fonction write. Vous pouvez trouvez ces fonctions
+dans la source complete de notre translator.
+</P><P>
+
+Une autre fonction de rappel est <CODE>trivfs_S_io_readable ()</CODE>. 
+Elle sera appelée si quelqu'un veut savoir quelle quantité de donnée nous
+pouvons fournir immédiatement. Bien sûr, cette quantitée est infinie, et comme
+l'a dit Marcus Brinkmann <A NAME="DOCF13" HREF="hhg.html#FOOT13">(13)</A>:
+</P><P>
+
+<BLOCKQUOTE>
+"Si vous pouvez délivrez une quantité illimitée d'octets sans délai,
+  je pense que la valeur la plus élevée possible qui tiens dans 
+  mach_msg_type_number_t est la plus appropriée. (J'éspère que les
+  applications peuvent s'arranger avec ça)."
+</BLOCKQUOTE>
+<P>
+
+Souvenons nous que si quelque chose peut aller mal, ça ira mal. Par
+exemple, notre programme d'exemple dump.c ci dessus gérerait assez mal
+une telle situation. C'est pourquoi j'ai écrit l'implementation suivante
+qui est un peu paranoïaque et ne cause pas de problème si une application
+n'est pas capable de gérer une grande valeur correctement :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>kern_return_t
+trivfs_S_io_readable (struct trivfs_protid *cred,
+                      mach_port_t reply, mach_msg_type_name_t replytype,
+                      mach_msg_type_number_t *amount)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred-&#62;po-&#62;openmodes &#38; O_READ))
+    return EINVAL;
+  else
+    *amount = 10240; /* Dummy value: 10k */
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+La dernière fonction de rappel interessante est <CODE>trivfs_S_io_select
+()</CODE>, qui est bien commentée dans la source complète ci-dessous.
+</P><P>
+
+<A NAME="Autres fonctions de rappel de trivfs"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.3 Autres fonctions de rappel de trivfs </H2>
+<!--docid::SEC20::-->
+<P>
+
+Nous devons travailler un peu plus avant d'avoir un translator trivfs complet :
+Nous devons définir des symboles qui contiennent l'information générale à propos
+de notre translator.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Trivfs hooks. */
+int trivfs_fstype = FSTYPE_MISC;  /* Generic trivfs server */
+int trivfs_fsid = 0;              /* Should always be 0 on startup */
+</pre></td></tr></table></P><P>
+
+Dans la plupart des cas, vous utiliserez FSTYPE_MISC pour trivfs_fstype.
+Les autres valeurs possibles sont (d'après
+<CODE>$(HURD)/hurd/hurd_types.h</CODE>):
+</P><P>
+
+<OL>
+<LI>
+FSTYPE_IFSOCK - PF_LOCAL socket naming point
+<LI>
+FSTYPE_DEV    - GNU Special file server
+<LI>
+FSTYPE_TERM   - GNU Terminal driver
+</OL>
+<P>
+
+Dans <CODE>trivfs_allow_open</CODE>, vous spécifiez les permissions initiales
+pour votre translator :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int trivfs_allow_open = O_READ | O_WRITE;
+</pre></td></tr></table></P><P>
+
+Et avec les variables suivantes, vous spécifiez quels types d'acces
+sont réellement implémentés :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Actual supported modes: */
+int trivfs_support_read  = 1;
+int trivfs_support_write = 1;
+int trivfs_support_exec  = 0;
+</pre></td></tr></table></P><P>
+
+<A NAME="La fonction principale"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.4 The main function </H2>
+<!--docid::SEC21::-->
+<P>
+
+Les translators sont des programmes normaux, et en tant que tels, ils
+nécessitent une fonction <CODE>main ()</CODE>. La librairie trivfs ne définit
+pas de telle fonction, donc nous devons le faire nous même. Notre programme
+peut être lancé en tant que programme normal, ou en tant que translator donc
+nous devons faire la différence entre ces deux cas. Cela peut se faire en 
+testant si le port de bootstrap vaut MACH_PORT_NULL. Si c'est le cas, le 
+programme n'a pas été lancé en tant que translator. Généralement, un 
+translator terminera dans ce cas. Si, cependant, notre port ne vaut pas
+MACH_PORT_NULL, nous devrions initialiser libtrivfs et désallouer le 
+port de bootstrap. Enfin, nous mettrons en place le translator. Notre
+fonction <CODE>main ()</CODE> (qui ne s'occupe pas des arguments passés en
+ligne de commande) ressemble à cela :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int
+main (void)
+{
+  error_t err;
+  mach_port_t bootstrap;
+  struct trivfs_control *fsys;
+
+  task_get_bootstrap_port (mach_task_self (), &#38;bootstrap);
+  if (bootstrap == MACH_PORT_NULL)
+    error (1, 0, "Must be started as a translator");
+
+  /* Reply to our parent */
+  err = trivfs_startup (bootstrap, 0, 0, 0, 0, 0, &#38;fsys);
+  mach_port_deallocate (mach_task_self (), bootstrap);
+  if (err)
+    error (1, err, "trivfs_startup failed");
+
+  /* Launch. */
+  ports_manage_port_operations_one_thread (fsys-&#62;pi.bucket,
+                                           trivfs_demuxer, 0);
+
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+Vous vous demandez peut-être pourquoi nos fonctions on des noms comme
+<CODE>trivfs_S_io_read ()</CODE>. La raison est simple : nous n'avons pas besoin
+d'enregistrer nos fonctions de rappel. Nous leur donnons juste le nom
+adéquat, et libtrivfs fera le reste pour nous. Bien sûr, ces noms de fonctions
+ont un sens, comme l'explique Marcus Brinkmann :
+</P><P>
+
+<BLOCKQUOTE>
+"io_read est le nom de la RPC dans le fichier .defs. Le préfixe S_
+précise qu c'est l'accès au serveur qui est implémenté ici, plutôt
+que l'encapsulation/decapsulation des messages. Le préfixe trivfs_ 
+signifie que ce n'est pas la RPC de base, mais que le mach_port_t est
+en fait converti en une autre structure. C'est fait dans intran.
+<P>
+
+Généralement, on récupère le mach_port_t en premier argument, mais
+dans l'accès libtrivfs, c'est un autre. Utilisez un grep pour intran
+dans <CODE>$(HURD)/libtrivfs/*</CODE> pour voir comment les ports sont
+reliés aux structures de libtrivfs."
+</BLOCKQUOTE>
+<P>
+
+<A NAME="La source complete"></A>
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.5 La source complete </H2>
+<!--docid::SEC22::-->
+<P>
+
+Arretons nous là. Je laisse de coté des détails peux importants, que
+vous devriez trouver dans le code complet ci-dessous. Vous pouvez compiler
+ce fichier avec
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ gcc -g -o one hurd-one.c -ltrivfs -lfshelp
+</pre></td></tr></table></P><P>
+
+D'autres sources d'information interessantes sont
+<CODE>$(HURD)/trans/hello.c</CODE> et <CODE>$(HURD)/trans/null.c</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* hurd-one.c - A trivial single-file translator
+   Written by Wolfgang J&auml;hrling &#60;wolfgang@pro-linux.de&#62;, 2001
+
+   This is based on hurd/trans/hello.c. The hello.c source says:
+     Copyright (C) 1998, 1999, 2001 Free Software Foundation, Inc.
+     Gordon Matzigkeit &#60;gord@fig.org&#62;, 1999
+   It also uses parts of hurd/trans/null.c. The null.c source says:
+     Copyright (C) 1995,96,97,98,99,2001 Free Software Foundation, Inc.
+     Written by Miles Bader &#60;miles@gnu.org&#62;
+      
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation; either version 2, or (at
+   your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330,
+   Boston, MA  02111-1307  USA */
+
+#define _GNU_SOURCE 1
+
+#include &#60;hurd/trivfs.h&#62;
+
+#include &#60;stdlib.h&#62;   /* exit () */
+#include &#60;error.h&#62;    /* Error numers */
+#include &#60;fcntl.h&#62;    /* O_READ etc. */
+#include &#60;sys/mman.h&#62; /* MAP_ANON etc. */
+
+/* Trivfs hooks. */
+int trivfs_fstype = FSTYPE_MISC;  /* Generic trivfs server */
+int trivfs_fsid = 0;              /* Should always be 0 on startup */
+
+int trivfs_allow_open = O_READ | O_WRITE;
+
+/* Actual supported modes: */
+int trivfs_support_read  = 1;
+int trivfs_support_write = 1;
+int trivfs_support_exec  = 0;
+
+/* May do nothing... */
+void
+trivfs_modify_stat (struct trivfs_protid *cred, struct stat *st)
+{
+  /* .. and we do nothing */
+}
+
+error_t
+trivfs_goaway (struct trivfs_control *cntl, int flags)
+{
+  exit (EXIT_SUCCESS);
+}
+
+error_t
+trivfs_S_io_read (struct trivfs_protid *cred,
+                  mach_port_t reply, mach_msg_type_name_t reply_type,
+                  vm_address_t *data, mach_msg_type_number_t *data_len,
+                  off_t offs, mach_msg_type_number_t amount)
+{
+  /* Deny access if they have bad credentials. */
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred-&#62;po-&#62;openmodes &#38; O_READ))
+    return EBADF;
+
+  if (amount &#62; 0)
+    {
+      int i;
+
+      /* Possibly allocate a new buffer. */
+      if (*data_len &#60; amount)
+        *data = (vm_address_t) mmap (0, amount, PROT_READ|PROT_WRITE,
+                                     MAP_ANON, 0, 0);
+
+      /* Copy the constant data into the buffer. */
+      for (i = 0; i &#60; amount; i++)
+        ((char *) *data)[i] = 1;
+    }
+
+  *data_len = amount;
+  return 0;
+}
+
+kern_return_t
+trivfs_S_io_write (struct trivfs_protid *cred,
+                   mach_port_t reply, mach_msg_type_name_t replytype,
+                   vm_address_t data, mach_msg_type_number_t datalen,
+                   off_t offs, mach_msg_type_number_t *amout)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred-&#62;po-&#62;openmodes &#38; O_WRITE))
+    return EBADF;
+  *amout = datalen;
+  return 0;
+}
+
+/* Tell how much data can be read from the object without blocking for
+   a "long time" (this should be the same meaning of "long time" used
+   by the nonblocking flag. */
+kern_return_t
+trivfs_S_io_readable (struct trivfs_protid *cred,
+                      mach_port_t reply, mach_msg_type_name_t replytype,
+                      mach_msg_type_number_t *amount)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred-&#62;po-&#62;openmodes &#38; O_READ))
+    return EINVAL;
+  else
+    *amount = 10000; /* Dummy value */
+  return 0;
+}
+
+/* Truncate file.  */
+kern_return_t
+trivfs_S_file_set_size (struct trivfs_protid *cred, off_t size)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+}
+
+/* Change current read/write offset */
+error_t
+trivfs_S_io_seek (struct trivfs_protid *cred, mach_port_t reply,
+                  mach_msg_type_name_t reply_type, off_t offs, int whence,
+                  off_t *new_offs)
+{
+  if (! cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+}
+
+/* SELECT_TYPE is the bitwise OR of SELECT_READ, SELECT_WRITE, and
+   SELECT_URG. Block until one of the indicated types of i/o can be
+   done "quickly", and return the types that are then available.
+   TAG is returned as passed; it is just for the convenience of the
+   user in matching up reply messages with specific requests sent. */
+kern_return_t
+trivfs_S_io_select (struct trivfs_protid *cred,
+                    mach_port_t reply, mach_msg_type_name_t replytype,
+                    int *type, int *tag)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    if (((*type &#38; SELECT_READ) &#38;&#38; !(cred-&#62;po-&#62;openmodes &#38; O_READ))
+        || ((*type &#38; SELECT_WRITE) &#38;&#38; !(cred-&#62;po-&#62;openmodes &#38; O_WRITE)))
+      return EBADF;
+    else
+      *type &#38;= ~SELECT_URG;
+  return 0;
+}
+
+/* Well, we have to define these four functions, so here we go: */
+
+kern_return_t
+trivfs_S_io_get_openmodes (struct trivfs_protid *cred, mach_port_t reply,
+                           mach_msg_type_name_t replytype, int *bits)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    {
+      *bits = cred-&#62;po-&#62;openmodes;
+      return 0;
+    }
+}
+
+error_t
+trivfs_S_io_set_all_openmodes (struct trivfs_protid *cred,
+                               mach_port_t reply,
+                               mach_msg_type_name_t replytype,
+                               int mode)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+}
+
+kern_return_t
+trivfs_S_io_set_some_openmodes (struct trivfs_protid *cred,
+                                mach_port_t reply,
+                                mach_msg_type_name_t replytype,
+                                int bits)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+}
+
+kern_return_t
+trivfs_S_io_clear_some_openmodes (struct trivfs_protid *cred,
+                                  mach_port_t reply,
+                                  mach_msg_type_name_t replytype,
+                                  int bits)
+{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+}
+
+int
+main (void)
+{
+  error_t err;
+  mach_port_t bootstrap;
+  struct trivfs_control *fsys;
+
+  task_get_bootstrap_port (mach_task_self (), &#38;bootstrap);
+  if (bootstrap == MACH_PORT_NULL)
+    error (1, 0, "Must be started as a translator");
+
+  /* Reply to our parent */
+  err = trivfs_startup (bootstrap, 0, 0, 0, 0, 0, &#38;fsys);
+  mach_port_deallocate (mach_task_self (), bootstrap);
+  if (err)
+    error (1, err, "trivfs_startup failed");
+
+  /* Launch. */
+  ports_manage_port_operations_one_thread (fsys-&#62;pi.bucket,
+                                           trivfs_demuxer, 0);
+
+  return 0;
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Debugger un translator"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 9. Debugger un translator </H1>
+<!--docid::SEC23::-->
+<P>
+
+Ce chapitre nécessite des connaissances sur l'utilisation de GDB, le
+debugger GNU. Si vous n'avez pas utilisé GDB avant, je vous recomande
+la lecture de la session d'exemple dans la documentation Texinfo de GDB.
+Si info et la documentation sont installées sur votre système, faites
+simplement
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ info gdb "Sample Session"
+</pre></td></tr></table></P><P>
+
+Maintenant, comment debugger un translator ? C'est plutôt simple, mais
+je vais vous expliquer quand même. :-) La manière la plus simple est
+de démarrer votre programme en tant que translator actif :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ gcc -g -o one one.c -ltrivfs -lfshelp
+$ settrans -ac foo one
+</pre></td></tr></table></P><P>
+
+Maintenant, le translator est en route. Vous pouvez le voir dans la
+liste des processus :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ ps Aux
+</pre></td></tr></table></P><P>
+
+(Le `ps' POSIX n'est pas encore disponible, donc `ps aux' ne fonctionnera 
+ pas, désolé.) Maintenant, nous avons besoin de nous rattacher au processus
+lancé. Par exemple, si le PID était 357, nous ferions :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ gdb one 357
+</pre></td></tr></table></P><P>
+
+On peut alors insérer des points d'arret, puis laisser le translator continuer :
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(gdb) break trivfs_S_io_read
+(gdb) c
+</pre></td></tr></table></P><P>
+
+Maintenant, vous devriez utiliser un autre terminal, et entrez une commande
+comme 
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$ cat foo
+</pre></td></tr></table></P><P>
+
+puis retournez au terminal contenant GDB. Vous verrez qu'il s'est 
+arreté au point d'arrêt. Vous pouvez maintenant debugger comme d'habitude.
+Facile n'est-ce pas ?
+</P><P>
+
+Une fois terminé, utilisez
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(gdb) quit
+</pre></td></tr></table></P><P>
+
+et dites que vous voulez détacher le processus. Nous pouvons conclure en
+disant que vous n'avez pas besoin de technique spécifique pour debugger
+un translator.
+</P><P>
+
+Maintenant, vous avez sans doute une idée de la façon dont on
+peut développer des serveurs pour le Hurd (des translators). Souvent,
+vous aurez besoin de plus que ce que fournit libtrivfs. Pour des information
+(pas forcément à jour) sur les autres librairies, vous pouvez regardez le
+Hurd Reference Manual ("info hurd"), aussi disponible dans 
+<CODE>$(HURD)/doc/hurd.texi</CODE>. Pour des informations plus à jour, il faut
+se référer aux fichiers d'en-tête apropriés.
+</P><P>
+
+<A NAME="Un exemple comprehensible de trivfs"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC25"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 10. Un exemple comprehensible de trivfs </H1>
+<!--docid::SEC24::-->
+<P>
+
+TODO: Peut-être un translator "cat".
+</P><P>
+
+<A NAME="Un exemple utilisant netfs"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 11. Un exemple utilisant netfs </H1>
+<!--docid::SEC25::-->
+<P>
+
+TODO
+</P><P>
+
+<A NAME="Un exemple utilisant diskfs"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC27"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC27"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 12. Un exemple utilisant diskfs </H1>
+<!--docid::SEC26::-->
+<P>
+
+TODO
+</P><P>
+
+<A NAME="Foire Aux Questions"></A>
+<HR SIZE="6">
+<A NAME="SEC27"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC26"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 13. Foire Aux Questions </H1>
+<!--docid::SEC27::-->
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>      _
+   .-[_]&#60;-.
+   v  |   _`.  T h e   G N U   H u r d
+  [_] `-&#62;[_]| 
+   ^  _  ,','    ...be a part of it!
+   `.[_]-+-'
+    `.__.'
+</pre></td></tr></table></P><P>
+
+Q: Comment un translator peut-il acceder aux noeuds sous jacents ? Un 
+translator gzip doit le faire par exemple.
+</P><P>
+
+R: Le noeud sous jacent est renvoyé par <CODE>fsys_startup ()</CODE>. (cf
+<CODE>$(HURD)/hurd/fsys.defs</CODE>).
+</P><P>
+
+Q: Peut-on empiler les translators ?
+</P><P>
+
+R: Oui, empiler les translators actifs est possible, mais c'est impossible
+avec les translators passifs.
+</P><P>
+
+Q: Qu'est-ce qu'un `protid' ?
+</P><P>
+
+R: `prot' signifie protection. Toute structure protid défini un client
+unique de notre translator. Vous pouvez acceder aux informations respectives
+par le champs `po' (per-open) de la structure.
+</P><P>
+
+Q: Quel type de threads devrais-je utiliser si je veux écrire un programme 
+fonctionnant à la fois sous GNU/Linux et GNU/Hurd ?
+</P><P>
+
+R: Utilisez plutôt les pthreads, nous les aurons bientôt ...
+</P><P>
+
+Q: Comment peut-on dire que l'on est POSIX compliant sans avoir de pthreads ?
+</P><P>
+
+R: Premièrement, les pthreads sont optionels dans les spécifications POSIX.
+Deuxièmement, nous avons des pthreads. Par exemple, GNU Portable Threads (pth)
+fournissent une émulation non préemptive des pthreads. Cela semble etre en
+accord avec les standards, mais certes assez peu utile puisque la majeure partie
+des programmes supposent que le multi-thread est préemptif. Jeroen Dekkers travaille
+sur de vrais pthreads, qui fonctionnent partiellement pour l'instant.
+</P><P>
+
+Q: Dans le manifeste GNU, RMS écrit que C et LISP seront des langages system.
+Qu'en est-il ?
+</P><P>
+
+R: L'interpreteur de Scheme Guile est une partie du projet GNU. Pour l'instant
+il ne fournit que les fonctionnalités POSIX, mais il n'y a pas de raison que
+personne n'ajoute de choses spécifiques à GNU. Ajouter le support pour divers
+langages serait bien en fait. Ce n'est cependant pas urgent.
+</P><P>
+
+Q: Pourquoi apprendre à utiliser Mach si le Hurd change pour L4 bientôt ?
+</P><P>
+
+R: Pour l'instant, Hurd utilise Mach, et vous avez besoin d'en connaître les
+bases pour travailler sous Hurd. Peut-être que le hurd tournera sur L4 dans
+quelque temps, mais ce n'est pas encore le cas.
+</P><P>
+
+<A NAME="Annexes"></A>
+<HR SIZE="6">
+<A NAME="SEC28"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC27"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC29"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 14. Annexes </H1>
+<!--docid::SEC28::-->
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC29">14.1 Document history</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">ChangeLog of this document</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC30">14.2 Stuff to do</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">What is missing? What should be changed?</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Document history"></A>
+<HR SIZE="6">
+<A NAME="SEC29"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC30"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.1 Document history </H2>
+<!--docid::SEC29::-->
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>0.2_1 [Mon Mar 25, 2002]
+( Announced on <A HREF="mailto:web-hurd@gnu.org">web-hurd@gnu.org</A> )
+  * Renamed minicat.c to dump.c
+  * Removed links to non-free OSF docs and SourceForge page
+  * Various small extensions: Explained more libraries, clarified dump.c
+  * Lots of spelling/grammar/layout fixes by Alfred M. Szmidt
+  * Some layout fixes done by me
+  * Update of the link to Marcus Brinkmann's talk, added some other links
+  * Changed empty cthreads chapter to FAQ chapter
+
+0.2_1 pre8 [Sun Oct 07, 2001]
+( Not announced at all, just uploaded )
+  * Improved description of minicat example in chapter 5
+  * Various small fixes and clarifications
+  * Converted to Texinfo! Thanks to Alfred M. Szmidt
+  * Added chapter descriptions
+  * Removed third appendix (Ruby code for extracting inline files), which
+    isn't useful anymore.
+
+0.2_1 pre7 [Mon Aug 27, 2001]
+( Announced on <A HREF="mailto:hurddocs-volunteer@lists.sourceforge.net">hurddocs-volunteer@lists.sourceforge.net</A> )
+  * Lots of spelling and grammar fixes, some clarifications
+  * Split chapter 5 into subchapters, improved minicat and added copy
+    example
+
+0.2_1 pre6 [Tue Aug 21, 2001]
+( Not announced at all, just uploaded )
+  * Included minicat.c example and reference to GCC extensions in
+    chapter 5
+  * Several minor fixes.
+
+0.2_1 pre5 [Thu Aug 16, 2001]
+( Not announced at all, just uploaded )
+  * Included Marcus Brinkmann's countless suggestions. Thanks, Marcus!
+
+0.2_1 pre4 [Wed Aug 15, 2001]
+( Announced on irc.openprojects.net, channel #hurd )
+  * Extended chapter 2
+  * Chapter 7 complete, split 7b (now 7b and 7c)
+  * As usual: various small corrections and extensions
+
+0.2_1 pre3 [Mon Aug 6, 2001]
+( Not announced at all, people shall find it on their own :-&#62; )
+  * Split Chapter 7 into subchapters, added subchapters to Chapter 3
+  * Chapter 7 almost complete, lacks some details still
+  * Chapter 3a almost complete
+  * Various small extensions in other chapters
+  * Added Chapter names for chapters 9, 10 and 11
+
+0.2_1 pre2 [Mon Jul 30, 2001]
+( Announced on <A HREF="mailto:hurddocs-volunteer@lists.sourceforge.net">hurddocs-volunteer@lists.sourceforge.net</A> )
+  * Chapter 3 half complete
+  * Various small fixes and extensions in different chapters
+  * Added appendic C with extract.rb
+
+0.2_1 pre1 [Sat Jul 28, 2001]
+( Announced on irc.openprojects.net, channel #hurd )
+  * Initial release with 8 chapters (4, 5 and 6 missing and 3 and 7
+    incomplete)
+</pre></td></tr></table></P><P>
+
+<A NAME="Stuff to do"></A>
+<HR SIZE="6">
+<A NAME="SEC30"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC29"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC28"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.2 Stuff to do </H2>
+<!--docid::SEC30::-->
+<P>
+
+This document is a work in progress. There are several things that
+should be added. If you want to help, please contact me.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>- Use consistent formating. often, @code{} should be used but isn't
+- Correct the remaining FIXMEs (ok, this one was obvious)
+- Take OSKit-Mach into account
+- Add Moritz' Mach device access example and link to mailing list
+  archive with Daniel Wagners Mach device code
+- Write about netfs and diskfs, add a longer trivfs example
+- Describe more Mach and esp. MiG details
+</pre></td></tr></table></P><P>
+
+<HR SIZE="6">
+<A NAME="hhg.html"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>Footnotes</H1>
+<H3><A NAME="FOOT1" HREF="hhg.html#DOCF1">(1)</A></H3>
+<P><A HREF="http://www.gnu.org/software/hurd/gnumach-doc/mach.html">http://www.gnu.org/software/hurd/gnumach-doc/mach.html</A>
+<H3><A NAME="FOOT2" HREF="hhg.html#DOCF2">(2)</A></H3>
+<P><A HREF="http://lists.debian.org/debian-hurd-0012/msg00149.html">http://lists.debian.org/debian-hurd-0012/msg00149.html</A>
+<H3><A NAME="FOOT3" HREF="hhg.html#DOCF3">(3)</A></H3>
+<P><A HREF="http://hurd.gnu.org/">http://hurd.gnu.org/</A>
+<H3><A NAME="FOOT4" HREF="hhg.html#DOCF4">(4)</A></H3>
+<P><A HREF="http://www.gnu.org/software/hurd/hurd-paper.html">http://www.gnu.org/software/hurd/hurd-paper.html</A>
+<H3><A NAME="FOOT5" HREF="hhg.html#DOCF5">(5)</A></H3>
+<P><A HREF="http://www.debian.org/ports/hurd/hurd-doc-translator">http://www.debian.org/ports/hurd/hurd-doc-translator</A>
+<H3><A NAME="FOOT6" HREF="hhg.html#DOCF6">(6)</A></H3>
+<P><A HREF="http://web.walfield.org/papers/hurd-installation-guide/">http://web.walfield.org/papers/hurd-installation-guide/</A>
+<H3><A NAME="FOOT7" HREF="hhg.html#DOCF7">(7)</A></H3>
+<P>see
+<A HREF="http://mail.gnu.org/pipermail/help-hurd/2001-July/004700.html">http://mail.gnu.org/pipermail/help-hurd/2001-July/004700.html</A>
+for the complete discussion
+<H3><A NAME="FOOT8" HREF="hhg.html#DOCF8">(8)</A></H3>
+<P>Ou mieux, utilisez-en un qui existe :
+celui écrit par Marcus Brinkmann et qui est plus souple; utiliser le translator filemux
+est encore une autre possibilité
+<H3><A NAME="FOOT9" HREF="hhg.html#DOCF9">(9)</A></H3>
+<P><A HREF="http://www.gnu.org/software/hurd/hurd-talk.html">http://www.gnu.org/software/hurd/hurd-talk.html</A>
+<H3><A NAME="FOOT10" HREF="hhg.html#DOCF10">(10)</A></H3>
+<P><A HREF="http://www.gnu.org/software/hurd/gnumach-doc/mach_4.html">http://www.gnu.org/software/hurd/gnumach-doc/mach_4.html</A>
+<H3><A NAME="FOOT11" HREF="hhg.html#DOCF11">(11)</A></H3>
+<P>Shadowfs ne fait pas 
+encore partie intégrante du Hurd, mais une implementation partielle existe
+<H3><A NAME="FOOT12" HREF="hhg.html#DOCF12">(12)</A></H3>
+<P>see "info libc Argp"
+<H3><A NAME="FOOT13" HREF="hhg.html#DOCF13">(13)</A></H3>
+<P> Le mail complet est disponible à
+<A HREF="http://mail.gnu.org/pipermail/help-hurd/2001-August/004747.html">http://mail.gnu.org/pipermail/help-hurd/2001-August/004747.html</A>
+<HR SIZE=1>
+<A NAME="SEC_Contents"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>Table of Contents</H1>
+<UL>
+<A NAME="TOC1" HREF="hhg.html#SEC1">1. A propos de ce document</A>
+<BR>
+<UL>
+<A NAME="TOC2" HREF="hhg.html#SEC2">1.1 Conventions</A>
+<BR>
+<A NAME="TOC3" HREF="hhg.html#SEC3">1.2 Sujet</A>
+<BR>
+<A NAME="TOC4" HREF="hhg.html#SEC4">1.3 Contributions</A>
+<BR>
+</UL>
+<A NAME="TOC5" HREF="hhg.html#SEC5">2. Prérequis</A>
+<BR>
+<A NAME="TOC6" HREF="hhg.html#SEC6">3. Courte introduction au Hurd et à Mach</A>
+<BR>
+<A NAME="TOC7" HREF="hhg.html#SEC7">4. Les bases de Mach et MiG</A>
+<BR>
+<UL>
+<A NAME="TOC8" HREF="hhg.html#SEC8">4.1 Les ports de Mach</A>
+<BR>
+<A NAME="TOC9" HREF="hhg.html#SEC9">4.2 Les threads et les taches</A>
+<BR>
+<A NAME="TOC10" HREF="hhg.html#SEC10">4.3 MiG</A>
+<BR>
+</UL>
+<A NAME="TOC11" HREF="hhg.html#SEC11">5. Les interfaces du Hurd</A>
+<BR>
+<A NAME="TOC12" HREF="hhg.html#SEC12">6. A quoi ça ressemble vraiment ?</A>
+<BR>
+<UL>
+<A NAME="TOC13" HREF="hhg.html#SEC13">6.1 Ecrire un fichier sur la sortie standard</A>
+<BR>
+<A NAME="TOC14" HREF="hhg.html#SEC14">6.2 Créer une copie d'un fichier</A>
+<BR>
+<A NAME="TOC15" HREF="hhg.html#SEC15">6.3 Notes finales</A>
+<BR>
+</UL>
+<A NAME="TOC16" HREF="hhg.html#SEC16">7. Les librairies du Hurd (Aperçu)</A>
+<BR>
+<A NAME="TOC17" HREF="hhg.html#SEC17">8. Un exemple utilisant trivfs</A>
+<BR>
+<UL>
+<A NAME="TOC18" HREF="hhg.html#SEC18">8.1 GNU/Linux et GNU/Hurd</A>
+<BR>
+<A NAME="TOC19" HREF="hhg.html#SEC19">8.2 Implementer les fonctions de rappel de trivfs</A>
+<BR>
+<A NAME="TOC20" HREF="hhg.html#SEC20">8.3 Autres fonctions de rappel de trivfs</A>
+<BR>
+<A NAME="TOC21" HREF="hhg.html#SEC21">8.4 The main function</A>
+<BR>
+<A NAME="TOC22" HREF="hhg.html#SEC22">8.5 La source complete</A>
+<BR>
+</UL>
+<A NAME="TOC23" HREF="hhg.html#SEC23">9. Debugger un translator</A>
+<BR>
+<A NAME="TOC24" HREF="hhg.html#SEC24">10. Un exemple comprehensible de trivfs</A>
+<BR>
+<A NAME="TOC25" HREF="hhg.html#SEC25">11. Un exemple utilisant netfs</A>
+<BR>
+<A NAME="TOC26" HREF="hhg.html#SEC26">12. Un exemple utilisant diskfs</A>
+<BR>
+<A NAME="TOC27" HREF="hhg.html#SEC27">13. Foire Aux Questions</A>
+<BR>
+<A NAME="TOC28" HREF="hhg.html#SEC28">14. Annexes</A>
+<BR>
+<UL>
+<A NAME="TOC29" HREF="hhg.html#SEC29">14.1 Document history</A>
+<BR>
+<A NAME="TOC30" HREF="hhg.html#SEC30">14.2 Stuff to do</A>
+<BR>
+</UL>
+</UL>
+<HR SIZE=1>
+<A NAME="SEC_OVERVIEW"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>Short Table of Contents</H1>
+<BLOCKQUOTE>
+<A NAME="TOC1" HREF="hhg.html#SEC1">1. A propos de ce document</A>
+<BR>
+<A NAME="TOC5" HREF="hhg.html#SEC5">2. Prérequis</A>
+<BR>
+<A NAME="TOC6" HREF="hhg.html#SEC6">3. Courte introduction au Hurd et à Mach</A>
+<BR>
+<A NAME="TOC7" HREF="hhg.html#SEC7">4. Les bases de Mach et MiG</A>
+<BR>
+<A NAME="TOC11" HREF="hhg.html#SEC11">5. Les interfaces du Hurd</A>
+<BR>
+<A NAME="TOC12" HREF="hhg.html#SEC12">6. A quoi ça ressemble vraiment ?</A>
+<BR>
+<A NAME="TOC16" HREF="hhg.html#SEC16">7. Les librairies du Hurd (Aperçu)</A>
+<BR>
+<A NAME="TOC17" HREF="hhg.html#SEC17">8. Un exemple utilisant trivfs</A>
+<BR>
+<A NAME="TOC23" HREF="hhg.html#SEC23">9. Debugger un translator</A>
+<BR>
+<A NAME="TOC24" HREF="hhg.html#SEC24">10. Un exemple comprehensible de trivfs</A>
+<BR>
+<A NAME="TOC25" HREF="hhg.html#SEC25">11. Un exemple utilisant netfs</A>
+<BR>
+<A NAME="TOC26" HREF="hhg.html#SEC26">12. Un exemple utilisant diskfs</A>
+<BR>
+<A NAME="TOC27" HREF="hhg.html#SEC27">13. Foire Aux Questions</A>
+<BR>
+<A NAME="TOC28" HREF="hhg.html#SEC28">14. Annexes</A>
+<BR>
+
+</BLOCKQUOTE>
+<HR SIZE=1>
+<A NAME="SEC_About"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>About this document</H1>
+This document was generated on <I>December, 2  2004</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+<P></P>  
+The buttons in the navigation panels have the following meaning:
+<P></P>
+<table border = "1">
+<TR>
+<TH> Button </TH>
+<TH> Name </TH>
+<TH> Go to </TH>
+<TH> From 1.2.3 go to</TH>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &lt; ] </TD>
+<TD ALIGN="CENTER">
+Back
+</TD>
+<TD>
+previous section in reading order
+</TD>
+<TD>
+1.2.2
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &gt; ] </TD>
+<TD ALIGN="CENTER">
+Forward
+</TD>
+<TD>
+next section in reading order
+</TD>
+<TD>
+1.2.4
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &lt;&lt; ] </TD>
+<TD ALIGN="CENTER">
+FastBack
+</TD>
+<TD>
+previous or up-and-previous section 
+</TD>
+<TD>
+1.1
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ Up ] </TD>
+<TD ALIGN="CENTER">
+Up
+</TD>
+<TD>
+up section
+</TD>
+<TD>
+1.2
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &gt;&gt; ] </TD>
+<TD ALIGN="CENTER">
+FastForward
+</TD>
+<TD>
+next or up-and-next section
+</TD>
+<TD>
+1.3
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [Top] </TD>
+<TD ALIGN="CENTER">
+Top
+</TD>
+<TD>
+cover (top) of document
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [Contents] </TD>
+<TD ALIGN="CENTER">
+Contents
+</TD>
+<TD>
+table of contents
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [Index] </TD>
+<TD ALIGN="CENTER">
+Index
+</TD>
+<TD>
+concept index
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ ? ] </TD>
+<TD ALIGN="CENTER">
+About
+</TD>
+<TD>
+this page
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+</TABLE>
+<P></P>
+where the <STRONG> Example </STRONG> assumes that the current position 
+is at <STRONG> Subsubsection One-Two-Three </STRONG> of a document of 
+the following structure:
+<UL>
+<LI> 1. Section One  </LI>
+<UL>
+<LI>1.1 Subsection One-One</LI>
+<UL>
+<LI> ... </LI>
+</UL>
+<LI>1.2 Subsection One-Two</LI>
+<UL>
+<LI>1.2.1 Subsubsection One-Two-One
+</LI><LI>1.2.2 Subsubsection One-Two-Two
+</LI><LI>1.2.3 Subsubsection One-Two-Three &nbsp; &nbsp; <STRONG>
+&lt;== Current Position </STRONG>
+</LI><LI>1.2.4 Subsubsection One-Two-Four
+</LI></UL>
+<LI>1.3 Subsection One-Three</LI>
+<UL>
+<LI> ... </LI>
+</UL>
+<LI>1.4 Subsection One-Four</LI>
+</UL>
+</UL>
+
+<HR SIZE=1>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+on <I>December, 2  2004</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

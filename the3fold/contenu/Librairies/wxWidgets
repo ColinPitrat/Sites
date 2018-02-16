@@ -1,0 +1,94 @@
+<h1>Création d'applications avec wxWidgets</h1>
+
+<p>La librairie wxWidgets (anciennement wxWindows) est une librairie multi-plateformes permettant de créer des interfaces utilisateurs. À la différence d'autres boîtes à outils qui tentent de restituer une interface utilisateur identique sur toutes les plateformes, wxWindows restitue des abstractions similaires, mais avec l'apparence native de chacun sous-jacent, ce qui est moins dépaysant pour les utilisateurs finaux.</p>
+
+<p>Avant de commencer, quelques rappels sur les commandes qui pourront être utiles :</p> 
+<ul>
+<li>Pour désarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
+<li>Pour compiler lorsqu'il y a un Makefile : <span class="commande">make</span></li>
+<li>Pour nettoyer les sources (supprimer les fichiers objets) : <span class="commande">make clean</span></li>
+</ul>
+
+<h2>1 - Premier programme</h2>
+
+<p>Notre premier programme va simplement nous permettre de voir comment faire pour utiliser la librairie et créer une simple fenêtre. Nous allons placer l'intégralité du code dans un même fichier.</p>
+
+<p class="code">
+#include &lt;wx/wx.h&gt;<br/>
+<br/>
+class HelloApp : public wxApp<br/>
+{<br/>
+&nbsp;&nbsp;  virtual bool OnInit();<br/>
+};<br/>
+<br/>
+IMPLEMENT_APP(HelloApp)<br/>
+<br/>
+class HelloFrame : public wxFrame<br/>
+{<br/>
+&nbsp;&nbsp;  public:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  HelloFrame(const wxString&amp; title, const wxPoint&amp; pos, const wxSize&amp; size);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  void OnQuit(wxCommandEvent&amp; event);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;  void OnAbout(wxCommandEvent&amp; event);<br/>
+};<br/>
+<br/>
+enum<br/>
+{<br/>
+&nbsp;&nbsp;  ID_Quit = 1,<br/>
+&nbsp;&nbsp;  ID_About<br/>
+};<br/>
+</p>
+
+<p>On commence par inclure le fichier de déclaration de la librairie : <span class="inline">wx/wx.h</span>. On déclare ensuite une classe pour notre application qui dérive de la classe <span class="inline">wxApp</span>, et l'on utilise la macro <span class="inline">IMPLEMENT_APP</span> pour définir quelques fonctions utiles concernant notre application. En pratique, cette macro s'étend en : </p>
+
+<p class="code">
+wxApp wxCreateApp() { return new HelloApp; }<br/>
+wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);<br/>
+HelloApp&amp; wxGetApp() { return (HelloApp)wxTheApp; }<br/>
+</p>
+
+<p>Les deux premières fonctions sont utiles à la librairie. La troisième nous sera très utile quand nous voudrons accéder à notre application. On déclare ensuite une classe représentant notre fenêtre principale, et qui réagira aux évènements "A propos" et "Quitter", pour lesquels nous définissons ensuite des identifiants par une énumération.</p>
+
+<p>Passons maintenant à l'implémentation des fonctions définies ci-dessus :</p>
+
+<p class="code">
+bool HelloApp::OnInit()<br/>
+{<br/>
+&nbsp;&nbsp;  HelloFrame *frame = new HelloFrame("Hello World", wxPoint(50, 50), wxSize(450,350));<br/>
+&nbsp;&nbsp;  frame-&gt;Connect(ID_Quit, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&amp; HelloFrame::OnQuit);<br/>
+&nbsp;&nbsp;  frame-&gt;Connect(ID_About, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&amp; HelloFrame::OnAbout);<br/>
+&nbsp;&nbsp;  frame-&gt;Show(true);<br/>
+&nbsp;&nbsp;  SetTopWindow(frame);<br/>
+&nbsp;&nbsp;  return true;<br/>
+}<br/>
+<br/>
+HelloFrame::HelloFrame(const wxString&amp; title, const wxPoint&amp; pos, const wxSize&amp; size) : wxFrame((wxFrame*)NULL, -1, title, pos, size)<br/>
+{<br/>
+&nbsp;&nbsp;  wxMenuBar *menuBar = new wxMenuBar;<br/>
+&nbsp;&nbsp;  wxMenu *menuFile = new wxMenu;<br/>
+&nbsp;&nbsp;  menuFile-&gt;Append(ID_About, "&amp;About...");<br/>
+&nbsp;&nbsp;  menuFile-&gt;AppendSeparator();<br/>
+&nbsp;&nbsp;  menuFile-&gt;Append(ID_Quit, "E&amp;xit");<br/>
+&nbsp;&nbsp;  menuBar-&gt;Append(menuFile, "&amp;File");<br/>
+&nbsp;&nbsp;  SetMenuBar(menuBar);<br/>
+&nbsp;&nbsp;  CreateStatusBar();<br/>
+&nbsp;&nbsp;  SetStatusText("Demonstration pour wxWidgets");<br/>
+}<br/>
+<br/>
+void HelloFrame::OnQuit(wxCommandEvent&amp;)<br/>
+{<br/>
+&nbsp;&nbsp;  Close(true);<br/>
+}<br/>
+<br/>
+void HelloFrame::OnAbout(wxCommandEvent&amp;)<br/>
+{<br/>
+&nbsp;&nbsp;  wxMessageBox("Exemple de Hello World avec wxWidgets\n-=(the3fold)=-\nhttp://the3fold.free.fr", "A propos d'Hello World", wxOK | wxICON_INFORMATION, this);<br/>
+}<br/>
+</p>
+
+<p>La fonction <span class="inline">OnInit</span> de la classe application est appelée automatiquement lors du démarrage du programme. On utilise cette fonction pour créer notre fenêtre principale, et connecter les évenements <span class="inline">ID_Quit</span> et <span class="inline">ID_About</span> aux fonctions correspondantes. Dans le constructeur de la fenêtre principale, on crée le menu qui permettra de déclencher ces évenements. On implémente ensuite ces fonctions.</p>
+
+<p>C'est tout pour <a href="src/wxWidgets-Ex1.tar.gz">cet exemple</a> qui nous aura permis de faire nos premiers pas avec wxWidgets.</p>
+
+<h1>A suivre ...</h1>
+
+<br/>

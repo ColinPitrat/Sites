@@ -1,0 +1,140 @@
+<h1>AlThreat</h1>
+
+<p class="quickmenu"><!--<a href="comment.php?subject=althreat&amp;type=1">Bug/Suggestion</a> | --><a href="comment.php?subject=althreat&amp;type=0">Poster un commentaire</a> | <a href="#screenshots">Screenshots</a> | <a href="#download">Télécharger</a></p>
+
+<p>AlThreat est un shoot'em up tout ce qu'il y a de plus classique. Le but est de créer un jeu modulaire et extensible, simple de fonctionnement mais aussi de prise en main.</p>
+
+<ul>
+<li> <a href="#principes">Principes de base</a></li>
+<!--
+<li> <a href="#formats">Formats utilisés</a></li>
+<li> <a href="#vaisseau">Créer un vaisseau spatial</a></li>
+<li> <a href="#niveau">Créer un niveau</a></li>
+-->
+<li> <a href="#download">Téléchargement du jeu</a></li>
+<li> <a href="#installation">Installation</a></li>
+<li> <a href="#screenshots">Screenshots</a></li>
+<li> <a href="#comments">Commentaires</a></li>
+</ul>
+
+<a name="principes"></a>
+<h2>Principes de base</h2>
+<p>Le jeu est programmé en C++ et utilise la librairie SDL. Il est facilement extensible en ajoutant de nouveaux vaisseaux spatiaux et de nouveaux niveaux.</p>
+<p>Le jeu est distribué sous <a href="http://www.gnu.org/copyleft/gpl.html">licence GPL</a>. Il reste encore quelque ressources non libres utilisées dans le jeu, mais les ressources finales seront libres.</p>
+<p><a href="http://code.google.com/p/althreat">AlThreat</a> est maintenant hebergé sur Google Code à l'adresse suivante : <a href="http://code.google.com/p/althreat">http://code.google.com/p/althreat</a>.
+
+<!--
+<a name="formats"></a>
+<h2>Formats utilisés</h2>
+<p>Les formats classiques d'images et de sons sont utilisables, mais dans un souci de cohérence, il est reccomandé de conserver le format PNG pour les images, et OGG pour les sons. Concernant les animations, elles sont décrites dans un fichier texte comportant sur la première ligne le nombre d'images composant l'animation, suivi du délai entre deux images (le délai est forcément constant), puis de la liste des images composant l'animation (dans l'ordre !).</p>
+
+<a name="vaisseau"></a>
+<h2>Créer un vaisseau spatial</h2>
+<p>Les vaisseaux disponibles sont listés dans le fichier <span class="commande">vaisseaux/vaisseaux.lst</span>. La première ligne de ce fichier donne le nombre de vaisseaux disponibles. Viennent ensuites les vaisseaux avec comme information leur nom sur une première ligne, suivi du répertoire dans lequel ils se trouvent sur une autre ligne. Dans ce répertoire doivent se trouver deux fichiers décrivant le vaisseau : <span class="commande">preview</span> et <span class="commande">proprietes</span>.</p>
+<p>Le fichier <span class="commande">preview</span> est un fichier décrivant l'animation utilisée lors du choix des vaisseaux. Cette animation doit respecter un critère de taille : largeur inférieure à 500 pixels, hauteur inférieur à 300 pixels. Ce critère n'est pas controlé lors de l'éxecution (du moins pour l'instant).</p>
+<p>Le fichier <span class="commande">proprietes</span> contient les propriétés du vaisseau. Son format définitif n'est pas encore pleinement défini.</p>
+
+<a name="niveau"></a>
+<h2>Créer un niveau</h2>
+<p></p>
+-->
+
+<a name="download"></a>
+<h2>Téléchargement du jeu</h2>
+<p>Si vous arrivez ou n'arrivez pas à faire fonctionner ce jeu, pour toute remarque ou problème, n'hésitez pas à utiliser les <a href="#comments">commentaires</a>.</p>
+<table class="tableau">
+  <tr><th>Version</th><th>Lien</th><th>Taille</th></tr>
+  <tr><td>0.1 (Sources et ressources)</td><td><a href="src/AlThreat-0.1.tar.gz">AlThreat-0.1.tar.gz</a></td><td>14 Mo</td></tr>
+  <tr><td>0.2 (Sources et ressources)</td><td><a href="src/AlThreat-0.2.tar.gz">AlThreat-0.2.tar.gz</a></td><td>14 Mo</td></tr>
+  <tr><td>0.3 (Sources et ressources)</td><td><a href="src/AlThreat-0.3.tar.gz">AlThreat-0.3.tar.gz</a></td><td>25 Mo</td></tr>
+  <tr><td>0.4 (Sources et ressources)</td><td><a href="src/AlThreat-0.4.tar.gz">AlThreat-0.4.tar.gz</a></td><td>32 Mo</td></tr>
+</table>
+
+<a name="installation"></a>
+<h2>Installation</h2>
+<p>Pour les versions 0.1 et 0.2, l'installation n'est pas possible. Pour les autres versions, l'installation se fait selon la méthode habituelle :<br/><br/>
+&nbsp;&nbsp;<span class="commande">tar -xvzf AlThreat-XXX.tar.gz</span><br/>
+&nbsp;&nbsp;<span class="commande">cd AlThreat-XXX.tar.gz</span><br/>
+&nbsp;&nbsp;<span class="commande">./configure</span><br/>
+&nbsp;&nbsp;<span class="commande">make</span><br/>
+puis en tant que root : <br/>
+&nbsp;&nbsp;<span class="commande">make install-strip</span> ou <span class="commande">make install</span><br/><br/>
+Vous pouvez alors jouer en tapant simplement <span class="commande">AlThreat</span></p>
+
+<p>Vous pouvez aussi l'installer en tant que simple utilisateur en précisant un préfixe d'installation différent (si vous n'avez pas l'accès au compte root par exemple) :<br/><br/>
+&nbsp;&nbsp;<span class="commande">tar -xvzf AlThreat-XXX.tar.gz</span><br/>
+&nbsp;&nbsp;<span class="commande">cd AlThreat-XXX.tar.gz</span><br/>
+&nbsp;&nbsp;<span class="commande">./configure --prefix=/home/toto/jeux</span><br/>
+&nbsp;&nbsp;<span class="commande">make</span><br/>
+&nbsp;&nbsp;<span class="commande">make install-strip</span> ou <span class="commande">make install</span><br/><br/>
+Le jeu sera alors installé dans /home/toto/jeux.</p>
+<!--
+<p><a href="src/AlThreat-0.01-BSD.patch">Un patch pour les utilisateurs de FreeBSD</a> proposé par Axioplase Ashi est disponible</p>
+-->
+
+<a name="screenshots"></a>
+<h2>Screenshots</h2>
+<div class="screenshots">
+  <span>Version 0.1</span>
+  <div class="spacer"></div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/menu.png"><img src="screenshots/AlThreat/thumbs/menu.png" alt="Menu de AlThreat" title="Menu de AlThreat"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/choixvaisseaux.png"><img src="screenshots/AlThreat/thumbs/choixvaisseaux.png" alt="Choix du vaisseau" title="Choix du vaisseau"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/jeu1.png"><img src="screenshots/AlThreat/thumbs/jeu1.png" alt="Screenshot de jeu" title="Un enemi de taille !"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/jeu2.png"><img src="screenshots/AlThreat/thumbs/jeu2.png" alt="Screenshot de jeu" title="Une invasion ..."/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/jeu3.png"><img src="screenshots/AlThreat/thumbs/jeu3.png" alt="Screenshot de jeu" title="Un autre vaisseau"/></a>&nbsp;
+    </div>
+  <div class="spacer"></div>
+</div>
+<div class="screenshots">
+  <span>Version 0.2</span>
+  <div class="spacer"></div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/menu2.png"><img src="screenshots/AlThreat/thumbs/menu2.png" alt="Menu de AlThreat" title="Le menu a été refondu avec de nouveaux widgets"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/options.png"><img src="screenshots/AlThreat/thumbs/options.png" alt="Options de jeu" title="Quelques options sont désormais disponibles"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/jeu4.png"><img src="screenshots/AlThreat/thumbs/jeu4.png" alt="Screenshot de jeu" title="Un nouveau level avec de nouveaux ennemis"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/jeu5.png"><img src="screenshots/AlThreat/thumbs/jeu5.png" alt="Screenshot de jeu" title="Pensez à attraper les bonus"/></a>&nbsp;
+    </div>
+  <div class="spacer"></div>
+</div>
+<div class="screenshots">
+  <span>Version 0.3</span>
+  <div class="spacer"></div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/entrainement.png"><img src="screenshots/AlThreat/thumbs/entrainement.png" alt="Entrainement" title="Accès direct aux niveaux pour le mode entrainement"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/menujeu.png"><img src="screenshots/AlThreat/thumbs/menujeu.png" alt="Menu de jeu" title="Un menu de jeu est maintenant disponible"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/jeu6.png"><img src="screenshots/AlThreat/thumbs/jeu6.png" alt="Nouveau level" title="Un nouveau level viens s'ajouter au précédent ... attention aux bords ;)"/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/highscore.png"><img src="screenshots/AlThreat/thumbs/highscore.png" alt="Enregistrement du highscore" title="Les champions ont le droit à leur heure de gloire ..."/></a>&nbsp;
+    </div>
+    <div class="screenshot">
+    <a href="screenshots/AlThreat/highscores.png"><img src="screenshots/AlThreat/thumbs/highscores.png" alt="Liste des highscores" title="... conservée pour l'éternité (ou presque)"/></a>&nbsp;
+    </div>
+  <div class="spacer"></div>
+</div>
+
+<a name="comments"></a>
+<h2>Commentaires</h2>
+
+#comments{althreat}
+
+<p class="quickmenu"><!--<a href="comment.php?subject=althreat&amp;type=1">Bug/Suggestion</a> | --><a href="comment.php?subject=althreat&amp;type=0">Poster un commentaire</a> | <a href="#screenshots">Screenshots</a> | <a href="#download">Télécharger</a></p>

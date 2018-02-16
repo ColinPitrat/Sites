@@ -1,0 +1,292 @@
+<h1>Python par l'exemple</h1>
+
+<!-- TODO: ajouter plus tard:
+ - Lire et ecrire des fichiers
+-->
+<p>Le principe de ce cours est de permettre de d&eacute;couvrir python par une suite d'exemple de complexit&eacute; croissante. Si vous d&eacute;butez en python, je vous conseille de recopier les exemples un a un puis de les ex&eacute;cuter et enfin, d'essayer de comprendre comment ils fonctionnent. Surtout, ne faites pas un simple copier-coller, vous rateriez des choses importantes. Il vaut mieux recopier les exemples afin de bien comprendre chaque ligne.<br/> La page &eacute;tant un peu longue, voici ce que vous trouverez, avec des raccourcis pour faciliter la navigation :</p>
+<ul>
+<li><a href="#Prerequis">Les pr&eacute;requis pour bien commencer</a></li>
+<li><a href="#PremiersPas">Les premiers pas</a></li>
+<li> 
+  <ul>
+    <li><a href="#ex1">Exemple 1 : Ecrire</a></li>
+    <li><a href="#ex2">Exemple 2 : Commenter</a></li>
+    <li><a href="#ex3">Exemple 3 : Lire</a></li>
+    <li><a href="#ex4">Exemple 4 : Compter</a></li>
+    <li><a href="#ex5">Exemple 5 : Variables</a></li>
+    <li><a href="#ex6">Exemple 6 : Fonctions</a></li>
+    <li><a href="#ex7">Exemple 7 : Si alors</a></li>
+    <li><a href="#ex8">Exemple 8 : Boucles</a></li>
+    <li><a href="#ex9">Exemple 9 : Listes</a></li>
+    <li><a href="#ex10">Exemple 10 : Hasard</a></li>
+    <li><a href="#prob1">A vous de jouer !</a></li>
+  </ul>
+</li>
+</ul>
+
+<a name="Prerequis"></a>
+<h2>Les pr&eacute;requis pour bien commencer</h2>
+
+<p>Afin de pouvoir recopier et ex&eacute;cuter les exemples qui suivent, il faut savoir comment faire l'un et l'autre. Pour recopier les exercices, il vous faudra utiliser un &eacute;diteur de texte. Attention, pas un traitement de texte, qui est un logiciel permettant d'&eacute;diter mais aussi de formater du texte (c'est &agrave; dire de changer la police, le style, l'alignement, etc ...) mais un &eacute;diteur de texte. Il en existe plusieurs sous linux qui sont tr&egrave;s bons. Sous KDE, vous pouvez utiliser kwrite ou kate. Sous gnome, il existe gedit. En ligne de commande, vous pouvez utiliser nano. Si vous voulez des &eacute;diteurs tr&egrave;s efficaces mais qui n&eacute;cessitent un (long) apprentissage avant de r&eacute;ussir &agrave; bien les utiliser, vous pouvez vous tourner vers vim (tapez vimtutor dans une console pour &ecirc;tre guid&eacute; dans vos premiers pas) ou emacs. Dans l'un de ces &eacute;diteurs, tapez le texte suivant :</p>
+
+<p class="code">
+print("Salut &agrave; tous !")
+</p>
+
+<p>puis sauvegardez le r&eacute;sultat dans un fichier nomm&eacute; ex0.py (vous pouvez vous placer dans un r&eacute;pertoire que vous d&eacute;dierez &agrave; votre apprentissage du python). Lancez alors une ligne de commande (ou console) et allez dans le r&eacute;pertoire dans lequel vous avez sauvegard&eacute; votre fichier. Par exemple, si vous avez sauvegard&eacute; votre fichier dans un r&eacute;pertoire nomm&eacute; python dans votre r&eacute;pertoire personnel /home/toto, executez dans votre console : </p>
+
+<p class="code">
+cd /home/toto/python<br/>
+python ex0.py
+</p>
+
+<p>Bien s&ucirc;r, pour que cela fonctionne, il faut que python soit install&eacute;. Si vous avez un message d'erreur vous disant que la commande python n'existe pas, c'est que ce n'est pas le cas. Utilisez alors le gestionnaire de paquet de votre distribution pour l'installer.</p>
+
+<p>Une fois que vous avez r&eacute;ussi &agrave; faire afficher "Salut &agrave; tous !" &agrave; votre programme, vous pouvez passer &agrave; la suite.</p>
+
+<a name="PremiersPas"></a>
+<h2>Les premiers pas</h2>
+
+<a name="ex1"></a>
+<h3>Exemple 1 : Ecrire</h3>
+
+<p class="code">
+print("Salut &agrave; tous !")<br/>
+print("Comment allez vous ?")<br/>
+print('Les cha&icirc;nes de caract&egrave;res peuvent &ecirc;tre entour&eacute;es avec le caract&egrave;re "')<br/>
+print("Ou avec le caract&egrave;re '")<br/>
+print("On peut quand m&ecirc;me y inclure des ' et des \"")<br/>
+print('Oui, on peut y inclure des \' et des "')<br/>
+print("Et on peut &eacute;crire des \\ aussi")<br/>
+print(""" On peut faire des textes<br/>
+ sur plusieurs lignes <br/>
+ contenant des ' et des ".""")<br/>
+print("La fonction print ", "peut afficher plusieurs ", "cha&icirc;nes de caract&egrave;re ", "&agrave; la suite")
+</p>
+
+<p>Vous avez d&eacute;j&agrave; vu dans les pr&eacute;requis que la fonction <span class="commande">print</span> permet d'&eacute;crire du texte. On voit ici quelques subtilit&eacute;s des cha&icirc;nes de caract&egrave;re : elle peuvent &ecirc;tre entour&eacute;es de guillemets simples ou doubles. Il faut bien s&ucirc;r utiliser le m&ecirc;me type de guillemet &agrave; la fin qu'au d&eacute;but. On peut placer des guillemets doubles dans une cha&icirc;ne de caract&egrave;re entour&eacute;e de guillemets simples et inversement. Si l'on d&eacute;sire utiliser des guillemets simples (resp. doubles) dans une cha&icirc;ne entour&eacute;e de guillemets simples (resp. doubles) il faut les &eacute;chapper, c'est &agrave; dire les faire pr&eacute;c&eacute;der du symbole \. Pour afficher un \, il faut lui aussi le pr&eacute;c&eacute;der d'un \. Enfin, on peut cr&eacute;er des cha&icirc;nes de caract&egrave;res de plusieurs lignes en utilisant 3 guillemets (simples ou doubles).</p>
+
+<p>La fonction print peut prendre un nombre arbitraire de param&egrave;tres. Les param&egrave;tres sont s&eacute;par&eacute;s par des virgules. La fonction print affiche tous ses param&egrave;tres les uns &agrave; la suite des autres.</p>
+
+<a name="ex2"></a>
+<h3>Exemple 2 : Commenter</h3>
+
+<p class="code">
+<span class="comment"># Ce programme affiche une simple phrase</span><br/>
+print("Salut &agrave; tous !") <span class="comment"># Voici la ligne qui affiche la phrase en question</span>
+</p>
+
+<p>Il est souvent utile d'expliquer ce que le code fait pour que les autres personnes qui vont devoir le lire comprennent plus facilement ce qu'il fait, ou pour soi-m&ecirc;me quand on relit son code quelques temps apr&egrave;s l'avoir &eacute;crire. Cela permet aussi de se souvenir pourquoi on a choisi une solution et pas une autre. Cel&agrave; se fait grace aux commentaires. En python, un commentaire commence par le symbole # et se termine &agrave; la fin de la ligne. Le commentaire n'a aucun effet sur le programme.</p>
+
+<a name="ex3"></a>
+<h3>Exemple 3 : Lire</h3>
+
+<p class="code">
+prenom = input("Bonjour, comment t'appelles tu ? ")<br/>
+print("Enchant&eacute; ", prenom, " je suis content de faire ta connaissance.")
+</p>
+
+<p>La fonction <span class="commande">input</span> permet &agrave; la fois d'afficher un texte et de demander &agrave; l'utilisateur du programme d'en entrer un. Si aucune cha&icirc;ne n'est pass&eacute;e en param&egrave;tre, la fonction input se contentera d'attendre que l'utilisateur entre quelque chose. Ici, ce que l'utilisateur rentre (normalement son pr&eacute;nom) est stock&eacute; dans une variable nomm&eacute;e prenom et est r&eacute;utilis&eacute; dans la fonction print pour &ecirc;tre affich&eacute;.</p>
+
+<a name="ex4"></a>
+<h3>Exemple 4 : Compter</h3>
+
+<p class="code">
+print("Une premi&egrave;re op&eacute;ration : ", 15 + 30 / 6)<br/>
+print("Puis une autre : ", 100 / (25 * 3))<br/>
+<br/>
+print("Est ce que 3 + 2 est plus petit que 7 - 4 ?")<br/>
+print(3 + 2 &lt; 7 - 4)<br/>
+<br/>
+print("Plus petit ou &eacute;gal alors ?")<br/>
+print(3 + 2 &lt;= 7 - 4)<br/>
+<br/>
+print("Plus grand donc ?")<br/>
+print(3 + 2 &gt; 7 - 4)<br/>
+<br/>
+print("Ah, et du coup plus grand ou &eacute;gal !")<br/>
+print(3 + 2 &gt;= 7 - 4)<br/>
+<br/>
+print("Mais pas &eacute;gal")<br/>
+print(3 + 2 == 7 - 4)<br/>
+<br/>
+print("Donc diff&eacute;rent")<br/>
+print(3 + 2 != 7 - 4)
+</p>
+
+<p>Nous avons vu que python permettait de manipuler des cha&icirc;nes de caract&egrave;res, mais il permet aussi de manipuler des nombres. Les op&eacute;rations classiques sont disponibles : additions, soustractions, multiplications, divisions. Il est aussi possible d'utiliser des parenth&egrave;ses pour pr&eacute;ciser l'ordre dans lequel les op&eacute;rations sont effectu&eacute;es. Enfin, des op&eacute;rateurs de comparaison sont disponibles. Leur r&eacute;sultat est un bool&eacute;en, c'est &agrave; dire la valeur True (vrai) ou False (faux). Ainsi, 3 &lt; 5 renverra True car 3 est plus petit que 5. Par contre, 3 &gt; 5 renverra False car 3 n'est pas plus grand que 5.</p>
+
+<a name="ex5"></a>
+<h3>Exemple 5 : Variables</h3>
+
+<p class="code">
+vitesse_autoroute=130<br/>
+vitesse_route=90<br/>
+distance_nice_paris=1000<br/>
+<br/>
+print("Dur&eacute;e de Nice-Paris par route : ", distance_nice_paris / vitesse_route)<br/>
+print("Dur&eacute;e de Nice-Paris par autoroute : ", distance_nice_paris / vitesse_autoroute)<br/>
+<br/>
+entier_5=5<br/>
+chaine_5="5"<br/>
+<br/>
+print("Est-ce que 5 == \"5\" ? ", entier_5 == chaine_5)<br/>
+print("Est-ce que 5 == int(\"5\") ? ", entier_5 == int(chaine_5))<br/>
+print("Est-ce que str(5) == \"5\" ? ", str(entier_5) == chaine_5)
+</p>
+
+<p>Nous avons d&eacute;j&agrave; utilis&eacute; une variable lorsque nous avons rencontr&eacute; la fonction input. Nous avons en effet stock&eacute; son r&eacute;sultat dans une variable que nous avons appel&eacute; pr&eacute;nom. Python est un langage faiblement typ&eacute;. C'est &agrave; dire que l'on a pas besoin de pr&eacute;ciser si une variable va contenir une cha&icirc;ne de caract&egrave;res, un nombre, un bool&eacute;en ... et que l'on peut change le type de ce qu'elle contient &agrave; chaque affectation. Mais elle a quand m&ecirc;mem un type, c'est pourquoi "5" est diff&eacute;rent de 5, car le premier est une cha&igrave;ne de caract&egrave;res tandis que le second est un entier. La conversion de l'un &agrave; l'autre est cependant possible &agrave; l'aide de fonctions d&eacute;di&eacute;es.</p>
+
+<a name="ex6"></a>
+<h3>Exemple 6 : Fonctions</h3>
+
+<p class="code">
+def sont_freres(nom1, nom2) :<br/>
+ &nbsp; &nbsp; print(nom1, "et", nom2, " sont fr&egrave;res.")<br/>
+ &nbsp; &nbsp; print(nom1, "est l'ain&eacute;")<br/>
+<br/>
+def multiply_and_add(a, b, c) :<br/>
+ &nbsp; &nbsp; return a*b+c<br/>
+<br/>
+sont_freres("Gregory", "Antoine")<br/>
+sont_freres("Jeremy", "Mickael")<br/>
+sont_freres("Benoit", "Luc")<br/>
+sont_freres("Laurent", "Guy")<br/>
+<br/>
+print(multiply_and_add(1, 2, 3))<br/>
+print(multiply_and_add(4, 5, 6))<br/>
+print(multiply_and_add(7, 8, 9))
+</p>
+
+<p>Nous avons d&eacute;fini, &agrave; l'aide du mot clef <span class="commande">def</span>, la fonction sont_freres qui prend deux arguments : nom1 et nom2. L'avantage est que nous pouvons maintenant l'appeler autant de fois que nous voulons. Il y a moins de risque d'erreurs car il n'est pas necessaire de retaper tout le texte pour chaque paire de freres. Les fonctions sont tr&egrave;s pratique pour r&eacute;utiliser le code mais aussi pour l'organiser. Une fonction peut retourner une valeur &agrave; l'aide du mot-clef <span class="commande">return</span>. C'est le cas de multiply_and_add. C'est aussi le cas de la fonction input que nous avions vu pr&eacute;c&eacute;demment.</p>
+
+<a name="ex7"></a>
+<h3>Exemple 7 : Si alors</h3>
+
+<p class="code">
+age = input("Quel age avez vous ?")<br/>
+if age > 18:<br/>
+ &nbsp; &nbsp; print("Vous &egrave;tes majeur !")<br/>
+elif age == 18:<br/>
+ &nbsp; &nbsp; print("Vous &egrave;tes tout juste majeur !")<br/>
+else:<br/>
+ &nbsp; &nbsp; print("Vous &egrave;tes mineur !")<br/>
+ &nbsp; &nbsp; if age < 10:<br/>
+ &nbsp; &nbsp; &nbsp; &nbsp; print("Vous &egrave;tes tr&egrave;s loin d'&egrave;tre majeur !")<br/>
+ &nbsp; &nbsp; print("Vous n'&ecirc;tes pas autoris&eacute; &agrave; rentrer.")<br/>
+if age > 18 and age < 25:<br/>
+ &nbsp; &nbsp; print("C'est la meilleur p&eacute;riode de la vie !")<br/>
+if age < 0 or age > 120:<br/>
+ &nbsp; &nbsp; print("Je ne sais pas pourquoi mais j'ai du mal &agrave; vous croire !")<br/>
+print("Au revoir")
+</p>
+
+<p>Le mot-clef <span class="commande">if</span> permet d'effectuer une op&eacute;ration de mani&egrave;re conditionnelle. Si la condition sp&eacute;cifi&eacute;e apr&egrave;s le if est vraie, le bloc de code qui suit est execut&eacute;. Notez que le bloc qui est execut&eacute; est celui qui est indent&eacute;, c'est &agrave; dire celui qui est pr&eacute;c&eacute; d'espaces. Contrairement &agrave; d'autres langages, l'indentation en python ne sert pas seulement &agrave; "faire joli" mais fais partie int&eacute;grante du code. Les deux derniers if montrent que l'on peut combiner des conditions. Si a et b sont deux conditions, la condition a and b ne sera vraie que si a et b sont vraies toutes les deux. La condition a or b sera vraie si a est vraie ou b est vraie (ou les deux).</p>
+
+<a name="ex8"></a>
+<h3>Exemple 8 : Boucles</h3>
+
+<p class="code">
+reponse=""<br/>
+while reponse != "oui":<br/>
+ &nbsp; &nbsp; reponse = input("Ai-je raison ?")<br/>
+ &nbsp; &nbsp; if reponse == "je refuse de r&eacute;pondre":<br/>
+ &nbsp; &nbsp; &nbsp; &nbsp; break<br/>
+<br/>
+for i in range(0, 5):<br/>
+ &nbsp; &nbsp; print("J'ai raison ! (au fait, i vaut ", i)
+</p>
+
+<p>Ce programme &eacute;n&egrave;rvent qui veut absolument avoir raison illustre le principe de boucle. La premi&egrave;re boucle est de type <span class="commande">while</span> (tant que). Le contenu de la boucle (c'est &agrave; dire le bloc de code qui le suit) s'execute tant que la condition sp&eacute;cifi&eacute;e apr&egrave;s le while est vraie. La seconde boucle est de type <span class="commande">for ... in</span> (pour ... parmi). Elle s'execute pour chaque &eacute;l&eacute;ment de la liste qui se trouve apr&egrave;s le mot-clef in. La fonction <span class="commande">range(x, y)</span> renvoit une liste comprenant les valeurs de x (comprise) &agrave; y (non comprise). La variable i va donc prendre successivement les valeurs 0, 1, 2, 3 puis 4. Nous verrons comment fonctionne les listes plus en d&eacute;tail un peu plus loin.</p>
+
+<a name="ex9"></a>
+<h3>Exemple 9 : Listes</h3>
+
+<p class="code">
+maListe = [ "a", "toto", 3, 4.5 ]<br/>
+print(maListe[0])<br/>
+print(maListe[3])<br/>
+print(maListe[-1])<br/>
+print(maListe[-4])<br/>
+print(maListe[1:3])<br/>
+print(maListe[:3])<br/>
+print(maListe[1:])<br/>
+maListe.append("titi")<br/>
+print(maListe)<br/>
+maListe.insert(2, "nouveau")<br/>
+print(maListe)<br/>
+maListe.extend(["une", "autre", "liste"])<br/>
+print(maListe)<br/>
+print("toto" in maListe)<br/>
+print(maListe.index("toto"))<br/>
+maListe.remove("toto")<br/>
+print(maListe)
+</p>
+
+<p>Cet exemple d&eacute;fini une liste compos&eacute;e de 4 &eacute;l&eacute;ments. Les crochets permettent d'acc&eacute;der aux &eacute;l&eacute;ments par leur index. L'index commence &agrave; z&eacute;ro et va donc jusqu'&agrave; n-1 pour une liste de taille n (ici 3 pour une liste de taille 4). Les index n&eacute;gatifs de -1 &agrave; -n permettent d'acc&eacute;der aux &eacute;l&eacute;ments depuis le dernier au premier. Il est &eacute;galement possible d'acc&eacute;der &agrave; des sous-listes en utilisant deux indexs s&eacute;par&eacute;s par :. Un index non donn&eacute; correspond &agrave; l'extr&eacute;mit&eacute; de la liste.</p>
+
+<p>La m&eacute;thode <span class="commande">append</span> permet d'ajouter un &eacute;l&eacute;ment &agrave; la liste. Une m&eacute;thode est une fonction qui doit &egrave;tre appel&eacute;e sur un objet et a un effet dessus. La m&eacute;thode <span class="commande">insert</span> permet d'ins&eacute;rer un &eacute;l&eacute;ment (le deuxi&egrave;me argument) &agrave; l'index donn&eacute; en premier argument. La m&eacute;thode <span class="commande">extend</span> permet de concatener la liste pass&eacute;e en param&egrave;tre &agrave; la liste sur laquelle la m&eacute;thode est appel&eacute;e. Le mot-clef <span class="commande">in</span> renvoit True si l'&eacute;l&eacute;ment est dans la liste, False sinon. La m&eacute;thode <span class="commande">index</span> renvoit l'index du premier &eacute;l&eacute;ment ayant la valeur donn&eacute;e en argument. La m&eacute;thode remove supprime le premier &eacute;l&eacute;ment aynat la valeur donn&eacute;e en argument.</p>
+
+<a name="ex10"></a>
+<h3>Exemple 10 : Hasard</h3>
+
+<p class="code">
+import random<br/>
+<br/>
+print("Un nombre au hasard entre 0 et 1 :", random.random())<br/>
+print("Un nombre au hasard entre 100 et 200 :", random.randint(100, 200))
+</p>
+
+<p>Pour le dernier exemple de cette partie, nous voyons comment g&eacute;n&eacute;rere des nombres al&eacute;atoires. Cette fonctionnalit&eacute; est disponible grace au module <span class="commande">random</span> que l'on d&eacute;clare vouloir utiliser &agrave; l'aide du mot-clef <span class="commande">import</span>. Une fois le module import&eacute;, on peut utiliser les fonctions qu'il fournit (ici <span class="commande">random</span> et <span class="commande">randint</span>) en les pr&eacute;fixant du nom du module suivi d'un point.</p>
+
+<a name="prob1"></a>
+<h3>A vous de jouer !</h3>
+
+<p>Vous voil&agrave; maintenant arm&eacute; pour vous attaquer &agrave; de vrais programmes. Voici une petite liste pour vous inspirer. Cependant, n'h&eacute;sitez pas &agrave; utiliser votre inspiration pour l'&eacute;tendre ! Pour ne pas gacher le plaisir, je ne fourni pas les solutions de ces exercices mais si vous bloquez, n'h&eacute;sitez pas &agrave; me demander par le biais du formulaire de contact ou dans le forum ! </p>
+
+<h4>Devin</h4>
+
+<div class="indent">
+<p class="comment">Ecrivez un programme qui choisit un nombre au hasard et vous demande de le deviner en un nombre de coups limit&eacute;. A chaque tentative, le programme vous indique si le nombre propos&eacute; est plus grand ou plus petit que celui recherch&eacute; ou si vous avez gagn&eacute. Au bout du nombre de tentatives maximum autoris&eacute;, le programme vous indique que vous avez perdu.</p>
+<p><strong>Pour aller plus loin :</strong></p>
+<ul>
+    <li> - Enchainer les parties en boucle sans avoir &agrave; relancer le programme, en demandant au joueur &agrave; chaque fin de partie si il veut continuer ou non, ou en lui donnant la possibilit&eacute; de quitter &agrave; tout moment</li>
+    <li> - A chaque partie, faire varier le minimum et le maximum entre lesquels le joueur doit chercher la r&eacute;ponse</li>
+    <li> - Determiner le nombre de coups maximum de mani&egrave;re automatique</li>
+    <li> - Indiquer au joueur si le coup qu'il joue est intelligent ou non</li>
+    <li> - Chronom&eacute;trer le temps mis par le joueur. Pour cela, vous pouvez jeter un coup d'oeil &agrave; <a href="http://docs.python.org/library/datetime.html">la documentation du module datetime</a>, en particulier les fonctions <span class="commande">datetime.now()</span>, <span class="commande">timedelta.total_seconds()</span> et les op&eacute;rations support&eacute;es par les objets <span class="commande">datetime</span>.</li>
+    <li> - G&eacute;rer un tableau des meilleurs scores (nombre de coups et temps, &agrave; adapter si l'intervale de d&eacute;part est variable) en utilisant <a href="http://docs.python.org/tutorial/inputoutput.html#reading-and-writing-files">les m&eacute;thodes de lecture et &eacute;criture</a> pour les stocker dans un fichier.</li>
+</ul>
+</div>
+
+<h4>Pendu</h4>
+
+<div class="indent">
+<p class="comment">Ecrivez un programme qui choisit un mot parmi une liste qu'il poss&egrave;de et propose de le deviner lettre par lettre. La longueur du mot est donn&eacute;e, materialis&eacute;e par un symbole correspondant aux lettres non-identifi&eacute;es. A chaque essai, l'utilisateur donne une lettre. Si elle est contenu dans le mot, la lettre est affich&eacute;e aux positions correspondantes. L'utilisateur n'a droit qu'&agrave; un nombre pr&eacute;d&eacute;fini d'erreurs.</p>
+<p><strong>Pour aller plus loin :</strong></p>
+<ul>
+    <li> - Proposer des niveaux de difficult&eacute;</li>
+    <li> - Dessiner le pendu &agrave; chaque &eacute;tape</li>
+    <li> - Enchainer les parties en boucle sans avoir &agrave; relancer le programme, en demandant au joueur &agrave; chaque fin de partie si il veut continuer ou non, ou en lui donnant la possibilit&eacute; de quitter &agrave; tout moment</li>
+    <li> - Ne pas reproposer le m&ecirc;me mot dans une m&ecirc;me execution du programme</li>
+    <li> - Chronom&eacute;trer le temps mis par le joueur. Pour cela, vous pouvez jeter un coup d'oeil &agrave; <a href="http://docs.python.org/library/datetime.html">la documentation du module datetime</a>, en particulier les fonctions <span class="commande">datetime.now()</span>, <span class="commande">timedelta.total_seconds()</span> et les op&eacute;rations support&eacute;es par les objets <span class="commande">datetime</span>.</li>
+    <li> - G&eacute;rer un tableau des meilleurs scores (nombre de coups et temps) en utilisant <a href="http://docs.python.org/tutorial/inputoutput.html#reading-and-writing-files">les m&eacute;thodes de lecture et &eacute;criture</a> pour les stocker dans un fichier.</li>
+</ul>
+</div>
+
+<h4>Calcul mental</h4>
+
+<div class="indent">
+<p class="comment">Ecrivez un programme qui permet &agrave; l'utilisateur de choisir quelle op&eacute;ration il souhaite travailler (addition, soustraction, multiplication, division). Selon le choix, des op&eacute;rations luis sont propos&eacute;es en boucle jusqu'&agrave; ce qu'il tape un mot clef pour retourner au menu (par exemple "menu" ou "quitter"). Pour chaque op&eacute;ration, le programme signale &agrave; l'utilisateur si la r&eacute;ponse est bonne ou non (dans ce cas il peut aussi afficher la solution). Faire attention &agrave; la division qui est un cas un peu plus complexe.</p>
+<p><strong>Pour aller plus loin :</strong></p>
+<ul>
+    <li> - Proposer des niveaux de difficult&eacute; (nombres plus ou moins grands, &agrave; adapter pour chaque op&eacute;ration)</li>
+    <li> - Fournir des statistiques &agrave; l'utilisateur lorsqu'il retourne au menu (nombre de bonnes et mauvaises r&eacute;ponses)</li>
+    <li> - Chronom&eacute;trer le temps mis par le joueur. Pour cela, vous pouvez jeter un coup d'oeil &agrave; <a href="http://docs.python.org/library/datetime.html">la documentation du module datetime</a>, en particulier les fonctions <span class="commande">datetime.now()</span>, <span class="commande">timedelta.total_seconds()</span> et les op&eacute;rations support&eacute;es par les objets <span class="commande">datetime</span>. Ajouter le temps dans les statistiques (temps total, temps moyen par r&eacute;ponse, temps moyen par bonne r&eacute;ponse ...)</li>
+    <li> - G&eacute;rer un tableau des meilleurs scores (nombre de coups et temps) en utilisant <a href="http://docs.python.org/tutorial/inputoutput.html#reading-and-writing-files">les m&eacute;thodes de lecture et &eacute;criture</a> pour les stocker dans un fichier.</li>
+</ul>
+</div>
+
+<p class="quickmenu"><a href="comment.php?subject=althreat&amp;type=0">Poster un commentaire</a></p>
+
+#comments{python}

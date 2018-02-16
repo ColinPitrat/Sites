@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- 
+	Colin Pitrat
+	Bull
+	colin.pitrat@bull.net
+	28 Novembre 2006
+	Version 0.1
+
+	Documentation placée sous licence GPL Version 2 ou supérieure.
+-->
+
+<html lang="fr">
+<head>
+<title>Commandes d'administration de RSBAC</title>
+<style>
+	h1
+	{
+		text-align: center;
+	}
+
+	h2
+	{
+		margin-left: 0em;
+	}
+
+	h3
+	{
+		margin-left: 2em;
+	}
+
+	h4
+	{
+		margin-left: 4em;
+	}
+
+	p.description
+	{
+		margin-left: 7em;
+	}
+
+	ul.description
+	{
+		margin-left: 9em;
+	}
+
+	p.usage
+	{
+		margin-left: 8em;
+		font-family: monospace;
+	}
+
+	p.example
+	{
+		margin-left: 8em;
+		margin-right: auto;
+		padding: 3px;
+		font-size: small;
+		background-color: #DDDDDD;
+		border: 2px inset #000000;
+	}
+
+	p.example span.example
+	{
+		font-weight: bold;
+		display: block;
+	}
+	p.example span.comment
+	{
+		font-style: italic;
+		color: #00AA00;
+	}
+</style>
+</head>
+
+<h1>Commandes d'administration de RSBAC</h1>
+
+<p class="description">Ce document concerne la version 1.3.0 de RSBAC.</p>
+
+<h2>Table des matières</h2>
+<ul>
+<li><a href="#generales">Commandes générales</a></li>
+<ul>
+	<li><a href="#gen_shell">Commandes shell</a></li>
+	<li><a href="#gen_dialog">Commandes dialog</a></li>
+</ul>
+<li><a href="#specifiques">Commandes spécifiques à un module</a></li>
+<ul>
+	<li><a href="#mod_auth">Module AUTH</a></li>
+	<li><a href="#mod_acl">Module ACL</a></li>
+	<li><a href="#mod_cap">Module CAP</a></li>
+	<li><a href="#mod_dac_disable">Module DAC_DISABLE</a></li>
+	<li><a href="#mod_daz">Module DAZ</a></li>
+	<li><a href="#mod_fc">Module FC</a></li>
+	<li><a href="#mod_ff">Module FF</a></li>
+	<li><a href="#mod_freeze">Module FREEZE</a></li>
+	<li><a href="#mod_gen">Module GEN</a></li>
+	<li><a href="#mod_jail">Module JAIL</a></li>
+	<li><a href="#mod_mac">Module MAC</a></li>
+	<li><a href="#mod_ms">Module MS</a></li>
+	<li><a href="#mod_pax">Module PAX</a></li>
+	<li><a href="#mod_pm">Module PM</a></li>
+	<li><a href="#mod_rc">Module RC</a></li>
+	<li><a href="#mod_reg">Module REG</a></li>
+	<li><a href="#mod_res">Module RES</a></li>
+	<li><a href="#mod_sim">Module SIM</a></li>
+	<li><a href="#mod_softmode">Module SOFTMODE</a></li>
+	<li><a href="#mod_um">Module UM</a></li>
+</ul>
+<li><a href="#noclass">Commandes non classées</a></li>
+<li><a href="#reference">Réference</a></li>
+<ul>
+	<li><a href="#ref_errors">Messages d'erreur</a></li>
+</ul>
+<li><a href="#examples">Exemples d'utilisation</a></li>
+<ul>
+	<li><a href="#ex_log">Protection des fichiers de log</a></li>
+</ul>
+<li><a href="#index">Index</a></li>
+</ul>
+
+<h2><a name="generales"></a>Commandes générales</h2>
+
+<h3><a name="gen_shell"></a>Commandes shell</h3>
+<h4><a name="attr_back_dev"></a>attr_back_dev</h4>
+Sert a sauvegarder les rêgles courantes ?
+<h4><a name="attr_back_fd"></a>attr_back_fd</h4>
+Sert a sauvegarder les rêgles courantes ?
+<h4><a name="attr_back_group"></a>attr_back_group</h4>
+Sert a sauvegarder les rêgles courantes ?
+<h4><a name="attr_back_net"></a>attr_back_net</h4>
+Sert a sauvegarder les rêgles courantes ?
+<h4><a name="attr_back_user"></a>attr_back_user</h4>
+Sert a sauvegarder les rêgles courantes ?
+
+<h4><a name="attr_get_fd"></a>attr_get_fd</h4>
+<p class="usage">
+Use: attr_get_fd [switches] module target-type attribute file/dirname(s)<br/>
+ -v = verbose, -e = show effective (maybe inherited) value, not real<br/>
+ -r = recurse into subdirs, -n = list all requests<br/>
+ -a = list attributes and values<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC or AUTH<br/>
+target-type = FILE, DIR, FIFO, SYMLINK, DEV or FD<br/>
+(FD: let attr_get_fd decide between FILE, DIR, FIFO and SYMLINK, no DEV)
+</p>
+
+<h4><a name="attr_get_file_dir"></a>attr_get_file_dir</h4>
+<p class="usage">
+Use: attr_get_file_dir module target-type file/dirname attribute [request]<br/>
+Use: attr_get_file_dir module target-type file/dirname attribute [position]<br/>
+Use: attr_get_file_dir list_category_nr<br/>
+ -e = show effective (maybe inherited) value, not real<br/>
+ -d = numeric device specification ({b|c}major[:minor])<br/>
+ -p = print requests, -n [target] = list all requests [for target]<br/>
+ -c list all Linux capabilities, -R = list all RES resource names<br/>
+ -C path = convert path to device special file to device specification<br/>
+ -a = list attributes and values<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC, AUTH, RES or PAX<br/>
+target-type = FILE, DIR, FIFO, SYMLINK or DEV
+</p>
+
+<h4><a name="attr_get_group"></a>attr_get_group</h4>
+<p class="usage">
+Use: attr_get_group [switches] module group attribute [position|request-name]<br/>
+ -n = numeric value, -b = both names and numbers,<br/>
+ -l list all users, -L list all Linux groups<br/>
+ -a = list attributes and values<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC or AUTH
+</p>
+
+<h4><a name="attr_get_ipc"></a>attr_get_ipc</h4>
+<p class="description">Récupère les attributs d'un IPC. Le module est un paramêtre optionnel. Si il est précisé, l'attribut doit correspondre au module précisé. Ainsi, on utilisera :</p>
+<ul class="description">
+	<li>security_level avec MAC</li>
+	<li>mac_categories avec MAC</li>
+	<li>pm_object_class, pm_object_type, pm_ipc_purpose avec PM</li>
+	<li>rc_type avec RC</li>
+	<li>jail_id avec JAIL</li>
+</ul>
+<p class="usage">
+Use: attr_get_ipc [flags] module ipc-type id attribute<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+ -i = list all IPC ids with non-default attributes<br/>
+ipc-types: sem, msg, shm, anonpipe, anonunix<br/>
+attribute (string) and returned value = see following list:<br/>
+security_level  0 = unclassified, 1 = confidential, 2 = secret, 3 = top secret, 254 = inherit, max. level 252<br/>
+mac_categories  Bit Set String of length 64 for all categories<br/>
+pm_object_class         Class-ID (positive integer)<br/>
+pm_ipc_purpose  Purpose-ID (positive integer)<br/>
+pm_object_type  0 = none, 1 = TP, 2 = personal data, 3 = non-personal data, 4 = ipc, 5 = dir<br/>
+rc_type         RC-type-id<br/>
+jail_id         JAIL ID (0 = off)
+</p>
+<p class="example">
+<span class="example">attr_get_ipc RC anonunix 2 rc_type</span>
+<span class="example">attr_get_ipc JAIL msg 2 jail_id</span>
+</p>
+
+<h4><a name="attr_get_net"></a>attr_get_net</h4>
+<p class="usage">
+Use: attr_get_net [-v] [-e] module target-type attribute [CAT category] [request] id(s)<br/>
+ -v = verbose, -e = show effective (maybe inherited) value, not real<br/>
+ -r = recurse into subdirs, -n [target] = list all requests [for target]<br/>
+ -a = list attributes and values<br/>
+ -d = list NETDEV targets with non-default attribute values<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS or RC<br/>
+target-type = NETDEV, NETTEMP or NETOBJ<br/>
+category = category number for mac_categories<br/>
+request = request number for log_array_low|high
+</p>
+
+<h4><a name="attr_get_process"></a>attr_get_process</h4>
+<p class="usage">
+Use: attr_get_process [switches] module pid attribute [bit-no]<br/>
+ -p = print all request names, -n = list all request names<br/>
+ -a = list attributes and values<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC, AUTH or PAX<br/>
+categories and log_program_based       (with additional parameter bit-no)<br/>
+0=no, 1=yes
+</p>
+
+<h4><a name="attr_get_up"></a>attr_get_up</h4>
+<p class="usage">
+Use: attr_get_up [switches] module target-type attribute user(s)/proc-no.<br/>
+-a = list attributes and values<br/>
+-N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC or AUTH<br/>
+target-type = USER or PROCESS,
+</p>
+
+<h4><a name="attr_get_user"></a>attr_get_user</h4>
+<p class="usage">
+Use: attr_get_user [switches] module user attribute [position|request-name]<br/>
+ -e = show effective (maybe inherited) value, not real<br/>
+ -n = numeric value, -b = both names and numbers,<br/>
+ -l list all users, -L list all Linux groups<br/>
+ -c list all Linux capabilities, -R = list all RES resource names<br/>
+ -a = list attributes and values<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC or AUTH<br/>
+mac_[min_]categories           (with additional parameter position)<br/>
+0=no, 1=yes<br/>
+log_user_based (with additional parameter request-name)<br/>
+0=no, 1=yes<br/>
+</p>
+
+<h4><a name="attr_rm_fd"></a>attr_rm_fd</h4>
+<h4><a name="attr_rm_file_dir"></a>attr_rm_file_dir</h4>
+<h4><a name="attr_rm_group"></a>attr_rm_group</h4>
+<h4><a name="attr_rm_user"></a>attr_rm_user</h4>
+<h4><a name="attr_set_fd"></a>attr_set_fd</h4>
+<p class="description">Positionne les attributs d'un(e) fichier/répertoire/device/file/lien.</p>
+<p class="usage">
+Use: attr_set_fd [-v] [-r] module target-type attribute value file/dirname(s)<br/>
+ -v = verbose, -r = recurse into subdirs,<br/>
+ -n = list all requests<br/>
+ -A = list attributes and values<br/>
+ -V version = supply RSBAC integer version number for upgrading<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+module = GEN, MAC, FC, SIM, PM, MS, FF, RC or AUTH<br/>
+target-type = FILE, DIR, FIFO, SYMLINK, DEV or FD<br/>
+(FD: let attr_set_fd decide between FILE, DIR, FIFO and SYMLINK, no DEV),
+</p>
+<p class="example">
+<span class="comment">Liste des options disponibles :</span>
+<span class="example">attr_set_fd -A</span>
+<span class="comment">Liste des requêtes existantes (tous types confondus) :</span>
+<span class="example">attr_set_fd -n</span>
+<span class="comment">Permet à su de prendre n'importe quel UID :</span>
+<span class="example">attr_set_fd AUTH FILE auth_may_setuid 1 /bin/su</span>
+<span class="comment">Définit le type correspondant au fichier /var/log/messages.log :</span>
+<span class="example">attr_set_fd RC FILE rc_type_fd 5 /var/log/messages.log</span>
+<span class="comment">Définit le role correspondant aux programmes dans /bin/ :</span>
+<span class="example">attr_set_fd -r RC FILE rc_force_role 0 /bin/</span>
+</p>
+
+<h4><a name="attr_set_file_dir"></a>attr_set_file_dir</h4>
+<h4><a name="attr_set_group"></a>attr_set_group</h4>
+<h4><a name="attr_set_ipc"></a>attr_set_ipc</h4>
+<p class="description">Positionne les attributs d'un ipc. Le module est un paramêtre optionnel. Si il est précisé, l'attribut doit correspondre au module précisé. Ainsi, on utilisera :</p>
+<ul class="description">
+	<li>security_level avec MAC</li>
+	<li>mac_categories avec MAC</li>
+	<li>pm_object_class, pm_object_type, pm_ipc_purpose avec PM</li>
+	<li>rc_type avec RC</li>
+	<li>jail_id avec JAIL</li>
+</ul>
+<p class="usage">
+Use: attr_set_ipc module ipc-type id attribute value<br/>
+- ipc-types: sem, msg, shm, anonpipe or anonunix<br/>
+- attribute (string) and value = see following list:<br/>
+security_level  0 = unclassified, 1 = confidential, 2 = secret, 3 = top secret, 254 = inherit, max. level 252<br/>
+mac_categories  Bit Set String of length 64 for all categories<br/>
+pm_object_class         Class-ID (positive integer)<br/>
+pm_ipc_purpose  Purpose-ID (positive integer)<br/>
+pm_object_type  0 = none, 1 = TP, 2 = personal data, 3 = non-personal data, 4 = ipc, 5 = dir<br/>
+rc_type         RC-type-id<br/>
+jail_id         JAIL ID (0 = off)
+</p>
+
+<h4><a name="attr_set_net"></a>attr_set_net</h4>
+<h4><a name="attr_set_process"></a>attr_set_process</h4>
+<h4><a name="attr_set_up"></a>attr_set_up</h4>
+<h4><a name="attr_set_user"></a>attr_set_user</h4>
+<h4><a name="rsbac_version"></a>rsbac_version</h4>
+<p class="description">Retourne les numéros de version des outils d'administration de RSBAC installés et de la version de RSBAC compilée dans le noyau.</p>
+
+<h4><a name="switch_adf_log"></a>switch_adf_log</h4>
+<h4><a name="switch_module"></a>switch_module</h4>
+
+<h3><a name="gen_dialog"></a>Commandes dialog</h3>
+<p class="description">Ces commandes utilisent le toolkit dialog pour offrir une interface plus simple d'utilisation.</p>
+<h4><a name="rsbac_acl_group_menu"></a>rsbac_acl_group_menu</h4>
+<h4><a name="rsbac_acl_menu"></a>rsbac_acl_menu</h4>
+<h4><a name="rsbac_dev_menu"></a>rsbac_dev_menu</h4>
+<h4><a name="rsbac_fd_menu"></a>rsbac_fd_menu</h4>
+<h4><a name="rsbac_group_menu"></a>rsbac_group_menu</h4>
+<h4><a name="rsbac_menu"></a>rsbac_menu</h4>
+<h4><a name="rsbac_netdev_menu"></a>rsbac_netdev_menu</h4>
+<h4><a name="rsbac_nettemp_def_menu"></a>rsbac_nettemp_def_menu</h4>
+<h4><a name="rsbac_nettemp_menu"></a>rsbac_nettemp_menu</h4>
+<h4><a name="rsbac_process_menu"></a>rsbac_process_menu</h4>
+<h4><a name="rsbac_rc_role_menu"></a>rsbac_rc_role_menu</h4>
+<h4><a name="rsbac_rc_type_menu"></a>rsbac_rc_type_menu</h4>
+<h4><a name="rsbac_settings_menu"></a>rsbac_settings_menu</h4>
+<h4><a name="rsbac_user_menu"></a>rsbac_user_menu</h4>
+
+<h2><a name="specifiques"></a>Commandes spécifiques à un module</h2>
+
+<h3><a name="mod_auth"></a>Module AUTH</h3>
+<p class="description">Le module AUTH contrôle quel process à le droit d'utiliser quels UID. Il peut être utilisé conjointement avec le module UM, ou avec la gestion d'utilisateurs standard de Linux.</p>
+
+<h4><a name="auth_back_cap"></a>auth_back_cap</h4>
+<p class="description">Permet d'afficher les commandes a utiliser pour récupérer la configuration du module AUTH pour le répertoire/fichier donné.</p>
+<p class="usage">
+Use: auth_back_cap [-r] [-v] [-o output-file] file/dirname(s)
+should be called by root with all rsbac modules switched off,
+ -r = recurse in subdirs, -v = verbose, no symlinks followed,
+ -T file = read file/dirname list from file (- for stdin),
+ -m = set maximum length of cap entry list per file, default is 200
+ -o target-file = write to file, not stdout
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)
+</p>
+<p class="example">
+<span class="example">auth_back_cap /usr/sbin/sshd</span>
+</p>
+
+<h4><a name="auth_set_cap"></a>auth_set_cap</h4>
+<p class="description">Affiche ou modifie les UID pouvant être utilisés par un fichier.</p>
+<p class="usage">
+Use: auth_set_cap [switches] TYPE add/remove target first_user [last_user]<br/>
+Use: auth_set_cap [switches] TYPE get target<br/>
+TYPE = PROCESS (add/remove only), DIR, FILE or FD (auto-select),<br/>
+target = pid or filename<br/>
+last_user: range from first_user to last_user<br/>
+ -m = set maximum length of cap entry list per file, default is 200<br/>
+ -e = get or set caps for effective uids, not real<br/>
+ -f = get or set caps for filesystem uids, not real<br/>
+ -g = get or set caps for gids, not uids<br/>
+ -E = get or set for eff gids, not real uids<br/>
+ -F = get or set for fs gids, not real uids<br/>
+ -t = set relative time-to-live for this cap entry in seconds (add only)<br/>
+ -T = set absolute time-to-live for this cap entry in seconds (add only)<br/>
+ -D = set relative time-to-live for this cap entry in days (add only)<br/>
+ -V version = supply RSBAC integer version number for upgrading<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+</p>
+<p class="example">
+<span class="example">auth_set_cap FILE add /bin/su 0</span>
+</p>
+
+<h4><a name="rsbac_auth"></a>rsbac_auth</h4>
+
+<h3><a name="mod_acl"></a>Module ACL</h3>
+<h4><a name="acl_grant"></a>acl_grant</h4>
+<h4><a name="acl_group"></a>acl_group</h4>
+<h4><a name="acl_mask"></a>acl_mask</h4>
+<h4><a name="acl_rights"></a>acl_rights</h4>
+<h4><a name="acl_rm_user"></a>acl_rm_user</h4>
+<h4><a name="acl_tlist"></a>acl_tlist</h4>
+<h4><a name="linux2acl"></a>linux2acl</h4>
+
+<h3><a name="mod_cap"></a>Module CAP</h3>
+
+<h3><a name="mod_dac_disable"></a>Module DAC_DISABLE</h3>
+<p class="description">Est-ce vraiment un module ?</p>
+
+<h3><a name="mod_daz"></a>Module DAZ</h3>
+<h4><a name="daz_flush"></a>daz_flush</h4>
+
+<h3><a name="mod_fc"></a>Module FC</h3>
+
+<h3><a name="mod_ff"></a>Module FF</h3>
+
+<h3><a name="mod_freeze"></a>Module FREEZE</h3>
+<p class="description">Est-ce vraiment un module ?</p>
+
+<h3><a name="mod_gen"></a>Module GEN</h3>
+
+<h3><a name="mod_jail"></a>Module JAIL</h3>
+<h4><a name="rsbac_jail"></a>rsbac_jail</h4>
+<p class="description">Execute un programme dans une prison.</p>
+<p class="usage">
+Use: rsbac_jail [flags] [-I addr] [-R dir] [-C cap-list] prog args<br/>
+This program will put the process into a jail with chroot to path,<br/>
+ip address IP and then execute prog with args<br/>
+ -I addr = limit to IP address,<br/>
+ -R dir  = chroot to dir,<br/>
+ -N = enclose process in its private namespace,<br/>
+ -C cap-list  = limit Linux capabilities for jailed processes,<br/>
+               use bit-vector, numeric value or list names of desired caps,<br/>
+               A = all, FS_MASK = all filesystem related,<br/>
+ -L = list all Linux capabilities,<br/>
+ -S = list all SCD targets,<br/>
+ -v = verbose, -i = allow access to IPC outside this jail,<br/>
+ -P = allow access to IPC in the parent jail,<br/>
+ -n = allow all network families, not only UNIX and INET (IPv4),<br/>
+ -r = allow INET (IPv4) raw sockets (e.g. for ping),<br/>
+ -a = auto-adjust INET any address 0.0.0.0 to jail address, if set,<br/>
+ -o = additionally allow to/from remote INET (IPv4) address 127.0.0.1,<br/>
+ -d = allow read access on devices, -D allow write access<br/>
+ -e = allow GET_STATUS_DATA on devices, -E allow MODIFY_SYSTEM_DATA<br/>
+ -t = allow *_OPEN on tty devices<br/>
+ -s = allow to create with / set mode to suid<br/>
+ -u = allow to mount/umount<br/>
+ -G scd ... = allow GET_STATUS_DATA on these scd targets<br/>
+ -M scd ... = allow MODIFY_SYSTEM_DATA on these scd targets<br/>
+Deprecated old options, please use -G and -M:<br/>
+ -l = allow to modify rlimits (-M rlimit),<br/>
+ -c = allow to modify system clock (-M clock time_strucs),<br/>
+ -m = allow to lock memory (-M mlock),<br/>
+ -p = allow to modify priority (-M priority),<br/>
+ -k = allow to get kernel symbols (-G ksyms)
+</p>
+<p class="example">
+<span class="comment">L'usage de -D permet l'accès en écriture aux devices (ici le terminal) : </span>
+<span class="example">rsbac_jail -vD echo "test"</span>
+<span class="comment">L'usage de -d permet l'accès en lecture aux devices : </span>
+<span class="example">rsbac_jail -vdD head -c 8 /dev/urandom</span>
+<span class="comment">L'option "-M priority" permet de positionner MODIFY_SYSTEM_DATA sur priority, -R définit un répertoire dans lequel chrooter : </span>
+<span class="example">rsbac_jail -vdD -M priority -R /var/apache-chroot /usr/bin/mysqld_safe –log-error=/var/log/mysqld.log</span>
+</p>
+
+<h3><a name="mod_mac"></a>Module MAC</h3>
+<h4><a name="mac_back_trusted"></a>mac_back_trusted</h4>
+<h4><a name="mac_get_levels"></a>mac_get_levels</h4>
+<h4><a name="mac_set_trusted"></a>mac_set_trusted</h4>
+<h4><a name="mac_wrap"></a>mac_wrap</h4>
+
+<h3><a name="mod_ms"></a>Module MS</h3>
+
+<h3><a name="mod_pax"></a>Module PAX</h3>
+
+<h3><a name="mod_pm"></a>Module PM</h3>
+<h4><a name="pm_create"></a>pm_create</h4>
+<h4><a name="pm_ct_exec"></a>pm_ct_exec</h4>
+
+<h3><a name="mod_rc"></a>Module RC</h3>
+<h4><a name="rc_copy_role"></a>rc_copy_role</h4>
+<p class="description">Copie un rôle.</p>
+<p class="usage">
+Use: rc_copy_role [flags] from_role to_role<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)
+</p>
+<p class="example">
+<span class="comment">Copie le rôle 0 (e.g. General_User) vers le rôle 3.</span>
+<span class="example">rc_copy_role 0 3</span>
+</p>
+
+<h4><a name="rc_copy_type"></a>rc_copy_type</h4>
+<p class="description">Copie un type.</p>
+<p class="usage">
+Use: rc_copy_type [flags] target from_type to_type<br/>
+target = FD, DEV, IPC, USER, PROCESS, GROUP, NETDEV, NETTEMP, NETOBJ<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+</p>
+<p class="example">
+<span class="comment">Copie le type FD 0 (e.g. General_FD) vers le type FD 3.</span>
+<span class="example">rc_copy_role 0 3</span>
+</p>
+
+<h4><a name="rc_create_file"></a>rc_create_file</h4>
+<h4><a name="rc_get_current_role"></a>rc_get_current_role</h4>
+<p class="description">Retourne le numéro du rôle courant.</p>
+
+<h4><a name="rc_get_eff_rights_fd"></a>rc_get_eff_rights_fd</h4>
+<p class="description">
+Retourne les droits actuellement disponibles sur un FD (fichier, répertoire, lien ou file) ou un device. Ces droits sont donc ceux associés au rôle courant.
+</p>
+<p class="usage">
+Use: rc_get_eff_rights_fd [-v] [-r] [-p] target-type file/dirname(s)<br/>
+ -v = verbose, -r = recurse into subdirs,<br/>
+ -p = print right names,<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+ target-type = FILE, DIR, FIFO, SYMLINK, DEV or FD<br/>
+ (FD: let rc_get_eff_rights_fd decide between FILE, DIR, FIFO and SYMLINK, no DEV),
+</p>
+<p class="example">
+rc_get_eff_rights_fd -p /var/log/messages.log
+</p>
+
+<h4><a name="rc_get_item"></a>rc_get_item</h4>
+<p class="usage">
+Use: rc_get_item [switches] rc-target-type id-nr item [sub-id-nr [right]]<br/>
+     rc_get_item list_xxx<br/>
+     rc_get_item list_unused_xxx  (_nr only)<br/>
+     rc_get_item list_def_fd_ind_create_type{s|_nr|_values role-id<br/>
+     rc_get_item backup<br/>
+     rc_get_item print<br/>
+ -v = verbose, -p = print right names,<br/>
+ -i = list items and values,<br/>
+ -r = remove role before restore (backup only)<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+rc-target-type = ROLE or TYPE,<br/>
+id-nr = ROLE or TYPE number,<br/>
+item = entry line,<br/>
+sub-id-nr = use this sub-id (_comp items only),<br/>
+right = right name or number (type_comp items only),<br/>
+xxx = roles, fd_types, dev_types, ipc_types, user_types, process_types, scd_types, group_types, role_nr, fd_type_nr, dev_type_nr, ipc_type_nr, user_type_nr, process_type_nr, scd_type_nr, rights: print a list<br/>
+list_def_fd_ind_create_types etc.: print a list
+</p>
+<p class="example">
+<span class="comment">Liste les rôles disponibles :</span>
+<span class="example">rc_get_item list_roles</span>
+<span class="comment">Liste les types d'IPC disponibles :</span>
+<span class="example">rc_get_item list_ipc_types</span>
+<span class="comment">Retourne la valeur du paramêtre def_fd_create_type pour le role 0 (e.g. General_User) :</span>
+<span class="example">rc_get_item ROLE 0 def_fd_create_type</span>
+<span class="comment">Retourne la valeur du paramêtre RECEIVE pour le type IPC 0 (e.g. General_IPC) pour le role 0 (e.g. General_User) :</span>
+<span class="example">rc_get_item ROLE 0 type_comp_ipc 0 RECEIVE</span>
+<span class="comment">Affiche toutes les informations concernant le module RC :</span>
+<span class="example">rc_get_item print</span>
+</p>
+
+<h4><a name="rc_role_wrap"></a>rc_role_wrap</h4>
+<h4><a name="rc_set_item"></a>rc_set_item</h4>
+<p class="usage">
+Use: rc_set_item [switches] rc-target-type id item [role/type [list-of-rights]] [value]<br/>
+rc_set_item -c TYPE target-id item source-id [first_role [last_role]],<br/>
+ -v = verbose, -p = print right names,<br/>
+ -a = add, not set, -k = revoke, not set,<br/>
+ -b = accept rights as bitstring,<br/>
+ -c = copy all/given roles' rights to type from other type,<br/>
+ -d = delete all roles' rights to this type,<br/>
+ -i = list items and values<br/>
+ -t = set relative time-to-live in secs (role/type comp, admin, assign only)<br/>
+ -T = set absolute time-to-live in secs (role/type comp, admin, assign only)<br/>
+ -D = set relative time-to-live in days (role/type comp, admin, assign only)<br/>
+ -V version = supply RSBAC integer version number for upgrading<br/>
+ -N ta = transaction number (default = value of RSBAC_TA, if set, or 0)<br/>
+rc-target-type = ROLE or TYPE,<br/>
+id-nr = ROLE or TYPE number,<br/>
+item = entry line,<br/>
+role/type = for this type only (role/type comp, admin, assign only),<br/>
+right = request name or number (type_comp items only),<br/>
+also special rights and groups R (read requests),<br/>
+RW (read-write), SY (system), SE (security), A (all)
+</p>
+<p class="example">
+<span class="comment">Définit un nouveau role nommé Test :</span>
+<span class="example">rc_set_item ROLE 4 name "Test"</span>
+<span class="comment">Supprime le droit def_fd_create_type pour ce rôle :</span>
+<span class="example">rc_set_item -k ROLE 4 def_fd_create_type</span>
+<span class="comment">Ajoute le droit MODIFY_SYSTEM_DATA pour ce rôle sur le SCD 14 (priority) :</span>
+<span class="example">rc_set_item -a ROLE 4 type_comp_scd 14 MODIFY_SYSTEM_DATA</span>
+</p>
+
+<h3><a name="mod_reg"></a>Module REG</h3>
+<h3><a name="mod_res"></a>Module RES</h3>
+
+<h3><a name="mod_sim"></a>Module SIM</h3>
+<h3><a name="mod_softmode"></a>Module SOFTMODE</h3>
+<p class="description">Est-ce vraiment un module ?</p>
+
+<h3><a name="mod_um"></a>Module UM</h3>
+
+<h2><a name="noclass"></a>Commandes non classées</h2>
+<h4><a name="backup_all"></a>backup_all</h4>
+<h4><a name="backup_all_1.1.2"></a>backup_all_1.1.2</h4>
+<h4><a name="get_attribute_name"></a>get_attribute_name</h4>
+<h4><a name="get_attribute_nr"></a>get_attribute_nr</h4>
+<h4><a name="net_temp"></a>net_temp</h4>
+<h4><a name="rklogd-viewer"></a>rklogd-viewer</h4>
+<h4><a name="rsbac_check"></a>rsbac_check</h4>
+<p class="usage">
+Use: rsbac_check correct check_inode<br/>
+     correct = 0: do not correct errors<br/>
+     correct = 1: correct errors<br/>
+     correct = 2: correct more<br/>
+     check_inode = 0: do not check inode numbers<br/>
+     check_inode = 1: also check inode numbers (only ext2/3 on 2.4 kernels)
+</p>
+<h4><a name="rsbac_gpasswd"></a>rsbac_gpasswd</h4>
+<h4><a name="rsbac_groupadd"></a>rsbac_groupadd</h4>
+<h4><a name="rsbac_groupdel"></a>rsbac_groupdel</h4>
+<h4><a name="rsbac_groupmod"></a>rsbac_groupmod</h4>
+<h4><a name="rsbac_groupshow"></a>rsbac_groupshow</h4>
+<h4><a name="rsbac_init"></a>rsbac_init</h4>
+<p class="usage">
+Use: rsbac_init root_dev<br/>
+root_dev: root device to initialize from, e.g. /dev/sda1
+</p>
+<h4><a name="rsbac_list_ta"></a>rsbac_list_ta</h4>
+<h4><a name="rsbac_login"></a>rsbac_login</h4>
+<h4><a name="rsbac_passwd"></a>rsbac_passwd</h4>
+<h4><a name="rsbac_pm"></a>rsbac_pm</h4>
+<h4><a name="rsbac_stats"></a>rsbac_stats</h4>
+<h4><a name="rsbac_stats_pm"></a>rsbac_stats_pm</h4>
+<h4><a name="rsbac_useradd"></a>rsbac_useradd</h4>
+<h4><a name="rsbac_userdel"></a>rsbac_userdel</h4>
+<h4><a name="rsbac_usermod"></a>rsbac_usermod</h4>
+<h4><a name="rsbac_usershow"></a>rsbac_usershow</h4>
+<h4><a name="rsbac_write"></a>rsbac_write</h4>
+<h4><a name="user_aci"></a>user_aci.sh</h4>
+
+<h2><a name="reference"></a>Référence</h2>
+
+<h3><a name="ref_errors"></a>Messages d'erreur</h3>
+<h4>RSBAC_EPERM</h4>
+<h4>RSBAC_EACCESS</h4>
+<h4>RSBAC_EREADFAILED</h4>
+<h4>RSBAC_EWRITEFAILED</h4>
+<h4>RSBAC_EINVALIDPOINTER</h4>
+<h4>RSBAC_ENOROOTDIR</h4>
+<h4>RSBAC_EPATHTOOLONG</h4>
+<h4>RSBAC_ENOROOTDEV</h4>
+<h4>RSBAC_ENOTFOUND</h4>
+<p class="description">L'attribut ou l'objet demandé n'a pu être trouvé. En général, l'objet n'existe pas.</p>
+<h4>RSBAC_ENOTINITIALIZED</h4>
+<h4>RSBAC_EREINIT</h4>
+<h4>RSBAC_ECOULDNOTADDDEVICE</h4>
+<h4>RSBAC_ECOULDNOTADDITEM</h4>
+<h4>RSBAC_ECOULDNOTCREATEPATH</h4>
+<h4>RSBAC_EINVALIDATTR</h4>
+<p class="description">Attribut invalide ou ne correspondant pas au module précisé.</p>
+<h4>RSBAC_EINVALIDDEV</h4>
+<h4>RSBAC_EINVALIDTARGET</h4>
+<h4>RSBAC_EINVALIDVALUE</h4>
+<h4>RSBAC_EEXISTS</h4>
+<h4>RSBAC_EINTERNONLY</h4>
+<h4>RSBAC_EINVALIDREQUEST</h4>
+<h4>RSBAC_ENOTWRITABLE</h4>
+<h4>RSBAC_EMALWAREDETECTED</h4>
+<h4>RSBAC_ENOMEM</h4>
+<h4>RSBAC_EDECISIONMISMATCH</h4>
+<h4>RSBAC_EINVALIDVERSION</h4>
+<p class="description">La version des outils d'administration de RSBAC et la version de RSBAC compilée dans le noyau ne sont pas les mêmes.</p>
+<h4>RSBAC_EINVALIDMODULE</h4>
+<p class="description">Le module invoqué n'a pas été activé lors de la compilation du noyau.</p>
+<h4>RSBAC_EEXPIRED</h4>
+<h4>RSBAC_EMUSTCHANGE</h4>
+<h4>RSBAC_EBUSY</h4>
+<h4>RSBAC_EINVALIDTRANSACTION</h4>
+<h4>RSBAC_EWEAKPASSWORD</h4>
+<p class="description">Le mot de passe proposé est trop simple.</p>
+
+<h2><a name="examples"></a>Exemples d'utilisation</h2>
+
+<h3><a name="ex_log"></a>Protection des fichiers de log</h3>
+<p class="description">Le but est ici de protéger les fichiers de log contre la suppression ou la modification des données qu'ils contiennent déjà. Les programmes devront cependant pouvoir ajouter des lignes à la fin du fichier. A noter que cet exemple ne se soucie pas de la rotation des logs.</p>
+<p class="example">
+<span class="comment">On cherche d'abord un identifiant de type disponible, et un type à copier : </span>
+<span class="example">rc_get_item list_fd_types</span>
+<span class="comment">On crée ensuite un type à partir du type 0 (e.g. General_FD) :</span>
+<span class="example">rc_copy_type FD 0 5</span>
+<span class="comment">Puis on définit le nom de ce nouveau type :</span>
+<span class="example">rc_set_item TYPE 3 type_fd_name "Logs FD"</span>
+<span class="comment">Enfin, on interdit la modification ou la suppression pour les fichiers de ce type pour tous les roles :</span>
+<span class="example">rc_get_item list_roles</span>
+<span class="example">for i in `seq 0 5`; do rc_set_item -k ROLE $i type_comp_fd 3 TRUNCATE; done</span>
+<span class="example">for i in `seq 0 5`; do rc_set_item -k ROLE $i type_comp_fd 3 DELETE; done</span>
+<span class="comment">On utilise ce type pour le fichier /var/log/messages.log :</span>
+<span class="example">attr_set_fd RC FILE rc_type_fd 3 /var/log/messages.log</span>
+<span class="comment">On peut vérifier les droits positionnés :</span>
+<span class="example">rc_get_eff_rights_fd -p /var/log/messages.log</span>
+</p>
+
+<h2><a name="index"></a>Index</h2>
+
+<ul>
+<li><a href="#acl_grant">acl_grant</a></li>
+<li><a href="#acl_group">acl_group</a></li>
+<li><a href="#acl_mask">acl_mask</a></li>
+<li><a href="#acl_rights">acl_rights</a></li>
+<li><a href="#acl_rm_user">acl_rm_user</a></li>
+<li><a href="#acl_tlist">acl_tlist</a></li>
+<li><a href="#attr_back_dev">attr_back_dev</a></li>
+<li><a href="#attr_back_fd">attr_back_fd</a></li>
+<li><a href="#attr_back_group">attr_back_group</a></li>
+<li><a href="#attr_back_net">attr_back_net</a></li>
+<li><a href="#attr_back_user">attr_back_user</a></li>
+<li><a href="#attr_get_fd">attr_get_fd</a></li>
+<li><a href="#attr_get_file_dir">attr_get_file_dir</a></li>
+<li><a href="#attr_get_group">attr_get_group</a></li>
+<li><a href="#attr_get_ipc">attr_get_ipc</a></li>
+<li><a href="#attr_get_net">attr_get_net</a></li>
+<li><a href="#attr_get_process">attr_get_process</a></li>
+<li><a href="#attr_get_up">attr_get_up</a></li>
+<li><a href="#attr_get_user">attr_get_user</a></li>
+<li><a href="#attr_rm_fd">attr_rm_fd</a></li>
+<li><a href="#attr_rm_file_dir">attr_rm_file_dir</a></li>
+<li><a href="#attr_rm_group">attr_rm_group</a></li>
+<li><a href="#attr_rm_user">attr_rm_user</a></li>
+<li><a href="#attr_set_fd">attr_set_fd</a></li>
+<li><a href="#attr_set_file_dir">attr_set_file_dir</a></li>
+<li><a href="#attr_set_group">attr_set_group</a></li>
+<li><a href="#attr_set_ipc">attr_set_ipc</a></li>
+<li><a href="#attr_set_net">attr_set_net</a></li>
+<li><a href="#attr_set_process">attr_set_process</a></li>
+<li><a href="#attr_set_up">attr_set_up</a></li>
+<li><a href="#attr_set_user">attr_set_user</a></li>
+<li><a href="#auth_back_cap">auth_back_cap</a></li>
+<li><a href="#auth_set_cap">auth_set_cap</a></li>
+<li><a href="#backup_all">backup_all</a></li>
+<li><a href="#backup_all_1">backup_all_1.1.2</a></li>
+<li><a href="#daz_flush">daz_flush</a></li>
+<li><a href="#get_attribute_name">get_attribute_name</a></li>
+<li><a href="#get_attribute_nr">get_attribute_nr</a></li>
+<li><a href="#linux2acl">linux2acl</a></li>
+<li><a href="#mac_back_trusted">mac_back_trusted</a></li>
+<li><a href="#mac_get_levels">mac_get_levels</a></li>
+<li><a href="#mac_set_trusted">mac_set_trusted</a></li>
+<li><a href="#mac_wrap">mac_wrap</a></li>
+<li><a href="#net_temp">net_temp</a></li>
+<li><a href="#pm_create">pm_create</a></li>
+<li><a href="#pm_ct_exec">pm_ct_exec</a></li>
+<li><a href="#rc_copy_role">rc_copy_role</a></li>
+<li><a href="#rc_copy_type">rc_copy_type</a></li>
+<li><a href="#rc_create_file">rc_create_file</a></li>
+<li><a href="#rc_get_current_role">rc_get_current_role</a></li>
+<li><a href="#rc_get_eff_rights_fd">rc_get_eff_rights_fd</a></li>
+<li><a href="#rc_get_item">rc_get_item</a></li>
+<li><a href="#rc_role_wrap">rc_role_wrap</a></li>
+<li><a href="#rc_set_item">rc_set_item</a></li>
+<li><a href="#rklogd-viewer">rklogd-viewer</a></li>
+<li><a href="#rsbac_acl_group_menu">rsbac_acl_group_menu</a></li>
+<li><a href="#rsbac_acl_menu">rsbac_acl_menu</a></li>
+<li><a href="#rsbac_auth">rsbac_auth</a></li>
+<li><a href="#rsbac_check">rsbac_check</a></li>
+<li><a href="#rsbac_dev_menu">rsbac_dev_menu</a></li>
+<li><a href="#rsbac_fd_menu">rsbac_fd_menu</a></li>
+<li><a href="#rsbac_gpasswd">rsbac_gpasswd</a></li>
+<li><a href="#rsbac_group_menu">rsbac_group_menu</a></li>
+<li><a href="#rsbac_groupadd">rsbac_groupadd</a></li>
+<li><a href="#rsbac_groupdel">rsbac_groupdel</a></li>
+<li><a href="#rsbac_groupmod">rsbac_groupmod</a></li>
+<li><a href="#rsbac_groupshow">rsbac_groupshow</a></li>
+<li><a href="#rsbac_init">rsbac_init</a></li>
+<li><a href="#rsbac_jail">rsbac_jail</a></li>
+<li><a href="#rsbac_list_ta">rsbac_list_ta</a></li>
+<li><a href="#rsbac_login">rsbac_login</a></li>
+<li><a href="#rsbac_menu">rsbac_menu</a></li>
+<li><a href="#rsbac_netdev_menu">rsbac_netdev_menu</a></li>
+<li><a href="#rsbac_nettemp_def_menu">rsbac_nettemp_def_menu</a></li>
+<li><a href="#rsbac_nettemp_menu">rsbac_nettemp_menu</a></li>
+<li><a href="#rsbac_passwd">rsbac_passwd</a></li>
+<li><a href="#rsbac_pm">rsbac_pm</a></li>
+<li><a href="#rsbac_process_menu">rsbac_process_menu</a></li>
+<li><a href="#rsbac_rc_role_menu">rsbac_rc_role_menu</a></li>
+<li><a href="#rsbac_rc_type_menu">rsbac_rc_type_menu</a></li>
+<li><a href="#rsbac_settings_menu">rsbac_settings_menu</a></li>
+<li><a href="#rsbac_stats">rsbac_stats</a></li>
+<li><a href="#rsbac_stats_pm">rsbac_stats_pm</a></li>
+<li><a href="#rsbac_user_menu">rsbac_user_menu</a></li>
+<li><a href="#rsbac_useradd">rsbac_useradd</a></li>
+<li><a href="#rsbac_userdel">rsbac_userdel</a></li>
+<li><a href="#rsbac_usermod">rsbac_usermod</a></li>
+<li><a href="#rsbac_usershow">rsbac_usershow</a></li>
+<li><a href="#rsbac_version">rsbac_version</a></li>
+<li><a href="#rsbac_write">rsbac_write</a></li>
+<li><a href="#switch_adf_log">switch_adf_log</a></li>
+<li><a href="#switch_module">switch_module</a></li>
+<li><a href="#user_aci">user_aci.sh</a></li>
+</ul>
+
+</html>

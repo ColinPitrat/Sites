@@ -1,0 +1,1908 @@
+\input texinfo.tex @c -*- texinfo -*-
+@c %**start of header
+@setfilename hhgfr.info
+@settitle Le guide du hacker sous Hurd
+@c %**end of header
+
+@ignore
+ ## Summary of shell commands to create various output formats:
+
+  ## Info output
+  makeinfo --no-split hhg.texi
+
+  ## DVI output
+  texi2dvi hhg.texi
+
+  ## HTML output
+  makeinfo --html --no-split --force --output=hhg.html hhg.texi
+
+  ## Plain text output
+  makeinfo --fill-column=70 --no-split --no-headers --output=hhg.txt hhg.texi
+@end ignore
+
+@set EDITION 0.2_1
+@set VERSION 0.2
+@set UPDATED Mar 25, 2002
+
+@ifinfo
+@dircategory Hurd
+@direntry
+     * HHG: (hhg).        Le guide du hacker sous Hurd.
+@end direntry
+@end ifinfo
+
+@titlepage
+@title Le guide du hacker sous Hurd.
+@subtitle Edition @value{EDITION}, for @code{GNU Hurd} Version @value{VERSION}.
+@subtitle @value{UPDATED}
+@author Wolfgang J@"ahrling
+@page
+@vskip 0pt plus 1filll
+
+@quotation
+``GNU Hurd est le remplaçant du noyau UNIX dans le projet GNU. 
+Le Hurd est une multitude de serveurs qui tournent avec le micro-noyau Mach
+pour implementer les systèmes de fichier, les protocoles réseaux, le contrôle d'accès aux fichiers et
+d'autres fonction qui sont implémentés par le noyau Unix ou des noyaux similaires (comme Linux).''
+
+--- @url{http://hurd.gnu.org}
+@end quotation
+@end titlepage
+
+@node Top, About this document, (dir), (dir)
+@top Hurd Hacking Guide
+
+@ifinfo
+@example
+           +------+
+           |      |
+      ,--- |      | <----.     ``The GNU Hurd is the GNU project's
+    ,'     |      |       `-.     replacement for the Unix kernel.
+    |      +------+          `.    The Hurd is a collection of servers
+    v         |                `.   that run on the Mach micro-kernel to
++------+      |      +------+   |    implement file systems, network
+|      |      `.     |      |   |    protocols, file access control, and
+|      |        `--> |      |   |    other features that are implemented
+|      |             |      |   |   by the Unix kernel or similar kernels
++------+             +------+  ,'  (such as Linux).''
+    ^                    |  _,'
+    |      +------+      +-'             --- @url{http://hurd.gnu.org/}
+    |      |      |   ,-'|
+    `.     |      | -'  ,'    This is the
+     |     |      |     |
+     `.    +------+    ,'       H u r d   H a c k i n g   G u i d e
+       `.            ,'
+         `----------'       Version @value{EDITION} - @value{UPDATED}
+
+@end example
+@end ifinfo
+
+Copyright @copyright{} 2001, 2002 Wolfgang J@"ahrling @email{wolfgang@@pro-linux.de}
+@*Traduction 2004 Colin Pitrat @email{colin.pitrat@@rez-gif.supelec.fr}
+
+Vous avez le droit de copier, distribuer et/ou modifier ce document selon les termes
+de la GNU Free Documentation License, Version 1.1 ou supérieure, publiée par la Free
+Software Foundation. Pour plus de détails, consultez
+@url{http://www.gnu.org/copyleft/fdl.html}.
+
+@menu
+* A propos de ce document::                  Information importante (?)
+* Prérequis::                                Ce que vous devriez savoir  
+* Courte introduction au Hurd et à Mach::    Les raisons pour lesquelles le Hurd rox
+* Les bases de Mach et MiG::                 Hurd utilise le micro-noyau Mach
+* Les interfaces du Hurd::                   Les fichiers *.defs
+* A quoi ça ressemble vraiment ?::           Exemples de codes source
+* Les librairies du Hurd (Aperçu)::          Les librairies facilitent la vie
+* Un exemple utilisant trivfs::              Notre premier translator
+* Debugger un translator::                   Comment debugger un translator
+* Un exemple comprehensible de trivfs::      A faire.
+* Un exemple utilisant netfs::               A faire.
+* Un exemple utilisant diskfs::              A faire.
+* Foire Aux Questions::                      Les questions souvent posées par les nouveaux hackers.
+* Annexes::                                  Annexes originales : non traduites
+@end menu
+
+@node A propos de ce document
+@chapter A propos de ce document
+
+@menu
+* Conventions::                 Les conventions utilisées dans ce document.
+* Sujet::                       Sujet de ce document
+* Contributions::               N'hésitez pas à contribuer
+@end menu
+
+@node Conventions
+@section Conventions
+Le numéro de version de ce document suit la convention 
+<hurd version>_<document release>.
+Cela signifie que la version 0.2_7 est la septième version depuis le Hurd 0.2 et que
+la version 0.4_1 serait la première version pour Hurd 0.4 (qui n'est bien sûr pas encore
+disponible :)).
+
+@noindent
+@code{$(HURD)}     désigne le repertoire des sources du `Hurd'.
+@code{$(GNUMACH)}  désigne le repertoire des sources de `GNU Mach'.
+@code{$(MIG)}      désigne le repertoire des sources de `MiG'.
+@code{$(GLIBC)}    désigne le repertoire des sources de la `GNU Libc'.
+
+Une commande du shell commence par @code{$} pour une commande d'un utilisateur normal et par
+@code{#} pour une commande de l'utilisateur root :
+
+@example
+$ diff -u libtrivfs.old/open.c libtrivfs/open.c
+# reboot
+@end example
+
+Les prompts des autres programmes sont représentés de la manière dont
+ils apparaissent dans l'application. Par exemple, le prompt de GDB est
+représenté par @code{(gdb)}:
+
+@example
+(gdb) break trivfs_S_io_write
+@end example
+
+J'essaierai de suivre les GNU Coding Standards dans mes exemples en C :
+@url{http://www.gnu.org/prep/standards_toc.html}
+@c FIXME: XREF to info-doc
+
+@node Sujet
+@section Sujet
+
+Ce document est une introduction à la programmation pour Hurd et GNU/Mach.
+Le but de ce guide est d'aider les personnes interessées pour débuter à hacker le Hurd 
+ou pour l'etendre (en ecrivant des translators). Il utilise beaucoup de references aux
+sources de Hurd et de GNU/Mach. Il est donc reccomandé de les parcourir avant de le lire.
+En fait, les sources du Hurd sont bien écrites et suffisement commentées pour pouvoir être lues
+sans trop de difficultées.
+
+Le Hurd semble très compliqué et difficile à maitriser au premier coup d'oeil.
+Mais il ne l'est pas car vous n'avez pas besoin de tout comprendre pour débuter, vous
+pouvez le faire petit à petit at utiliser à chaque étape ce que vous savez.
+Il y a aussi des librairies qui rendent la création de certain translators classique
+assez facile. Je pense que le seul problème est l'abscence d'une bonne documentation comme
+``Linux Module Programming Guide'' ou autre, qui rend possible l'apprentissage étape par étape.
+Ce document tente de combler ce manque.
+
+Mach et MiG ne sont pas décrits en détail ici, donc si vous désirez des informations spécifiques
+les concernant, je vous reccomande la lecture du GNU Mach Reference Manual
+@footnote{@url{http://www.gnu.org/software/hurd/gnumach-doc/mach.html}}
+et la documentation sur MiG disponible sur internet.
+
+Le Hurd Hacking Guide n'est pas supposé être une réference complete mais
+aider à débuter. La seule veritable reference pour l'instant est ce que l'on peut
+trouver d'écrit dans les sources du Hurd.
+
+L'ordre des chapitres de ce document était à l'origine basé sur un mail de
+Farid Hajji
+@footnote{@url{http://lists.debian.org/debian-hurd-0012/msg00149.html}},
+qui semble basé sur @code{$(HURD)/doc/navigating}.
+
+@node Contributions
+@section Contributions
+
+N'hésitez pas à m'envoyer vos améliorations, corrections et extensions.
+(NdT : Vous êtes bien sûr invités à corriger mes erreurs de traduction, et il y en a surement).
+Merci à Alfred M. Szmidt pour ses corrections.
+
+Je serais heureux d'avoir des retour quand à la compréhensibilité de ce document (NdT : Moi aussi !!)
+Avez vous tout compris ? Quels points vous semblent confus ?
+
+En fait, j'ai écrit ce document pour expliquer tout ce que je sais à propos du Hurd
+afin que plus tard, je puisse rapidement me rappeler ce qu j'aurai oublié.
+Cela signifie que si vous m'envoyez des extensions, j'en profiterai aussi ;)
+
+@ifinfo
+@example
+         +------+
+         |      |      B e   a
+     ,-> | Hurd | -.      p a r t   o f
+   ,'    |      |   `.         i t
+   |     +------+    v
+@end example
+@end ifinfo
+@c END About this document
+
+@node Prérequis
+@chapter Prérequis
+
+@enumerate
+@item
+Vous devriez avoir quelques bases concernant le Hurd
+@footnote{@url{http://hurd.gnu.org/}}.
+
+@item
+Des connaissances plus précises sont bien sûr les bienvenues.
+@footnote{@url{http://www.gnu.org/software/hurd/hurd-paper.html}}.
+
+@item
+Savoir ce qu'est un translator est une bonne chose.
+@footnote{@url{http://www.debian.org/ports/hurd/hurd-doc-translator}}.
+
+@item
+Les sources du Hurd et de GNU Mach sont assez utiles :
+
+@example
+#! /bin/sh
+
+cd $HOME
+mkdir hurd-cvs
+cd hurd-cvs/
+
+# Use the empty string password:
+cvs -d:pserver:anoncvs@@subversions.gnu.org:/cvsroot/hurd login
+
+for module in hurd gnumach
+do
+  cvs -z3 -d:pserver:anoncvs@@subversions.gnu.org:/cvsroot/hurd \
+      co $module
+done
+@end example
+
+@item
+Avoir GNU/Hurd installé sur votre ordinateur pourrait aider aussi
+@footnote{@url{http://web.walfield.org/papers/hurd-installation-guide/}}.
+
+@item
+Se plonger dans les fichiers d'en-tête des librairies du Hurd est dangereux
+parceque vous pouvez vous noyer facilemment car vous ne trouverez pas la logique de
+toutes ces structures. Peut-être qu'une liste de où trouver quoi aidera :
+
+@example
+$ cd $(HURD) && egrep '^struct [^;*]+$' */*.h
+@end example
+
+@item
+Si vous connaissez les principes de Mach, ce qu'est MiG, etc..., alors cela vous
+aidera certainement beaucoup, mais ça ne devrait pas être indispensable. Connaitre un peu
+le noyau de Linux peut aussi aider dans une certaine mesure.
+
+@item
+Oh, vous devez aussi connaitre un peu le langage de programmation C ;)
+@end enumerate
+@c END Requirements
+
+@node Courte introduction au Hurd et à Mach
+@chapter Courte introduction au Hurd et à Mach
+
+@quotation
+``We're way ahead of you here. The Hurd has always been on the cutting
+edge of not being good for anything.''(``Nous avons un train d'avance sur vous.
+Le Hurd a toujours été à la limite de n'être bon à rien.'') (Roland McGrath)
+@end quotation
+
+@quotation
+``In short: just say NO TO DRUGS, and maybe you won't end up like the
+Hurd people.''(``Pour faire simple: dites juste non à la drogue, et peut-être
+que vous ne finirez pas comme les fans du Hurd.'') (Linus Torvalds)
+@end quotation
+
+Tout logiciel digne de ce nom nécessite un moyen de communication entre 
+ses composants. Actuellement, des moyens comme CORBA ou les composants XPCOM de
+Mozilla sont utilisés à cette fin. L'avantage du Hurd sur les autres systèmes est qu'il
+fournit un tel moyen et ne nécessite pas de modifier les applications existantes pour
+en tirer partie. Comment fait-il ?
+
+Comme vous le savez peut-être déjà, le Hurd est une collection de serveurs
+tournant avec Mach. Dans un environement Mach, les communications entre programmes
+sont principalement faites par l'envoi de messages à travers ce que l'on appelle des 
+``ports'', et qui sont en fait une sorte du file de message. Pour chaque port, il y a
+une tache ayant la receive-permission (cette tache reçois les message envoyés sur ce port).
+D'autres taches peuvent avoir la send-permission (possibilité d'envoyer des messages sur ce port)
+ou la send-once-permission (qui est utilisé pour avoir la réponse d'un serveur car les ports
+sont unidirectionnels) pour ce port, ou même aucune permission.
+
+Si vous lisez @code{$(GNUMACH)/include/mach/port.h}, vous pourrez noter qu'il y a
+d'autres droits sur les ports: une authorisation send ou send-onceend-once devient
+une ``dead name'' si la tache ayant le droit de reception est détruite. Ce droit ne peut
+donc être utilisé pour rien d'autre. C'est seulement un remplaçant.
+Un autre droit est le ``port set'', que Marcus Brinkmann définit comme suit @footnote{see
+@url{http://mail.gnu.org/pipermail/help-hurd/2001-July/004700.html}
+for the complete discussion}:
+
+@quotation
+``Un port set est un groupe de ports. Il est interessant de grouper les ports
+si vous voulez le prochain message arrivant sur n'importe lequel des ports pour 
+les quels vous avez la receive-permission. Dans le Hurd, on utilise aussi les classes
+de ports fournies par libports.
+
+En fait, on est pas très strict au niveau du vocabulaire lorsque l'on parle de ports.
+[...] Vous pouvez voir les droits sur les ports comme des capacités associées aux ports
+et aux groupes de ports, si vous préferez.''
+@end quotation
+
+Comment fait un processus pour trouver un port particulier ? C'est très simple:
+En passant par le système de fichiers. Par exemple, l'utilisation d'un serveur
+pour l'ext2 se fait à travers le noeud ou le système de fichier est ``monté''
+(remarquez qu'il n'y a pas la notion de montage dans le monde du Hurd,
+c'est juste la façon dont ce serait nommé sous Unix; le terme correct sous Hurd
+est ``mettre en place un translator''.
+
+Votre client mail favoris ne supporte pas les signatures aléatoires ? Ecrivez
+un translator pour signature aléatoire @footnote{Ou mieux, utilisez-en un qui existe :
+celui écrit par Marcus Brinkmann et qui est plus souple; utiliser le translator filemux
+est encore une autre possibilité} (qui retourne une nouvelle signature à chaque fois que
+vous le lisez). Et le mieux est : tous les clients mail peuvent utiliser cette fonction !
+Voyez-vous comment le Hurd encourage la réutilisation du code ? Comprenez vous pourquoi
+GNU/Hurd ne nécessite pas de modification des programmes pour profiter des avantages qu'il
+procure ?
+
+Si vous désirez en savoir plus à propos du système de fichier du Hurd, je vous reccomande chaudement
+de lire cette présentation du Hurd :
+@footnote{@url{http://www.gnu.org/software/hurd/hurd-talk.html}}
+
+On peut dire que le système de fichier est l'espace de nom pour les services,
+ce qui est aussi vrai dans l'autre sens : l'espace de nom pour les services est
+le système de fichiers. C'est une chose très importante à comprendre. Bien que le
+système de fichiers soit la voie la plus courante pour atteindre un port, il y'en
+a d'autres; par exemple, vous pouvez obtenir le port dans un message.
+
+Si vous vous demandez pourquoi je compare ce genre de communication
+avec CORBA, la citation suivante provenant de la publication ``Vers 
+une nouvelle stratégie de conception des OS'' pourrait vous aider à comprendre.
+
+@quotation
+``Avec des translators, le système de fichier peut agir en tant que « point de 
+rendez-vous » pour des applications qui ne sont pas similaires à des fichiers. 
+Considérez un service qui met en oeuvre une certaine version du protocole de X, 
+et utiliserait des messages Mach comme mode de transport fondamental. Pour chaque 
+affichage de X, un fichier peut être créé avec le programme approprié en tant que 
+translator. Les clients X ouvriraient simplement ce fichier. Peu d'opération sur 
+les fichiers seraient utiles (lire et écrire, par exemple, serait inutile), mais 
+les nouvelles opérations (XCreateWindow ou XDrawText) pourraient devenir signicatives. 
+Dans ce cas, le protocole fichier est uniquement utilisé pour manipuler les 
+caractéristiques du node servant de « point de rendez-vous ». Ce node n'a pas 
+besoin de supporter d'opérations E/S, mais il peut répondre à de tels messages 
+par un code « message_not_understood ».''
+@end quotation
+@c END Short Overview of Hurd and Mach
+
+@node Les bases de Mach et MiG
+@chapter Les bases de Mach et MiG
+@menu
+* Les ports de Mach::          Un port est une file de message
+* Les threads et les taches::  A faire
+* MiG::                        Mach Interface Generator
+@end menu
+
+@node Les ports de Mach
+@section Les ports de Mach
+Nous allons maintenant nous pencher de plus près sur Mach.
+Je sais que vous voudriez commencer à écrire des translators aussi vite que possible
+mais vous aurez vraiment besoin de quelques bases sur Mach
+Les ports de Mach sont beaucoup utilisés dans le Hurd, ce sera donc
+notre point de départ.
+
+Tout d'abord, faisons bien la distinction entre les ports, les droits sur les ports
+et les noms de ports. Marcus Brinkmann à écrit (sur IRC):
+
+@quotation
+``@code{mach_port_t} est un nom de port, il désigne une entrée dans l'espace de nom
+des ports, qui est associée à un droit dead name, un droit send-once ou une combinaison 
+de droits receive et send avec éventuellement plusieurs utilisateurs.
+
+Suposons que vous ayez un @code{mach_port_t 5}, et que vous vouliez lui envoyer un
+message. Pour ce faire, vous passez la tache @code{mach_task_self()}, le nom de port, 
+l'id du message et les arguments. La tache est utilisée pour récupérer l'espace de nom
+IPC, le nom de port est utilisé pour trouver l'entrée dans cet espace de nom.
+L'entrée renseigne Mach sur les droits que vous avez sur le port qui porte ce nom.
+
+Il n'y a qu'un seul nom de port pour tous les droits receive/send que vous
+pouvez avoir sur un port. Mais il y a des noms differents pour les droits send-once,
+parceque ça facilite la gestion par le Mach - et par les programmes utilisateurs aussi.''
+@end quotation
+
+Mach définit le type natural_t, qui est le type natif pour la machine,
+par exemple 32 bits pour processeur 32-bit. natural_t est toujours
+non-signé, mais il y a une version signée qui s'appelle integer_t. La 
+definition pour une plateforme i386 peut être touvée dans
+@code{$(GNUMACH)/i386/include/mach/i386/vm_types.h}. Dans ce fichier se
+trouvent d'autres types interessants, mais ils ne nous seront pas utiles 
+pour l'instant.
+
+Comme les descripteurs de fichiers Unix, les noms de port de Mach sont
+de simples et ennuyeux entiers. Dans le fichier @code{$(GNUMACH)/include/mach/port.h} 
+vous pouvez trouver les définitions suivantes :
+
+@example
+typedef natural_t mach_port_t;
+typedef mach_port_t *mach_port_array_t;
+@end example
+
+(Pour la plupart des types de données fournits par le Mach, il existe un type
+*_array_t.) Le numéros de port identifie un unique port (dans l'espace de nom de 
+la tache), ainsi une valeur de mach_port_t est souvent désignée comme un nom de port.
+
+Une valeure de @code{MACH_PORT_DEAD} (i.e. ~0) represente un droit de port
+qui est mort, alors que @code{MACH_PORT_NULL} (cf port.h)
+``indique l'absence de port ou de droit sur le port.''
+
+Vous pouvez vérifier avec @code{MACH_PORT_VALID (port)} si un port n'a pas l'une
+de ces valeurs.
+
+Pour les droits sur les ports, il existe les macros suivantes :
+@code{MACH_PORT_RIGHT_RECEIVE},
+@code{MACH_PORT_RIGHT_SEND},
+@code{MACH_PORT_RIGHT_SEND_ONCE},
+@code{MACH_PORT_RIGHT_PORT_SET},
+@code{MACH_PORT_RIGHT_DEAD_NAME} and
+@code{MACH_PORT_RIGHT_NUMBER}
+qui sont de type @code{mach_port_right_t}:
+
+@example
+typedef natural_t mach_port_right_t;
+@end example
+
+Ce type est utile lorsque l'on désire agir sur un droit paritculier d'un port.
+Souvent cependant, on désire utiliser un groupe de droits car on peut avoir
+plusieurs droits sur un seul port. Pour cela, on utilisera le type suivant :
+
+@example
+typedef natural_t mach_port_type_t;
+typedef mach_port_type_t *mach_port_type_array_t;
+@end example
+
+Une variable mach_port_type_t peut soit porter la valeur @code{MACH_PORT_TYPE_NONE},
+qui représente bien sûr un groupe de droits vide, ou un ensemble de macros
+@code{MACH_PORT_TYPE_SEND}, @code{MACH_PORT_TYPE_RECEIVE} etc. combinées avec un 
+OR bit à bit. IL y a aussi plusieurs combinaisons prédéfinies :
+
+@multitable {MACH_PORT_TYPE_PORT_OR_DEAD} {MACH_PORT_TYPE_PORT_OR_DEAD}
+@item Macro @tab Combination
+@item MACH_PORT_TYPE_SEND_RECEIVE @tab MACH_PORT_TYPE_SEND,
+@item                             @tab MACH_PORT_TYPE_RECEIVE
+@item                             @tab @c Blank line
+@item MACH_PORT_TYPE_SEND_RIGHTS  @tab MACH_PORT_TYPE_SEND,
+@item                             @tab MACH_PORT_TYPE_SEND_ONCE
+@item                             @tab @c Blank line
+@item MACH_PORT_TYPE_PORT_RIGHTS  @tab MACH_PORT_TYPE_SEND_RIGHTS,
+@item                             @tab MACH_PORT_TYPE_RECEIVE
+@item                             @tab @c Blank line
+@item MACH_PORT_TYPE_PORT_OR_DEAD @tab MACH_PORT_TYPE_PORT_RIGHTS,
+@item                             @tab MACH_PORT_TYPE_DEAD_NAME
+@item                             @tab @c Blank line
+@item MACH_PORT_TYPE_ALL_RIGHTS   @tab MACH_PORT_TYPE_PORT_OR_DEAD,
+@item                             @tab MACH_PORT_TYPE_PORT_SET
+@end multitable
+
+Ne confondez pas les @code{MACH_PORT_RIGHT_*} avec les macros @code{MACH_PORT_TYPE_*}.
+Leurs noms sont similaires, mais ont une signification et une valeure differente.
+
+Vous pourrez trouver plus de détails sur l'IPC (Inter Process Communication : Communication
+Inter Processus) du Mach dans le Manuel de Reference de GNU Mach, Chapître 4
+@footnote{@url{http://www.gnu.org/software/hurd/gnumach-doc/mach_4.html}}.
+@c FIXME: XREF
+@c FIXME: Explain some other types, constants and data structures
+@c END Mach ports
+
+@node Les threads et les taches
+@section Les threads et les taches
+
+@c FIXME: Threading basics, mach_task_self () etc.
+
+@c END Threads and Tasks
+
+@node MiG
+@section MiG
+
+Faire des RPCs (Remote Procedure Calls : Appel de procedures distantes) 
+en envoyant des messages Mach n'est pas trivial. Rendre la tache plus simple
+est le but de MiG (Mach Interface Generator : Generateur d'interfaces pour Mach).
+Vous devez ecrire un fichier de definition de l'interface, le faire traiter par MiG
+et il fournit deux fichiers source C et un fichier d'en-tête, qui s'occupe de la 
+mécanique des ports de Mach pour vous. Dès lors vous pouvez envoyer des messages par
+de simples appels de fonction.
+
+Bien sûr, vous n'avez à le faire que si vous désirez mettre en place
+votre propre interface. Le Hurd contient déja plusieurs interfaces.
+Les fonctions appropriées sont dans la glibc, et vous n'avez donc rien
+à faire avant de vous en servir.
+
+La syntaxe des fichiers MiG est similaire au Pascal et ne devrait pas
+être dure à comprendre. Nous verrons quelques détails plus loin.
+
+@c FIXME: Reference to (free?) docs, short overview
+@c END MiG
+
+@node Les interfaces du Hurd
+@chapter Les interfaces du Hurd
+
+Comprendre les conceptes est une chose importante, mais ça ne suffira pas
+pour faire quoi que ce soit. Vous avez aussi besoin de connaître quelques
+choses à propos des interfaces qui rendent possible l'usage de ces concepts.
+
+Vous trouverez les definitions des interfaces dans les fichiers
+@code{$(HURD)/hurd/*.defs}. Les plus importantes sont io.defs,
+password.defs, fsys.defs, fs.defs et auth.defs. L'interface login.defs
+est interessante, mais pas encore implémentée et ne le sera peut être jamais
+Les interfaces *_reply.defs sont - bien sûr - pour les réponses.
+
+Vous devriez vraiment jeter un oeil aux interfaces du Hurd maintenant. Dans le
+prochain chapître, nous verrons comment les utiliser.
+@c END The Hurd Interfaces
+
+@node A quoi ça ressemble vraiment ?
+@chapter A quoi ça ressemble vraiment ?
+
+@menu
+* Ecrire un fichier sur la sortie standard::  dump.c
+* Créer une copie d'un fichier::              copy.c
+* Notes finales::                             Informations supplémentaires
+@end menu
+@c END How does this look in practice?
+
+@node Ecrire un fichier sur la sortie standard
+@section Ecrire un fichier sur la sortie standard
+
+Regardons d'un peu plus près un programme qui affiche le contenu d'un fichier
+sur la sortie standard d'une manière ``hurdiste''. Notez que la manière habituelle
+est toujours utilisable. Glibc fournit toujours les functions comme @code{write ()} 
+pour le Hurd. Les parties specifiques au hurd de la glibc sont dans
+@code{$(GLIBC)/hurd/}, les parties dépendante du Mach sont dans
+@code{$(GLIBC)/sysdeps/mach/hurd/}.
+
+@example
+/* dump.c - Dump a file to stdout in a "hurdish" way.
+ * Copyright (C) 2001, 2002 Wolfgang J@"ahrling <wolfgang@@pro-linux.de>
+ * Distributed under the terms of the GNU General Public License.
+ * This is distributed "as is". No warranty is provided at all.
+ */
+
+#define _GNU_SOURCE 1
+
+#include <hurd.h>
+#include <hurd/io.h>
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <errno.h>
+#include <error.h>
+
+int
+main (int argc, char *argv[])
+@{
+  file_t f;
+  mach_msg_type_number_t amount;
+  char *buf;
+  error_t err;
+
+  if (argc != 2)
+    error (1, 0, "Usage: %s <filename>", argv[0]);
+
+  /* Open file */
+  f = file_name_lookup (argv[1], O_READ, 0);
+  if (f == MACH_PORT_NULL)
+    error (1, errno, "Could not open %s", argv[1]);
+
+  /* Get size of file (buggy! See below) */
+  err = io_readable (f, &amount);
+  if (err)
+    error (1, err, "Could not get number of readable bytes");
+
+  /* Create buffer */
+  buf = malloc (amount + 1);
+  if (buf == NULL)
+    error (1, 0, "Out of memory");
+
+  /* Read */
+  err = io_read (f, &buf, &amount, -1, amount);
+  if (err)
+    error (1, errno, "Could not read from file %s", argv[1]);
+  buf[amount] = '\0';
+  mach_port_deallocate (mach_task_self (), f);
+
+  /* Output */
+  printf ("%s", buf);
+  return 0;
+@}
+@end example
+
+Vous pouvez compiler ce programme comme suit :
+
+@example
+$ gcc -g -o dump dump.c
+@end example
+
+Penchons nous sur les parties interessantes de ce programme :
+
+@example
+#define _GNU_SOURCE 1
+@end example
+
+Je vous conseille de toujours définir cette macro pour les programmes
+spécifiques a GNU/Hurd, sans quoi vous ne pourrez même pas les compiler.
+Definissez la avant d'inclure un quelconque fichier d'en-tête. Pour des 
+programmes plus important, vous serez plutôt tentés de passer
+@code{-D_GNU_SOURCE} à gcc.
+
+@example
+file_t f;
+@end example
+
+Un file_t est en fait un mach_port_t, mais nous utilisons un file_t pour montrer 
+clairement que nous allons l'utiliser pour ouvrir un fichier.
+
+@example
+char *buf;
+@end example
+
+Vous aurez peut-être noté que nous allons utiliser ce buffer dans une situation
+où nous devrions passer un data_t (qui est définit comme un char *), mais
+@code{$(HURD)/hurd/hurd_types.h} affirme pour data_t et quelques autres types:
+
+@quotation
+``Ces noms n'existent qu'a cause de defaillances de MiG. Vous ne devriez pas les utiliser
+dans des sources C; utilisez les types C standard à la place.''
+@end quotation
+
+@example
+error_t err;
+@end example
+
+Il y a aussi le type kern_return_t, mais dans le Hurd, error_t est
+le meilleur choix. Marcus Brinkmann explique pourquoi:
+
+@quotation
+``kern_return_t est le type d'erreur mach pour mach_msg par exemple, donc
+si vous faîtes un RPC, et désirez le faire d'une manière compatible avec le
+Mach, utilisez kern_return_t. MAIS pour le Hurd, utilisez error_t, car c'est
+compatible avec les types d'erreur de la glibc. Vous pouvez toujours convertir
+depuis kern_return_t vers un error_t sur les systemes GNU.''
+@end quotation
+
+@example
+if (argc != 2)
+  error (1, 0, "Usage: %s <filename>", argv[0]);
+@end example
+
+Juste au cas où vous ne seriez pas familier avec la fonction
+@code{error ()} je citerai @code{/include/error.h} (Souvenez vous que l'on utilise pas
+/usr dans le Hurd :-)):
+
+@example
+/* Ecrivez un message avec `fprintf (stderr, FORMAT, ...)';
+   si ERRNUM est non nul, faites suivre de ": " et strerror (ERRNUM).
+   si STATUS est non nul, terminez le programme avec `exit (STATUS)'.  */
+extern void error (int status, int errnum, const char *format, ...);
+@end example
+
+Maintenant l'action arrive vraiment. On essaie d'ouvrir un fichier avec
+la fonction de la glibc @code{file_name_lookup ()}. Cette fonction retourne
+@code{MACH_PORT_NULL} si la tentative à échoué. O_READ est une extension de GNU 
+et est identique à la constante POSIX O_RDONLY. De même, O_WRITE est identique à O_WRONLY.
+
+@example
+/* Open file */
+f = file_name_lookup (argv[1], O_READ, 0);
+if (f == MACH_PORT_NULL)
+  error (1, errno, "Could not open %s", argv[1]);
+@end example
+
+Bien sûr, nous pourrions lire le fichier caractère par caractère, mais
+dans cette exemple, nous supposons que c'est un fichier ``normal'' et
+que nous pouvons le lire en une fois, donc nous utilisons @code{io_readable ()} 
+pour connaître la taille du fichier (ça ne marchera pas pour des fichiers comme /dev/random !
+@code{io_readable ()} nous dit seulement quelle quantité de donnée est disponible à l'instant
+de son appel). On crée alors un buffer pour le fichier complet:
+
+@example
+/* Get size of file */
+err = io_readable (f, &amount);
+if (err)
+  error (1, err, "Could not get number of readable bytes");
+
+/* Create buffer */
+buf = malloc (amount + 1);
+if (buf == NULL)
+  error (1, 0, "Out of memory");
+@end example
+
+Maintenant, tout ce que nous avons à faire est de lire le fichier dans le buffer.
+On ajoute un octet nul à la fin, afin de pouvoir l'utiliser comme une chaine (on 
+suppose que le fichier ne contient pas de caractère nul, ce qui n'est pas parfait,
+mais pour l'exemple on ne s'en préoccupe pas).
+
+@example
+/* Read */
+err = io_read (f, &buf, &amount, -1, amount);
+if (err)
+  error (1, errno, "Could not read from file %s", argv[1]);
+buf[amount] = '\0';
+@end example
+
+Remarquez que l'on passe ``&buf'', qui est un poiteur de pointeur. ``buf''
+pourrait être modifié, mais cette décision doit être laissée au receveur 
+du message io_read.
+
+Si vous regardez @code{$(HURD)/hurd/io.defs}, vous vous demanderez sans doute
+pourquoi on passe 5 arguments à io_read qui n'en attend que 4. io_object, data,
+offset et amount sont écrit dans le fichier .defs, alors que 
+@code{/include/hurd/io.h} a un argument supplémentaire (appelé dataCnt)
+après data, qui est tout a fait logique : Nous avons aussi besoin de connaître
+la quantité de données que nous avons. Ajouter cet argument est fait automatiquement
+par MiG.
+
+Nous en avons terminé avec le fichier, nous pouvons donc le fermer. Cela
+se fait en desallouant le port:
+
+@example
+mach_port_deallocate (mach_task_self (), f);
+@end example
+
+C'est tout.
+@c END Writing a file to standard output
+
+@node Créer une copie d'un fichier
+@section Créer une copie d'un fichier
+
+Nous allons maintenant essayer de copier un fichier. Mais cette fois, 
+nous allons le faire correctement: si le translator qui fournit le fichier
+prend un certain temps pour fournir ses données, nous attendrons. Nous allons
+donc lire jusqu'à rencontrer un EOF. Nous saurons que nous aurons atteint
+la fin du fichier si notre appel à @code{io_read ()} nous donne zero octets de
+données.
+
+@example
+/* copy.c - Copy a file in a "hurdish" way.
+ * Copyright (C) 2001 Wolfgang J@"ahrling <wolfgang@@pro-linux.de>
+ * Distributed under the terms of the GNU General Public License.
+ * This is distributed "as is". No warranty is provided at all.
+ */
+
+#define _GNU_SOURCE 1
+
+#include <hurd.h>
+#include <hurd/io.h>
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <errno.h>
+#include <error.h>
+
+#define BUFLEN 10  /* Arbitrary */
+
+int
+main (int argc, char *argv[])
+@{
+  file_t in, out;
+  mach_msg_type_number_t rd_amount, wr_amount;
+  char *buf, *ptr;
+  error_t err;
+
+  if (argc != 3)
+    error (1, 0, "Usage: %s <inputfile> <outputfile>", argv[0]);
+
+  /* Create buffer */
+  buf = malloc (BUFLEN + 1);
+  if (buf == NULL)
+    error (1, 0, "Out of memory");
+
+  /* Open files */
+  in = file_name_lookup (argv[1], O_READ, 0);
+  if (in == MACH_PORT_NULL)
+    error (1, errno, "Could not open %s", argv[1]);
+  out = file_name_lookup (argv[2], O_WRITE | O_CREAT | O_TRUNC, 0640);
+  if (out == MACH_PORT_NULL)
+    error (1, errno, "Could not open %s", argv[2]);
+
+  /* Copy */
+  while (1)
+    @{
+      /* Read */
+      err = io_read (in, &buf, &rd_amount, -1, BUFLEN);
+      if (err)
+        error (1, err, "Could not read from file %s", argv[1]);
+
+      if (rd_amount == 0)
+        break;
+
+      /* Write */
+      ptr = buf;
+      do
+        @{
+          err = io_write (out, ptr, rd_amount, -1, &wr_amount);
+          if (err)
+            error (1, err, "Could not write to file %s", argv[2]);
+          rd_amount -= wr_amount;
+          ptr += wr_amount;
+        @}
+      while (rd_amount);
+    @}
+
+  mach_port_deallocate (mach_task_self (), in);
+  mach_port_deallocate (mach_task_self (), out);
+  return 0;
+@}
+@end example
+
+Les parties interessantes sont :
+
+@example
+out = file_name_lookup (argv[2], O_WRITE | O_CREAT | O_TRUNC, 0640);
+@end example
+
+Ici, nous créons un fichier avec la permission 640 si il n'existe pas, 
+et récupérons sa sortie.
+
+@example
+/* Read */
+err = io_read (in, &buf, &rd_amount, -1, BUFLEN);
+if (err)
+  error (1, err, "Could not read from file %s", argv[1]);
+
+if (rd_amount == 0)
+  break;
+@end example
+
+Comme nous l'avons dit plus haut: si on ne peut lire aucun octet, cela
+signifie que nous avons atteint la fin du fichier. Ca ne veut pas dire
+qu'il n'y a pas de donnée disponible à cet instant: Si nous lisions depuis
+/dev/random par exemple, et qu'il n'y aurait pas de données à lire à cet
+instant, l'appel ne nous dirait pas qu'il n'y a pas de données, mais bloquerait
+jusqu'à l'arrivée de nouvelle donnée.
+
+@example
+/* Write */
+ptr = buf;
+do
+  @{
+    err = io_write (out, ptr, rd_amount, -1, &wr_amount);
+    if (err)
+      error (1, err, "Could not write to file %s", argv[2]);
+    rd_amount -= wr_amount;
+    ptr += wr_amount;
+  @}
+while (rd_amount);
+@end example
+
+Il n'y a pas de certitude que @code{io_write ()} acceptera immediatement toutes les données
+que nous essaierons de lui envoyer, donc nous devrons sans doute réessayer, mais
+seulement avec les données qui n'ont pas été acceptées.
+@c END Creating a copy of a file
+
+@node Notes finales
+@section Notes finales
+
+@c FIXME: More examples, esp. some for interfaces other than io
+
+Finalement, je voudrais préciser que sur GNU/Hurd, il n'y a pas
+de raison de ne pas utiliser l'excellente extension non standard de GCC.
+Par exemple, les fonctions imbriquées sont fréquement utilisées dans les
+sources du Hurd. Il peut être très utile d'en savoir un peu sur ces extensions,
+donc vous devriez sans doute faire :
+
+@example
+$ info gcc "C Extensions"
+@end example
+@c FIXME: Cross-ref
+
+Un bon exemple de code ``hurdiste'' est @code{$(HURD)/init/init.c}, donc vous devriez
+y jeter un coup d'oeil. Vous ne comprendrez sans doute pas tout, mais ça n'est
+pas genant. Vous trouverez d'autres sources que vous voudrez peut-être lire 
+dans @code{$(HURD)/utils/} et @code{$(HURD)/sutils/}.
+@c END Final notes
+
+@node Les librairies du Hurd (Aperçu)
+@chapter Les librairies du Hurd (Aperçu)
+
+Il y a un certain nombre de librairies qui rendent l'ecriture d'un
+translator plus facile.
+
+Libtrivfs est utilisée pour les translators "triviaux". Dans ce cas,
+un translator trivial est un translator qui ne donne accès qu'à un seul 
+fichier (noeud), et non à un répertoire complet ou même un système de 
+fichiers. Comme les premiers translators qu'écrivent tous les nouveaux
+hacker sous le Hurd sont de ce type, cette librairie est la première que 
+vous devriez étudier.
+
+Libnetfs est la librairie pour des translators donnant accès à un système
+de fichiers complet, et contrôlant pas directement les données sous jacentes, 
+comme c'est le cas dans ftpfs, nfs et shadowfs@footnote{Shadowfs ne fait pas 
+encore partie intégrante du Hurd, mais une implementation partielle existe}, 
+par exemple. Libnetfs sera probablement renommée libfsserver.
+
+Libdiskfs est aussi destinée aux systèmes de fichiers complets, mais
+est utilisée dans les cas ou le translator controle les données sous 
+jacentes, comme par exemple ext2fs, UFS et tmpfs.
+
+Libtreefs est morte. Elle n'a jamais été terminée, et personne ne l'utilise.
+Vous ne devriez pas non plus.
+
+@c Libdiskpart
+
+Libports fournit des fonctions pour travailler avec les ports. Elle
+peut aussi être vu comme une abstraction des fonctionnalités que le 
+Hurd attend d'un system transmettant des messages.
+
+Libstore: L'explication suivante peut être trouvée dans le fichier
+d'en-tête de libstore : ``Un `store' (une réserve) est un block de 
+stockage de taille fixe, qui peut être lu et éventuellement écrit. 
+Cette librairie implémente plusieurs interfaces différentes qui autorisent 
+la réserve à être utilisé avec plusieurs types de stockage -- fichiers, 
+mémoire, taches, etc. Elle permet aussi de combiner et de filtrer les 
+réserves de différentes manières.''
+            
+@c Libfshelp
+
+Libiohelp: ``Librairie fournissant des fonctions utiles aux serveurs 
+d'entrées/sorties.''
+
+Libthreads est la librairie des cthreads. Cette librairie viens du
+micronoyau Mach et à été dévelopée avant que le standard des threads 
+POSIX existe. Les threads POSIX seront disponibles à l'avenir, mais 
+pour l'instant, l'instant, cette librairie est utilisée poru le 
+multithreading.
+
+@c Libpager
+
+@c Libdirmgt
+
+Libihash fournit des fonctions destinées aux hash-table à clefs
+entières.
+
+@c Libmemdir
+
+@c Libmom
+
+@c Libpipe
+
+Libps: ``Routines pour récupérer et afficher des informations sur
+les processus.''
+
+Libshouldbeinlibc: Nomen est omen. :-)
+@c END The Hurd Libraries (Overview)
+
+@node Un exemple utilisant trivfs
+@chapter Un exemple utilisant trivfs
+@menu
+* GNU/Linux et GNU/Hurd::                          Quelle différence ?
+* Implementer les fonctions de rappel de trivfs::  Implementer une interface hurdiste
+* Autres fonctions de rappel de trivfs::           Variables qu'il faut définir
+* La fonction principale::                         Mise en place du translator
+* La source complete::                             hurd-one.c
+@end menu
+@c END An example using trivfs
+
+@node GNU/Linux et GNU/Hurd
+@section GNU/Linux et GNU/Hurd
+
+Avant de regarder de plus prêt comment utiliser trivfs, regardons
+comment ce serait fait dans un système GNU/Linux. Je ne vais pas 
+entrer dans les détails de cette exemple, car ce n'est pas très 
+important pour nous, mais comme beaucoup sont familiers avec la
+programmation (noyau) sous Linux, il pourrait être interessant de 
+comparer la façon dont les choses sont faites sous GNU/Linux par
+rapport à GNU/Hurd.
+
+Ecrire un module pour le noyau de Linux, pour un périphérique comme
+/dev/one (qui bien sur, donne une infinité de 1 si vous la lisez :))
+est facile en théorie. Un module pour le noyau 2.4.x dans un
+fichier dédié ressemblerait à ça :
+
+@example
+/* linux-one.c - Linux kernel module for /dev/one.
+ * Copyright (C) 2000, 2001 Wolfgang J@"ahrling <wolfgang@@pro-linux.de>
+ * Distributed under the terms of the GNU General Public License.
+ * This is distributed "as is". No warranty is provided at all.
+ */
+
+#include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/fs.h>
+#include <linux/wrapper.h>
+#include <asm/uaccess.h>
+
+#define ONE_NAME "one"
+#define ONE_MAJOR 100 /* Major device file number */
+
+static int is_opened = 0;
+
+/* Someone wants to open the file */
+static int
+device_open (struct inode *inode, struct file *file)
+@{
+  /* We allow only one simultaneous usage */
+  if (is_opened)
+    return -EBUSY;
+
+  is_opened = 1;
+  MOD_INC_USE_COUNT; /* Module can't be unloaded now */
+
+  return 0; /* Could be opened */
+@}
+
+/* The file is closed again */
+static int
+device_release (struct inode *inode, struct file *file)
+@{
+  is_opened = 0;
+  MOD_DEC_USE_COUNT; /* Module may be unloaded now */
+
+  return 0;
+@}
+
+/* Somebody wants to have lots of one's */
+static ssize_t
+device_read (struct file *file, char *buf, size_t len, loff_t *offset)
+@{
+  int i;
+  static char one = 1;
+
+  for (i = 0; i < len; i++)
+    if (copy_to_user (&buf[i], &one, 1))
+      return -EFAULT;
+
+  return len;
+@}
+
+/* Now he/she wants to write something... */
+static ssize_t
+device_write (struct file *file, const char *buf, size_t len,
+              loff_t *offset)
+@{
+  /* ...but we don't care */
+  return len;
+@}
+
+/* Let's put the supported operations in a structure */
+struct file_operations one_operations =
+  @{
+    NULL, /* Owner module... wonder what this means :-) */
+    NULL, /* seek */
+    device_read,
+    device_write,
+    NULL, /* readdir */
+    NULL, /* poll */
+    NULL, /* ioctl */
+    NULL, /* mmap */
+    device_open
+    NULL, /* flush */
+    device_release,
+    NULL, NULL, NULL, NULL, NULL /* Some others */
+  @};
+
+/* This is automatically called when the module is loaded */
+int
+init_module (void)
+@{
+  int result = register_chrdev (ONE_MAJOR, ONE_NAME, &one_operations);
+
+  if (result < 0) /* Could not register character device */
+    @{
+      printk (KERN_ERR "Couldn't register device: %d.\n", result);
+      return result;
+    @}
+  printk (KERN_INFO "Loading the %s module.\n", ONE_NAME);
+  return 0;
+@}
+
+/* This gets called when unloading the module */
+void
+cleanup_module (void)
+@{
+  int result = unregister_chrdev (ONE_MAJOR, ONE_NAME);
+
+  if (result < 0)
+    printk (KERN_ERR "Couldn't unregister device: %d.\n", result);
+  else
+    printk (KERN_INFO "Unloading the %s module.\n", ONE_NAME);
+@}
+@end example
+
+Nous implémentons simplement les opérations habituelles come @code{read ()},
+@code{close ()} et @code{open ()}, plaçons des pointeurs sur ces fonctions
+dans une structure et enregistrons le tout comme un périphérique de caractères.
+
+Dans l'étape suivante, nous compilerions ce fichier source en un fichier objet
+que nous chargerions en root grace à insmod(8) et créerions le fichier /dev/one
+avec 
+
+@example
+# cd /dev && mknod one c 100 1
+@end example
+
+C'est simple à comprendre - mais difficile à mettre en pratique, pour
+(au moins) quatre raisons : Premièrement, une petite erreur dans le code
+peut causer un kernel panic; deuxièmement, vous avez besoin d'être root
+pour faire tout cela; troisièmement, vous ne pouvez utiliser les fonctions
+de la GNU C librairie, et d'autres librairies utiles comme la GLib; 
+quatrièmement, vous devez utiliser un numéro de périphérique non utilisé
+(J'ai utilisé 100 ci-dessus en esperant que personne n'avait fait de même
+ avant).
+
+Avec le Hurd, les choses fonctionnent différement. Bien sûr, la structure
+globale est un peu différente, mais aussi (et c'est plus important) 
+l'enfironment du code est plus sympathique : C'est l'environment `normal'
+(user space) que nous connaissons tous. Cela signifie que vous pouvez 
+développer un translator comme n'importe quel autre programme. Le seul 
+désavantage est que l'interface de programmation est un peu plus complexe
+que celle du noyau Linux. Mais si vous comprenez l'exemple ci-dessus, vous
+n'aurez pas de problème à suivre le translator qui vient, qui implémente 
+la même fonctionnalité.
+
+En fait, il fournit plus de fonctionalités, car libtrivfs nous force
+à en implémenter plus; quand vous implémenterez un vrai translator, 
+vous devriez aussi vous préoccuper des options passées, car parfois,
+l'utilisateur demande seulement ``--help'', mais j'ai essayé de conserver
+cette exemple aussi simple que possible. Lorsque vous écrivez des 
+programmes pour le système GNU, il est reccomandé de parser les options 
+avec la fonction argp. @footnote{see "info libc Argp"}
+@c END GNU/Linux and GNU/Hurd
+
+@node Implementer les fonctions de rappel de trivfs
+@section Implementer les fonctions de rappel de trivfs
+
+Dans le systeme GNU/Hurd, les appels systemes usuels d'Unix sont
+fournis par la GNU C librairie qui les transforme en messages transmis 
+aux ports respectifs. Cela signifie que vous n'écrirez pas 
+d'implémentations directes pour des fonctions comme @code{read ()}, 
+mais des fonctions utilisant des arguments comme par exemple 
+@code{io_read ()}. Lorsque l'on utilise la librairie trivfs,
+nous devons implementer des routines avec des arguments quelque peu 
+différents. Par exemple, les arguments de @code{trivfs_S_io_read ()},
+sont :
+
+@multitable @columnfractions .33 .15 .50
+@item Type @tab Name @tab Description
+@item struct trivfs_protid *
+@tab cred
+@tab Credentials
+@item mach_port_t
+@tab reply
+@tab The port where the reply will be sent
+@item mach_msg_type_name_t
+@tab reply_type
+@tab The rights we have on the above port
+@item vm_address_t *
+@tab data
+@tab Pointer to the place where you should write you reply data to
+@item mach_msg_type_number_t
+@tab data_len
+@tab Here you should store, how much data you actually return. Initialy, this
+is set to the size of the already available memory at *data.
+@item off_t
+@tab offs
+@tab Seek a position. If offs is -1, use the internal file pointer. Ignore it
+if the object is not seekable.
+@item mach_msg_type_number_t
+@tab amount
+@tab How much data you should write
+@end multitable
+
+La fonction @code{trivfs_S_io_read ()} du translator "Hello, world"
+(cf @code{$(HURD)/trans/hello.c}) est un bon exemple de comment 
+implémenter une telle fonction. L'implémentation de notre "one" translator
+sera un exemple un peu moins complet.
+
+Voilà à quoi ressemble notre fonction :
+
+@example
+error_t
+trivfs_S_io_read (struct trivfs_protid *cred,
+                  mach_port_t reply, mach_msg_type_name_t reply_type,
+                  vm_address_t *data, mach_msg_type_number_t *data_len,
+                  off_t offs, mach_msg_type_number_t amount)
+@{
+  /* Deny access if they have bad credentials. */
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (! (cred->po->openmodes & O_READ))
+    return EBADF;
+
+  if (amount > 0)
+    @{
+      int i;
+
+      /* Possibly allocate a new buffer. */
+      if (*data_len < amount)
+        *data = (vm_address_t) mmap (0, amount, PROT_READ|PROT_WRITE,
+                                     MAP_ANON, 0, 0);
+
+      /* Copy the constant data into the buffer. */
+      for (i = 0; i < amount; i++)
+        ((char *) *data)[i] = 1;
+    @}
+
+  *data_len = amount;
+  return 0;
+@}
+@end example
+
+C'est la fonction de rappel la plus complexe de notre translator. 
+Les autres sont plus simples.
+
+Vous devriez toujours retourner EOPNOTSUPP (Operation non supportée) si
+"cred" est mauvais, et EBADF (Mauvais descripteur de fichier) se le
+bit nécessaire n'est pas en place.
+
+Si l'utilisateur veut lire plus d'octets (le nombre dans "amount") que
+le buffer peut contenir, nous devons allouer de la mémoire supplémentaire.
+Souvenez vous que nous avons eu à passer un pointeur sur le pointeur sur 
+notre buffer, lorsque nous avons appelé @code{io_read ()}. C'était pour
+cette raison. Nous allouons de la mémoire avec @code{mmap ()} car nous
+voulons un block mémoire aligné. Maintenant que nous sommes sûrs d'avoir
+assez d'espace où écrire les données, nous pouvons commencer à la remplir
+de uns. Notez que "*data" est une vm_address_t et que nous devons
+déréférencer le pointeur pour pouvoir l'utiliser.
+
+Si vous comprenez la fonction ci-dessus, je doute que vous ayez un 
+problème avec la routine d'écriture suivante, qui ne fait presque rien :
+
+@example
+kern_return_t
+trivfs_S_io_write (struct trivfs_protid *cred,
+                   mach_port_t reply, mach_msg_type_name_t replytype,
+                   vm_address_t data, mach_msg_type_number_t datalen,
+                   off_t offs, mach_msg_type_number_t *amout)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred->po->openmodes & O_WRITE))
+    return EBADF;
+  *amout = datalen;
+  return 0;
+@}
+@end example
+
+Mis à part pour l'habituel vérification d'erreurs, cette fonction ne
+fait qu'indiquer que toute donnée que l'utilisateur voulait écrire l'a
+été avec succès - ce qui est logique car nous ignorons toute écriture
+sur notre fichier.
+
+Il y a plusieurs fonctions de rappel que nous implémenterons d'une manière
+similaire à la fonction write. Vous pouvez trouvez ces fonctions
+dans la source complete de notre translator.
+
+Une autre fonction de rappel est @code{trivfs_S_io_readable ()}. 
+Elle sera appelée si quelqu'un veut savoir quelle quantité de donnée nous
+pouvons fournir immédiatement. Bien sûr, cette quantitée est infinie, et comme
+l'a dit Marcus Brinkmann @footnote{ Le mail complet est disponible à
+@url{http://mail.gnu.org/pipermail/help-hurd/2001-August/004747.html}}:
+
+@quotation
+``Si vous pouvez délivrez une quantité illimitée d'octets sans délai,
+  je pense que la valeur la plus élevée possible qui tiens dans 
+  mach_msg_type_number_t est la plus appropriée. (J'éspère que les
+  applications peuvent s'arranger avec ça).''
+@end quotation
+
+Souvenons nous que si quelque chose peut aller mal, ça ira mal. Par
+exemple, notre programme d'exemple dump.c ci dessus gérerait assez mal
+une telle situation. C'est pourquoi j'ai écrit l'implementation suivante
+qui est un peu paranoïaque et ne cause pas de problème si une application
+n'est pas capable de gérer une grande valeur correctement :
+
+@example
+kern_return_t
+trivfs_S_io_readable (struct trivfs_protid *cred,
+                      mach_port_t reply, mach_msg_type_name_t replytype,
+                      mach_msg_type_number_t *amount)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred->po->openmodes & O_READ))
+    return EINVAL;
+  else
+    *amount = 10240; /* Dummy value: 10k */
+  return 0;
+@}
+@end example
+
+La dernière fonction de rappel interessante est @code{trivfs_S_io_select
+()}, qui est bien commentée dans la source complète ci-dessous.
+@c END Implementing trivfs callback functions
+
+@node Autres fonctions de rappel de trivfs
+@section Autres fonctions de rappel de trivfs
+
+Nous devons travailler un peu plus avant d'avoir un translator trivfs complet :
+Nous devons définir des symboles qui contiennent l'information générale à propos
+de notre translator.
+
+@example
+/* Trivfs hooks. */
+int trivfs_fstype = FSTYPE_MISC;  /* Generic trivfs server */
+int trivfs_fsid = 0;              /* Should always be 0 on startup */
+@end example
+
+Dans la plupart des cas, vous utiliserez FSTYPE_MISC pour trivfs_fstype.
+Les autres valeurs possibles sont (d'après
+@code{$(HURD)/hurd/hurd_types.h}):
+
+@enumerate
+@item
+FSTYPE_IFSOCK - PF_LOCAL socket naming point
+@item
+FSTYPE_DEV    - GNU Special file server
+@item
+FSTYPE_TERM   - GNU Terminal driver
+@end enumerate
+
+Dans @code{trivfs_allow_open}, vous spécifiez les permissions initiales
+pour votre translator :
+@c FIXME: Is this _really_ correct?
+
+@example
+int trivfs_allow_open = O_READ | O_WRITE;
+@end example
+
+Et avec les variables suivantes, vous spécifiez quels types d'acces
+sont réellement implémentés :
+
+@example
+/* Actual supported modes: */
+int trivfs_support_read  = 1;
+int trivfs_support_write = 1;
+int trivfs_support_exec  = 0;
+@end example
+@c END Other trivfs callbacks
+
+@node La fonction principale
+@section The main function
+
+Les translators sont des programmes normaux, et en tant que tels, ils
+nécessitent une fonction @code{main ()}. La librairie trivfs ne définit
+pas de telle fonction, donc nous devons le faire nous même. Notre programme
+peut être lancé en tant que programme normal, ou en tant que translator donc
+nous devons faire la différence entre ces deux cas. Cela peut se faire en 
+testant si le port de bootstrap vaut MACH_PORT_NULL. Si c'est le cas, le 
+programme n'a pas été lancé en tant que translator. Généralement, un 
+translator terminera dans ce cas. Si, cependant, notre port ne vaut pas
+MACH_PORT_NULL, nous devrions initialiser libtrivfs et désallouer le 
+port de bootstrap. Enfin, nous mettrons en place le translator. Notre
+fonction @code{main ()} (qui ne s'occupe pas des arguments passés en
+ligne de commande) ressemble à cela :
+
+@example
+int
+main (void)
+@{
+  error_t err;
+  mach_port_t bootstrap;
+  struct trivfs_control *fsys;
+
+  task_get_bootstrap_port (mach_task_self (), &bootstrap);
+  if (bootstrap == MACH_PORT_NULL)
+    error (1, 0, "Must be started as a translator");
+
+  /* Reply to our parent */
+  err = trivfs_startup (bootstrap, 0, 0, 0, 0, 0, &fsys);
+  mach_port_deallocate (mach_task_self (), bootstrap);
+  if (err)
+    error (1, err, "trivfs_startup failed");
+
+  /* Launch. */
+  ports_manage_port_operations_one_thread (fsys->pi.bucket,
+                                           trivfs_demuxer, 0);
+
+  return 0;
+@}
+@end example
+
+Vous vous demandez peut-être pourquoi nos fonctions on des noms comme
+@code{trivfs_S_io_read ()}. La raison est simple : nous n'avons pas besoin
+d'enregistrer nos fonctions de rappel. Nous leur donnons juste le nom
+adéquat, et libtrivfs fera le reste pour nous. Bien sûr, ces noms de fonctions
+ont un sens, comme l'explique Marcus Brinkmann :
+
+@quotation
+``io_read est le nom de la RPC dans le fichier .defs. Le préfixe S_
+précise qu c'est l'accès au serveur qui est implémenté ici, plutôt
+que l'encapsulation/decapsulation des messages. Le préfixe trivfs_ 
+signifie que ce n'est pas la RPC de base, mais que le mach_port_t est
+en fait converti en une autre structure. C'est fait dans intran.
+
+Généralement, on récupère le mach_port_t en premier argument, mais
+dans l'accès libtrivfs, c'est un autre. Utilisez un grep pour intran
+dans @code{$(HURD)/libtrivfs/*} pour voir comment les ports sont
+reliés aux structures de libtrivfs.''
+@end quotation
+
+@ignore
+@c FIXME: Implement "later" ;-)
+@c Traduction à finir
+Later we will take a closer look at a more complete trivfs example.
+This example will use hooks, parse options and provide a more complex
+data stream than an endless number of one's.
+@end ignore
+@c END The main function
+
+@node La source complete
+@section La source complete
+
+Arretons nous là. Je laisse de coté des détails peux importants, que
+vous devriez trouver dans le code complet ci-dessous. Vous pouvez compiler
+ce fichier avec
+
+@example
+$ gcc -g -o one hurd-one.c -ltrivfs -lfshelp
+@end example
+
+D'autres sources d'information interessantes sont
+@code{$(HURD)/trans/hello.c} et @code{$(HURD)/trans/null.c}.
+
+@example
+/* hurd-one.c - A trivial single-file translator
+   Written by Wolfgang J@"ahrling <wolfgang@@pro-linux.de>, 2001
+
+   This is based on hurd/trans/hello.c. The hello.c source says:
+     Copyright (C) 1998, 1999, 2001 Free Software Foundation, Inc.
+     Gordon Matzigkeit <gord@@fig.org>, 1999
+   It also uses parts of hurd/trans/null.c. The null.c source says:
+     Copyright (C) 1995,96,97,98,99,2001 Free Software Foundation, Inc.
+     Written by Miles Bader <miles@@gnu.org>
+      
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License as
+   published by the Free Software Foundation; either version 2, or (at
+   your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330,
+   Boston, MA  02111-1307  USA */
+
+#define _GNU_SOURCE 1
+
+#include <hurd/trivfs.h>
+
+#include <stdlib.h>   /* exit () */
+#include <error.h>    /* Error numers */
+#include <fcntl.h>    /* O_READ etc. */
+#include <sys/mman.h> /* MAP_ANON etc. */
+
+/* Trivfs hooks. */
+int trivfs_fstype = FSTYPE_MISC;  /* Generic trivfs server */
+int trivfs_fsid = 0;              /* Should always be 0 on startup */
+
+int trivfs_allow_open = O_READ | O_WRITE;
+
+/* Actual supported modes: */
+int trivfs_support_read  = 1;
+int trivfs_support_write = 1;
+int trivfs_support_exec  = 0;
+
+/* May do nothing... */
+void
+trivfs_modify_stat (struct trivfs_protid *cred, struct stat *st)
+@{
+  /* .. and we do nothing */
+@}
+
+error_t
+trivfs_goaway (struct trivfs_control *cntl, int flags)
+@{
+  exit (EXIT_SUCCESS);
+@}
+
+error_t
+trivfs_S_io_read (struct trivfs_protid *cred,
+                  mach_port_t reply, mach_msg_type_name_t reply_type,
+                  vm_address_t *data, mach_msg_type_number_t *data_len,
+                  off_t offs, mach_msg_type_number_t amount)
+@{
+  /* Deny access if they have bad credentials. */
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred->po->openmodes & O_READ))
+    return EBADF;
+
+  if (amount > 0)
+    @{
+      int i;
+
+      /* Possibly allocate a new buffer. */
+      if (*data_len < amount)
+        *data = (vm_address_t) mmap (0, amount, PROT_READ|PROT_WRITE,
+                                     MAP_ANON, 0, 0);
+
+      /* Copy the constant data into the buffer. */
+      for (i = 0; i < amount; i++)
+        ((char *) *data)[i] = 1;
+    @}
+
+  *data_len = amount;
+  return 0;
+@}
+
+kern_return_t
+trivfs_S_io_write (struct trivfs_protid *cred,
+                   mach_port_t reply, mach_msg_type_name_t replytype,
+                   vm_address_t data, mach_msg_type_number_t datalen,
+                   off_t offs, mach_msg_type_number_t *amout)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred->po->openmodes & O_WRITE))
+    return EBADF;
+  *amout = datalen;
+  return 0;
+@}
+
+/* Tell how much data can be read from the object without blocking for
+   a "long time" (this should be the same meaning of "long time" used
+   by the nonblocking flag. */
+kern_return_t
+trivfs_S_io_readable (struct trivfs_protid *cred,
+                      mach_port_t reply, mach_msg_type_name_t replytype,
+                      mach_msg_type_number_t *amount)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else if (!(cred->po->openmodes & O_READ))
+    return EINVAL;
+  else
+    *amount = 10000; /* Dummy value */
+  return 0;
+@}
+
+/* Truncate file.  */
+kern_return_t
+trivfs_S_file_set_size (struct trivfs_protid *cred, off_t size)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+@}
+
+/* Change current read/write offset */
+error_t
+trivfs_S_io_seek (struct trivfs_protid *cred, mach_port_t reply,
+                  mach_msg_type_name_t reply_type, off_t offs, int whence,
+                  off_t *new_offs)
+@{
+  if (! cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+@}
+
+/* SELECT_TYPE is the bitwise OR of SELECT_READ, SELECT_WRITE, and
+   SELECT_URG. Block until one of the indicated types of i/o can be
+   done "quickly", and return the types that are then available.
+   TAG is returned as passed; it is just for the convenience of the
+   user in matching up reply messages with specific requests sent. */
+kern_return_t
+trivfs_S_io_select (struct trivfs_protid *cred,
+                    mach_port_t reply, mach_msg_type_name_t replytype,
+                    int *type, int *tag)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    if (((*type & SELECT_READ) && !(cred->po->openmodes & O_READ))
+        || ((*type & SELECT_WRITE) && !(cred->po->openmodes & O_WRITE)))
+      return EBADF;
+    else
+      *type &= ~SELECT_URG;
+  return 0;
+@}
+
+/* Well, we have to define these four functions, so here we go: */
+
+kern_return_t
+trivfs_S_io_get_openmodes (struct trivfs_protid *cred, mach_port_t reply,
+                           mach_msg_type_name_t replytype, int *bits)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    @{
+      *bits = cred->po->openmodes;
+      return 0;
+    @}
+@}
+
+error_t
+trivfs_S_io_set_all_openmodes (struct trivfs_protid *cred,
+                               mach_port_t reply,
+                               mach_msg_type_name_t replytype,
+                               int mode)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+@}
+
+kern_return_t
+trivfs_S_io_set_some_openmodes (struct trivfs_protid *cred,
+                                mach_port_t reply,
+                                mach_msg_type_name_t replytype,
+                                int bits)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+@}
+
+kern_return_t
+trivfs_S_io_clear_some_openmodes (struct trivfs_protid *cred,
+                                  mach_port_t reply,
+                                  mach_msg_type_name_t replytype,
+                                  int bits)
+@{
+  if (!cred)
+    return EOPNOTSUPP;
+  else
+    return 0;
+@}
+
+int
+main (void)
+@{
+  error_t err;
+  mach_port_t bootstrap;
+  struct trivfs_control *fsys;
+
+  task_get_bootstrap_port (mach_task_self (), &bootstrap);
+  if (bootstrap == MACH_PORT_NULL)
+    error (1, 0, "Must be started as a translator");
+
+  /* Reply to our parent */
+  err = trivfs_startup (bootstrap, 0, 0, 0, 0, 0, &fsys);
+  mach_port_deallocate (mach_task_self (), bootstrap);
+  if (err)
+    error (1, err, "trivfs_startup failed");
+
+  /* Launch. */
+  ports_manage_port_operations_one_thread (fsys->pi.bucket,
+                                           trivfs_demuxer, 0);
+
+  return 0;
+@}
+@end example
+@c END The complete source
+
+@node Debugger un translator
+@chapter Debugger un translator
+
+Ce chapitre nécessite des connaissances sur l'utilisation de GDB, le
+debugger GNU. Si vous n'avez pas utilisé GDB avant, je vous recomande
+la lecture de la session d'exemple dans la documentation Texinfo de GDB.
+Si info et la documentation sont installées sur votre système, faites
+simplement
+
+@example
+$ info gdb "Sample Session"
+@end example
+
+Maintenant, comment debugger un translator ? C'est plutôt simple, mais
+je vais vous expliquer quand même. :-) La manière la plus simple est
+de démarrer votre programme en tant que translator actif :
+
+@example
+$ gcc -g -o one one.c -ltrivfs -lfshelp
+$ settrans -ac foo one
+@end example
+
+Maintenant, le translator est en route. Vous pouvez le voir dans la
+liste des processus :
+
+@example
+$ ps Aux
+@end example
+
+(Le `ps' POSIX n'est pas encore disponible, donc `ps aux' ne fonctionnera 
+ pas, désolé.) Maintenant, nous avons besoin de nous rattacher au processus
+lancé. Par exemple, si le PID était 357, nous ferions :
+
+@example
+$ gdb one 357
+@end example
+
+On peut alors insérer des points d'arret, puis laisser le translator continuer :
+
+@example
+(gdb) break trivfs_S_io_read
+(gdb) c
+@end example
+
+Maintenant, vous devriez utiliser un autre terminal, et entrez une commande
+comme 
+
+@example
+$ cat foo
+@end example
+
+puis retournez au terminal contenant GDB. Vous verrez qu'il s'est 
+arreté au point d'arrêt. Vous pouvez maintenant debugger comme d'habitude.
+Facile n'est-ce pas ?
+
+Une fois terminé, utilisez
+
+@example
+(gdb) quit
+@end example
+
+et dites que vous voulez détacher le processus. Nous pouvons conclure en
+disant que vous n'avez pas besoin de technique spécifique pour debugger
+un translator.
+
+Maintenant, vous avez sans doute une idée de la façon dont on
+peut développer des serveurs pour le Hurd (des translators). Souvent,
+vous aurez besoin de plus que ce que fournit libtrivfs. Pour des information
+(pas forcément à jour) sur les autres librairies, vous pouvez regardez le
+Hurd Reference Manual (``info hurd''), aussi disponible dans 
+@code{$(HURD)/doc/hurd.texi}. Pour des informations plus à jour, il faut
+se référer aux fichiers d'en-tête apropriés.
+@c FIXME: XREF
+@c END Debugging a translator
+
+@node Un exemple comprehensible de trivfs
+@chapter Un exemple comprehensible de trivfs
+
+TODO: Peut-être un translator ``cat''.
+@c END Comprehensive trivfs example
+
+@node Un exemple utilisant netfs
+@chapter Un exemple utilisant netfs
+
+TODO
+@c END An example using netfs
+
+@node Un exemple utilisant diskfs
+@chapter Un exemple utilisant diskfs
+
+TODO
+@c END An example using diskfs
+
+@node Foire Aux Questions
+@chapter Foire Aux Questions
+
+@ifinfo
+@example
+      _
+   .-[_]<-.
+   v  |   _`.  T h e   G N U   H u r d
+  [_] `->[_]| 
+   ^  _  ,','    ...be a part of it!
+   `.[_]-+-'
+    `.__.'
+@end example
+@end ifinfo
+
+Q: Comment un translator peut-il acceder aux noeuds sous jacents ? Un 
+translator gzip doit le faire par exemple.
+
+R: Le noeud sous jacent est renvoyé par @code{fsys_startup ()}. (cf
+@code{$(HURD)/hurd/fsys.defs}).
+
+Q: Peut-on empiler les translators ?
+
+R: Oui, empiler les translators actifs est possible, mais c'est impossible
+avec les translators passifs.
+
+Q: Qu'est-ce qu'un `protid' ?
+
+R: `prot' signifie protection. Toute structure protid défini un client
+unique de notre translator. Vous pouvez acceder aux informations respectives
+par le champs `po' (per-open) de la structure.
+
+Q: Quel type de threads devrais-je utiliser si je veux écrire un programme 
+fonctionnant à la fois sous GNU/Linux et GNU/Hurd ?
+
+R: Utilisez plutôt les pthreads, nous les aurons bientôt ...
+
+Q: Comment peut-on dire que l'on est POSIX compliant sans avoir de pthreads ?
+
+R: Premièrement, les pthreads sont optionels dans les spécifications POSIX.
+Deuxièmement, nous avons des pthreads. Par exemple, GNU Portable Threads (pth)
+fournissent une émulation non préemptive des pthreads. Cela semble etre en
+accord avec les standards, mais certes assez peu utile puisque la majeure partie
+des programmes supposent que le multi-thread est préemptif. Jeroen Dekkers travaille
+sur de vrais pthreads, qui fonctionnent partiellement pour l'instant.
+
+Q: Dans le manifeste GNU, RMS écrit que C et LISP seront des langages system.
+Qu'en est-il ?
+
+R: L'interpreteur de Scheme Guile est une partie du projet GNU. Pour l'instant
+il ne fournit que les fonctionnalités POSIX, mais il n'y a pas de raison que
+personne n'ajoute de choses spécifiques à GNU. Ajouter le support pour divers
+langages serait bien en fait. Ce n'est cependant pas urgent.
+
+Q: Pourquoi apprendre à utiliser Mach si le Hurd change pour L4 bientôt ?
+
+R: Pour l'instant, Hurd utilise Mach, et vous avez besoin d'en connaître les
+bases pour travailler sous Hurd. Peut-être que le hurd tournera sur L4 dans
+quelque temps, mais ce n'est pas encore le cas.
+@c END Frequently Asked Questions
+
+@node Annexes
+@chapter Annexes
+@menu
+* Document history::  ChangeLog of this document
+* Stuff to do::       What is missing? What should be changed?
+@end menu
+@c END Appendices
+
+@node Document history
+@section Document history
+
+@example
+0.2_1 [Mon Mar 25, 2002]
+( Announced on @email{web-hurd@@gnu.org} )
+  * Renamed minicat.c to dump.c
+  * Removed links to non-free OSF docs and SourceForge page
+  * Various small extensions: Explained more libraries, clarified dump.c
+  * Lots of spelling/grammar/layout fixes by Alfred M. Szmidt
+  * Some layout fixes done by me
+  * Update of the link to Marcus Brinkmann's talk, added some other links
+  * Changed empty cthreads chapter to FAQ chapter
+
+0.2_1 pre8 [Sun Oct 07, 2001]
+( Not announced at all, just uploaded )
+  * Improved description of minicat example in chapter 5
+  * Various small fixes and clarifications
+  * Converted to Texinfo! Thanks to Alfred M. Szmidt
+  * Added chapter descriptions
+  * Removed third appendix (Ruby code for extracting inline files), which
+    isn't useful anymore.
+
+0.2_1 pre7 [Mon Aug 27, 2001]
+( Announced on @email{hurddocs-volunteer@@lists.sourceforge.net} )
+  * Lots of spelling and grammar fixes, some clarifications
+  * Split chapter 5 into subchapters, improved minicat and added copy
+    example
+
+0.2_1 pre6 [Tue Aug 21, 2001]
+( Not announced at all, just uploaded )
+  * Included minicat.c example and reference to GCC extensions in
+    chapter 5
+  * Several minor fixes.
+
+0.2_1 pre5 [Thu Aug 16, 2001]
+( Not announced at all, just uploaded )
+  * Included Marcus Brinkmann's countless suggestions. Thanks, Marcus!
+
+0.2_1 pre4 [Wed Aug 15, 2001]
+( Announced on irc.openprojects.net, channel #hurd )
+  * Extended chapter 2
+  * Chapter 7 complete, split 7b (now 7b and 7c)
+  * As usual: various small corrections and extensions
+
+0.2_1 pre3 [Mon Aug 6, 2001]
+( Not announced at all, people shall find it on their own :-> )
+  * Split Chapter 7 into subchapters, added subchapters to Chapter 3
+  * Chapter 7 almost complete, lacks some details still
+  * Chapter 3a almost complete
+  * Various small extensions in other chapters
+  * Added Chapter names for chapters 9, 10 and 11
+
+0.2_1 pre2 [Mon Jul 30, 2001]
+( Announced on @email{hurddocs-volunteer@@lists.sourceforge.net} )
+  * Chapter 3 half complete
+  * Various small fixes and extensions in different chapters
+  * Added appendic C with extract.rb
+
+0.2_1 pre1 [Sat Jul 28, 2001]
+( Announced on irc.openprojects.net, channel #hurd )
+  * Initial release with 8 chapters (4, 5 and 6 missing and 3 and 7
+    incomplete)
+@end example
+@c END Document history
+
+@node Stuff to do
+@section Stuff to do
+
+This document is a work in progress. There are several things that
+should be added. If you want to help, please contact me.
+
+@example
+- Use consistent formating. often, @@code@{@} should be used but isn't
+- Correct the remaining FIXMEs (ok, this one was obvious)
+- Take OSKit-Mach into account
+- Add Moritz' Mach device access example and link to mailing list
+  archive with Daniel Wagners Mach device code
+- Write about netfs and diskfs, add a longer trivfs example
+- Describe more Mach and esp. MiG details
+@end example
+@c END Stuff to do 
+
+@bye

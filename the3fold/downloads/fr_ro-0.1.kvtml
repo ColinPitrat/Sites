@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<!DOCTYPE kvtml SYSTEM "kvoctrain.dtd">
+<!--
+This is a machine generated file.
+Be careful when editing here.
+
+Short definition:
+
+lesson       lesson group
+ desc        name
+   %no       its index
+   %query    is in query selection
+   %current  is current lesson
+type         type group
+ desc        name
+   %no       its index
+e            entry of dictionary
+  %s         is selected
+  %m         lesson member
+  %t         common expression type
+ o           original
+   %q        in query ("o" is given, "t" is wanted)
+   %l        language code
+   %r        remark
+   %p        pronunciation
+   %width    column width
+   %t        expression type (see QueryManager.h)
+   %tf       false friend from
+   %ff       false friend to
+   %a        antonym
+   %y        synonym
+   %x        example
+   %u        usage label
+   %h        paraphrase
+ t           translation ..
+   %q        in query ("t" is given, "o" is wanted)
+   %l        language code
+   %r        remark
+   %p        pronunciation
+   %width    column width
+   %t        expression type
+   %tf       false friend from
+   %ff       false friend to
+   %a        antonym
+   %y        synonym
+   %x        example
+   %u        usage label
+   %h        paraphrase
+
+   %d        last query date (from;to)
+   %w        dito, compressed and deprecated
+   %g        grade (from;to)
+   %c        count (from;to)
+   %b        bad count (from;to)
+
+
+Valid xml means:
+ - Close all tags
+ - Keep proper hierarchy
+ - All attributes are quoted
+-->
+
+ <kvtml
+  encoding="UTF-8"
+  generator="kvoctrain v0.8.3"
+  cols="2"
+  lines="53"
+  title="Apprendre le roumain"
+  author="Colin Pitrat"
+  license="CC by-nc-sa">
+
+ <lesson width="196">
+  <desc no="1">Nombres</desc>
+  <desc no="2">Verbes de base</desc>
+  <desc no="3">Expression du temps</desc>
+  <desc no="4" current="1">Formules de politesse</desc>
+ </lesson>
+
+ <article>
+  <e l="fr">
+   <fd>la</fd>
+   <fi>une</fi>
+   <md>le</md>
+   <mi>un</mi>
+   <nd>le</nd>
+   <ni>un</ni>
+  </e>
+  <e l="ro">
+   <fi>o</fi>
+   <mi>un</mi>
+   <ni>un</ni>
+  </e>
+ </article>
+
+ <conjugation>
+  <e l="fr">
+   <s1>je</s1>
+   <s2>tu</s2>
+   <s3f>elle</s3f>
+   <s3m>il</s3m>
+   <s3n>il</s3n>
+   <p1>nous</p1>
+   <p2>vous</p2>
+   <p3f>elles</p3f>
+   <p3m>ils</p3m>
+   <p3n>ils</p3n>
+  </e>
+  <e l="ro">
+   <s1>eu</s1>
+   <s2>tu</s2>
+   <s3f>ea</s3f>
+   <s3m>el</s3m>
+   <s3n>el</s3n>
+   <p1>noi</p1>
+   <p2>voi</p2>
+   <p3f>ele</p3f>
+   <p3m>ei</p3m>
+   <p3n>ei</p3n>
+  </e>
+ </conjugation>
+
+ <options>
+  <sort on="1"/>
+ </options>
+
+ <e m="3"><o width="392" l="fr" q="o">après-après-demain</o><t width="396" l="ro" q="t" g="1;0" c="3;0" b="2;0" d="1156185188;0">răspoimîine</t></e>
+ <e m="3"><o>après-demain</o><t g="1;0" c="1;0" d="1156184914;0">poimîine</t></e>
+ <e m="3"><o y="-">ce soir</o><t g="1;0" c="3;0" b="2;0" d="1156185214;0" y="seară asta">acuma seară</t></e>
+ <e m="3"><o>demain</o><t g="1;0" c="1;0" d="1156184976;0">mîine</t></e>
+ <e m="3"><o>demain soir</o><t g="1;0" c="1;0" d="1156185036;0">mîine seară</t></e>
+ <e m="3"><o>l'an prochain</o><t g="1;0" c="2;0" b="1;0" d="1156185131;0">anul viitor</t></e>
+ <e m="3"><o>la semaine prochaine</o><t g="1;0" c="3;0" b="2;0" d="1156185206;0">săptămâna viitoare</t></e>
+ <e m="3"><o>le mois prochain</o><t g="1;0" c="2;0" b="1;0" d="1156185157;0">luna viitoare</t></e>
+ <e m="3"><o>matin</o><t g="1;0" c="1;0" d="1156185012;0">dimineaţă</t></e>
+ <e m="3"><o>soir</o><t g="1;0" c="1;0" d="1156185017;0">seară</t></e>
+ <e m="1"><o>cent</o><t g="1;0" c="1;0" d="1156184381;0">o suta</t></e>
+ <e m="1"><o>cinq</o><t g="2;1" c="2;1" d="1156184355;1155751788">cinci</t></e>
+ <e m="1"><o>cinquante</o><t g="1;0" c="1;0" d="1156184424;0">cincizeci</t></e>
+ <e m="1"><o>deux</o><t g="2;1" c="2;1" d="1156184587;1155751796">doi</t></e>
+ <e m="1"><o>dix</o><t g="2;1" c="2;1" d="1156184467;1155751803">zece</t></e>
+ <e m="1"><o>dix-huit</o><t g="1;0" c="1;0" d="1156184547;0">optsprezece</t></e>
+ <e m="1"><o>dix-neuf</o><t g="1;0" c="1;0" d="1156184331;0">nouăsprezece</t></e>
+ <e m="1"><o>dix-sept</o><t g="1;0" c="1;0" d="1156184558;0">şaptesprezece</t></e>
+ <e m="1"><o>douze</o><t g="1;0" c="1;0" d="1156184352;0">doisprezece</t></e>
+ <e m="1"><o>huit</o><t g="2;1" c="2;1" d="1156184383;1155751800">opt</t></e>
+ <e m="1"><o>neuf</o><t g="2;1" c="2;1" d="1156184549;1155751798">noua</t></e>
+ <e m="1"><o>onze</o><t g="1;0" c="1;0" d="1156184571;0">unsprezece</t></e>
+ <e m="1"><o>quarante</o><t g="1;0" c="1;0" d="1156184585;0">patruzeci</t></e>
+ <e m="1"><o>quatorze</o><t g="1;0" c="1;0" d="1156184771;0">paisprezece</t></e>
+ <e m="1"><o>quatre</o><t g="2;1" c="2;1" d="1156184833;1155751795">patru</t></e>
+ <e m="1"><o>quatre-vingt</o><t g="1;0" c="1;0" d="1156184441;0">optzeci</t></e>
+ <e m="1"><o>quatre-vingt-dix</o><t g="1;0" c="1;0" d="1156184753;0">nouăzeci</t></e>
+ <e m="1"><o>quinze</o><t g="1;0" c="1;0" d="1156184508;0">cincisprezece</t></e>
+ <e m="1"><o>seize</o><t g="1;0" c="2;0" b="1;0" d="1156184854;0">şaisprezece</t></e>
+ <e m="1"><o>sept</o><t g="2;1" c="2;1" d="1156184457;1155751802">şapte</t></e>
+ <e m="1"><o>six</o><t g="2;1" c="2;1" d="1156184776;1155751793">şase</t></e>
+ <e m="1"><o>soixante</o><t g="1;0" c="1;0" d="1156184786;0">şaizeci</t></e>
+ <e m="1"><o>soixante-dix</o><t g="1;0" c="1;0" d="1156184486;0">şaptezeci</t></e>
+ <e m="1"><o>treize</o><t g="1;0" c="1;0" d="1156184435;0">treisprezece</t></e>
+ <e m="1"><o>trente</o><t g="1;0" c="1;0" d="1156184793;0">treizeci</t></e>
+ <e m="1"><o>trois</o><t g="2;1" c="2;1" d="1156184589;1155751790">trei</t></e>
+ <e m="1"><o>un</o><t g="2;1" c="2;1" d="1156184366;1155751805">unu</t></e>
+ <e m="1"><o>vingt</o><t g="1;0" c="1;0" d="1156184364;0">douăzeci</t></e>
+ <e m="1"><o>vingt et un</o><t g="1;0" c="1;0" d="1156184536;0">douăzeci şi unu</t></e>
+ <e m="2" t="v:ir"><o y="-">
+  <conjugation>
+   <t n="PrSi"><s1>vais</s1><s2>vas</s2><s3f common="1">va</s3f><p1>allons</p1><p2>allez</p2><p3f common="1">vont</p3f></t>
+  </conjugation>
+  aller</o><t g="2;0" c="2;0" d="1156184884;0">
+   <conjugation>
+    <t n="PrSi"><s1>merg</s1><s2>mergi</s2><s3f common="1">merge</s3f><p1>mergem</p1><p2>mergeţi</p2><p3f common="1">merg</p3f></t>
+   </conjugation>
+   a merge</t></e>
+ <e m="2" t="v:ir"><o y="-">
+  <conjugation>
+   <t n="PrSi"><s1>ai</s1><s2>as</s2><s3f common="1">a</s3f><p1>avons</p1><p2>avez</p2><p3f common="1">ont</p3f></t>
+  </conjugation>
+  avoir</o><t g="2;1" c="2;1" d="1156184879;1155751809">
+   <conjugation>
+    <t n="PrSi"><s1>am</s1><s2>ai</s2><s3f common="1">are</s3f><p1>avem</p1><p2>aveţi</p2><p3f common="1">au</p3f></t>
+   </conjugation>
+   a avea</t></e>
+ <e m="2" t="v:re"><o>
+  <conjugation>
+   <t n="PrSi"><s1>parle</s1><s2>parles</s2><s3f common="1">parle</s3f><p1>parlons</p1><p2>parlez</p2><p3f common="1">parlent</p3f></t>
+  </conjugation>
+  parler</o><t g="2;0" c="2;0" d="1156184873;0">
+   <conjugation>
+    <t n="PrSi"><s1>vorbesc</s1><s2>vorbeşti</s2><s3f common="1">vorbeşte</s3f><p1>vorbim</p1><p2>vorbiţi</p2><p3f common="1">vorbesc</p3f></t>
+   </conjugation>
+   a vorbi</t></e>
+ <e m="2" t="v:re"><o y="-">
+  <conjugation>
+   <t n="PrSi"><s1>sais</s1><s2>sais</s2><s3f common="1">sait</s3f><p1>savons</p1><p2>savez</p2><p3f common="1">savent</p3f></t>
+  </conjugation>
+  savoir</o><t g="2;0" c="3;0" b="1;0" d="1156184862;0">
+   <conjugation>
+    <t n="PrSi"><s1>ştiu</s1><s2>ştii</s2><s3f common="1">ştie</s3f><p1>ştim</p1><p2>ştiţi</p2><p3f common="1">ştiu</p3f></t>
+   </conjugation>
+   a şti</t></e>
+ <e m="2" t="v"><o>
+  <conjugation>
+   <t n="PrSi"><s1>suis</s1><s2>es</s2><s3f common="1">est</s3f><p1>sommes</p1><p2>êtes</p2><p3f common="1">sont</p3f></t>
+  </conjugation>
+  être</o><t g="2;1" c="2;1" d="1156184875;1155751810">
+   <conjugation>
+    <t n="PrSi"><s1>sunt</s1><s2>eşti</s2><s3f common="1">este</s3f><p1>suntem</p1><p2>sunteţi</p2><p3f common="1">sunt</p3f></t>
+   </conjugation>
+   a fi</t></e>
+ <e m="4"><o>bonjour</o><t>bună ziua</t></e>
+ <e m="4"><o>bonjour (le matin)</o><t>bună dimineaţa</t></e>
+ <e m="4"><o>bonsoir</o><t>bună seara</t></e>
+ <e m="4"><o>bonne nuit</o><t>noapte bună</t></e>
+ <e m="4"><o>Comment vas-tu ?</o><t>Ce mai faci ?</t></e>
+ <e m="4"><o>Comment allez-vous ?</o><t>Ce mai faceţi</t></e>
+ <e m="4"><o>merci</o><t>mulţumesc</t></e>
+ <e m="4"><o>de rien</o><t>cu plăcere</t></e>
+ <e m="4"><o>au revoir</o><t>la revedere</t></e>
+</kvtml>
