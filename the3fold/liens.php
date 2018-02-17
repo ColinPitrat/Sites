@@ -23,11 +23,11 @@
   <ul>
   <li>
   <h3><a href="http://www.gtk-fr.org/">GTK-FR</a></h3>
-  <p>Un excellent site sur GTK en français et avec des exemples détaillés pour ceux qui veulent faire des belles interfaces graphiques en C.</p>
+  <p>Un excellent site sur GTK en franÃ§ais et avec des exemples dÃ©taillÃ©s pour ceux qui veulent faire des belles interfaces graphiques en C.</p>
   </li>
   <li>
   <h3><a href="http://coding.romainl.com/">Coding</a></h3>
-  <p>Un site très complet sur la programmation sous GNU/Linux, mais aussi sur la sécurité informatique. A visiter absolument.</p>
+  <p>Un site trÃ¨s complet sur la programmation sous GNU/Linux, mais aussi sur la sÃ©curitÃ© informatique. A visiter absolument.</p>
   </li>
   </ul>
 
@@ -35,7 +35,7 @@
   <ul>
   <li>
   <h3><a href="http://hurdfr.org/">HurdFr.org</a></h3>
-  <p>HurdFr.org est le lieu de rendez-vous de la communauté française du Hurd.</p>
+  <p>HurdFr.org est le lieu de rendez-vous de la communautÃ© franÃ§aise du Hurd.</p>
   </li>
   </ul>
 

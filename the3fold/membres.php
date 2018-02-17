@@ -2,7 +2,7 @@
   require("./include/ident.php");
 ?>
   <h1>Bienvenue dans l'espace membres</h1>
-  <p class="quickmenu"><a href="profil.php">Modifier son profil</a> | <a href="logout.php">Se déconnecter</a></p>
+  <p class="quickmenu"><a href="profil.php">Modifier son profil</a> | <a href="logout.php">Se dÃ©connecter</a></p>
   <br /><br />
   <br />
   Vous pouvez acceder aux sections suivantes :

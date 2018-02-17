@@ -1,23 +1,23 @@
-<h1>La bibliothèque libxml++</h1>
+<h1>La bibliothÃ¨que libxml++</h1>
 
 <p>libxml++ est une librairie permettant de lire et ecrire facilement des document XML en C++.</p> 
 
-<p>Avant de commencer, quelques rappels sur les commandes qui pourront être utiles :</p> 
+<p>Avant de commencer, quelques rappels sur les commandes qui pourront Ãªtre utiles :</p> 
 <ul>
-<li>Pour désarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
+<li>Pour dÃ©sarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
 <li>Pour compiler lorsqu'il y a un Makefile : <span class="commande">make</span></li>
 <li>Pour nettoyer les sources (supprimer les fichiers objets) : <span class="commande">make clean</span></li>
 </ul>
 
 <h2>1 - Du <acronym title="Extensible Markup Language">XML</acronym>, de <acronym title="Simple API for XML">SAX</acronym> et de <acronym title="Document Object Model">DOM</acronym></h2>
 
-<p>Et oui, autour de XML tournent tout un tas de buzzwords, que nous allons nous empresser de découvrir. Tout d'abord, si vous ne savez pas ce qu'est XML, je vous conseille vivement de faire un détour du coté des <a href="http://www.w3schools.com/xml/default.asp">tutoriels de W3Schools</a> qui en plus d'être abordables, sont assez complets. Pour ce qui est de SAX et DOM, ce sont deux interfaces qui définissent des moyens différents d'accéder aux données contenues dans un fichier XML. SAX permet de lire le fichier de manière séquentielle, traitant les balises une par une. L'avantage de cette méthode est de demander nettement moins de mémoire lorsque les documents deviennent un petit peu important. DOM permet de lire l'intégralité du fichier XML, et de le stocker en mémoire sous forme d'un arbre auquel on accède ensuite par le biais d'objet. Cette méthode est à mon avis beaucoup plus simple d'utilisation, car elle permet entre autres de traiter les données dans un ordre différent de celui dans lequel elles sont stockées.</p>
+<p>Et oui, autour de XML tournent tout un tas de buzzwords, que nous allons nous empresser de dÃ©couvrir. Tout d'abord, si vous ne savez pas ce qu'est XML, je vous conseille vivement de faire un dÃ©tour du cotÃ© des <a href="http://www.w3schools.com/xml/default.asp">tutoriels de W3Schools</a> qui en plus d'Ãªtre abordables, sont assez complets. Pour ce qui est de SAX et DOM, ce sont deux interfaces qui dÃ©finissent des moyens diffÃ©rents d'accÃ©der aux donnÃ©es contenues dans un fichier XML. SAX permet de lire le fichier de maniÃ¨re sÃ©quentielle, traitant les balises une par une. L'avantage de cette mÃ©thode est de demander nettement moins de mÃ©moire lorsque les documents deviennent un petit peu important. DOM permet de lire l'intÃ©gralitÃ© du fichier XML, et de le stocker en mÃ©moire sous forme d'un arbre auquel on accÃ¨de ensuite par le biais d'objet. Cette mÃ©thode est Ã  mon avis beaucoup plus simple d'utilisation, car elle permet entre autres de traiter les donnÃ©es dans un ordre diffÃ©rent de celui dans lequel elles sont stockÃ©es.</p>
 
-<p>libxml++ se base sur la libxml, qui elle même offre des interfaces SAX et DOM. Si vous désirez plus de détails sur les spécifications de ces deux interfaces, vous en trouverez sur <a href="http://www.saxproject.org">la page du projet SAX</a> pour SAX, et <a href="http://www.w3.org/DOM">la page du W3C</a> pour DOM.</p>
+<p>libxml++ se base sur la libxml, qui elle mÃªme offre des interfaces SAX et DOM. Si vous dÃ©sirez plus de dÃ©tails sur les spÃ©cifications de ces deux interfaces, vous en trouverez sur <a href="http://www.saxproject.org">la page du projet SAX</a> pour SAX, et <a href="http://www.w3.org/DOM">la page du W3C</a> pour DOM.</p>
 
 <h2>2 - De la lecture avec DOM</h2>
 
-<p>Parser un document XML peut se faire très simplement à l'aide de l'objet <span class="inline">xmlpp::DomParser</span>. Voyons tout d'abord la portion de code suivant :</p>
+<p>Parser un document XML peut se faire trÃ¨s simplement Ã  l'aide de l'objet <span class="inline">xmlpp::DomParser</span>. Voyons tout d'abord la portion de code suivant :</p>
 
 <p class="code">
     xmlpp::DomParser parser;<br/>
@@ -32,9 +32,9 @@
     }<br/>
 </p>
 
-<p>D'abord on utilise la fonction <span class="inline">set_validate</span> qui, pour autant que je sache, ne fait pas valider le document par le parser, mais fait vérifier que le document soit bien formé. D'après les reccomendations du W3C, un programme ne devrait pas ouvrir et traiter un document XML qui ne soit pas bien formé. Notez que <span class="inline">set_validate</span> prend un booléen en argument qui vaut <span class="inline">true</span> par défaut.</p>
-<p>On appelle ensuite <span class="inline">set_substitute_entities</span> qui permet de remplacer automatiquement les entitées par leurs vraies valeurs. Il est en effet possible de définir, dans un document, des entités qui sont des sortes d'alias pour certaines données (les entités commencent par &amp; et finissent par ;). La fonction <span class="inline">set_substitute_entities</span> prend elle aussi un booléen valant true par défaut en argument.</p>
-<p>Il ne reste alors plus qu'à appeler la fonction <span class="inline">parse_file</span> qui prend comme paramètre l'adresse du fichier à parser pour que la totalité du document soit parsée et mise en mémoire. On utilise alors la fonction <span class="inline">get_document</span> pour accéder au document en lui même, puis la fonction <span class="inline">get_root_node</span> pour accéder au noeud racine du document. On peut alors parcourir l'arbre à partir de ce noeud.</p>
+<p>D'abord on utilise la fonction <span class="inline">set_validate</span> qui, pour autant que je sache, ne fait pas valider le document par le parser, mais fait vÃ©rifier que le document soit bien formÃ©. D'aprÃ¨s les reccomendations du W3C, un programme ne devrait pas ouvrir et traiter un document XML qui ne soit pas bien formÃ©. Notez que <span class="inline">set_validate</span> prend un boolÃ©en en argument qui vaut <span class="inline">true</span> par dÃ©faut.</p>
+<p>On appelle ensuite <span class="inline">set_substitute_entities</span> qui permet de remplacer automatiquement les entitÃ©es par leurs vraies valeurs. Il est en effet possible de dÃ©finir, dans un document, des entitÃ©s qui sont des sortes d'alias pour certaines donnÃ©es (les entitÃ©s commencent par &amp; et finissent par ;). La fonction <span class="inline">set_substitute_entities</span> prend elle aussi un boolÃ©en valant true par dÃ©faut en argument.</p>
+<p>Il ne reste alors plus qu'Ã  appeler la fonction <span class="inline">parse_file</span> qui prend comme paramÃ¨tre l'adresse du fichier Ã  parser pour que la totalitÃ© du document soit parsÃ©e et mise en mÃ©moire. On utilise alors la fonction <span class="inline">get_document</span> pour accÃ©der au document en lui mÃªme, puis la fonction <span class="inline">get_root_node</span> pour accÃ©der au noeud racine du document. On peut alors parcourir l'arbre Ã  partir de ce noeud.</p>
 
 <!--<h2>3 - De la lecture avec SAX</h2>-->
 

@@ -34,7 +34,7 @@
     $dest="./skins/".$newname;
     if(!move_uploaded_file($userfile, $dest)) 
     {
-      echo("Problem rencontré lors du telechargement. Veuillez réessayer."); 
+      echo("Problem rencontrÃ© lors du telechargement. Veuillez rÃ©essayer."); 
       exit; 
     }
     chmod($dest, 0644);
@@ -46,7 +46,7 @@
   if($succes)
   {
   ?>
-    <h3 class="centre">Votre skin a été modifié.</h3>
+    <h3 class="centre">Votre skin a Ã©tÃ© modifiÃ©.</h3>
     <br /><br />
     <p class="centre"><a href="profil.php">Retour au profil</a></p>
   <?php

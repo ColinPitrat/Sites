@@ -11,7 +11,7 @@
     
     $query = "SELECT * FROM users WHERE nick='".$_POST["login"]."'";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     
     if($row && $row->password==md5($_POST["password"]))
     {
@@ -30,7 +30,7 @@
     ?>
     <h1>Espace membres</h1>
     <br/>
-    Le forum possède une <a href="forumpublic.php">partie publique</a>, accessible à tous sans identification.<br/>
+    Le forum possÃ¨de une <a href="forumpublic.php">partie publique</a>, accessible Ã  tous sans identification.<br/>
     <br/>
     Avant de pouvoir poster dans le forum, vous devez vous identifier.<br/>
     Si vous ne poss&eacute;dez pas encore d'identit&eacute;, vous

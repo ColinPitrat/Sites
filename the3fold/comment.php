@@ -6,7 +6,7 @@
 		print 'Should redirect to '.$_POST['origin'];
 		SqlConnect();
 		$res = SqlQuery('select * from captcha where id = '.$_POST['captcha_id'].' limit 0,1');
-		$row = mysql_fetch_object($res);
+		$row = mysqli_fetch_object($res);
 		if($row->answer == $_POST['captcha_ans'])
 		{
 			SqlQuery('insert into comments(subject, name, date, texte, captcha) values ("'.$_POST['subject'].'", "'.$_POST['name'].'", "'.date('Y-m-d H:i:s').'", "'.$_POST['comment'].'", '.$_POST['captcha_id'].')');
@@ -22,10 +22,10 @@
 		top();
 		SqlConnect();
 		$res = SqlQuery('select max(id) from captcha;');
-		$maxid = mysql_fetch_row($res);
+		$maxid = mysqli_fetch_row($res);
 		$cid = rand(0, $maxid[0]);
 		$res = SqlQuery('select * from captcha where id >= '.$cid.' limit 0,1');
-		if($row = mysql_fetch_object($res))
+		if($row = mysqli_fetch_object($res))
 		{
 			print '<h1>Poster un commentaire</h1>';
 			print '<center><form action="" method="post"><table cellspacing="10px" width="100%">';

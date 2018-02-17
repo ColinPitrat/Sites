@@ -35,7 +35,7 @@
 
   $query = 'SELECT * FROM users WHERE nick="'.$_SESSION["login"].'"';
   $res = SqlQuery($query);
-  $row = mysql_fetch_object($res);
+  $row = mysqli_fetch_object($res);
   
   if($row->skin)
     echo("<p class=\"centre\"><img width=\"110\" src=\"".$row->skin."\" /></p>");

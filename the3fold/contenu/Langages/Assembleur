@@ -74,11 +74,11 @@ Ceci pour amener que pour toute base N :</p>
 <br/>
 avec V,W,X,Y et Z qui sont tous inferieurs &agrave; N.</p>
 
-<p>Cette definition n'utilise que 5 facteurs, mais si le nombre de facteurs augmente, elle ne change pas. L'exposant de N continu de croître vers la gauche. Dans la base 2 :</p>
+<p>Cette definition n'utilise que 5 facteurs, mais si le nombre de facteurs augmente, elle ne change pas. L'exposant de N continu de croÃ®tre vers la gauche. Dans la base 2 :</p>
 
 <p>100 = 1 * (2^2) + 0 * (2^1) + 0 * (2^0) = 4</p>
 
-<p>Cela paraît simple, diront certains, &agrave; quoi nous r&eacute;pondrons qu'il n'y a aucun vice cach&eacute; et qu'il suffit de faire attention pour ne pas se tromper. Exercez-vous et vous verrez, c'est en buchant qu'on devient bucheron (proverbe bien connu).</p>
+<p>Cela paraÃ®t simple, diront certains, &agrave; quoi nous r&eacute;pondrons qu'il n'y a aucun vice cach&eacute; et qu'il suffit de faire attention pour ne pas se tromper. Exercez-vous et vous verrez, c'est en buchant qu'on devient bucheron (proverbe bien connu).</p>
 
 <p>Maintenant, sachez que le processeur travaille avec des registres de 8, 16, 32 chiffres (ou bits) et m&ecirc;me 64 (avec le MMX). Cela veut dire que pour affecter une valeure &agrave; un registre, vous devrez envoyer une suite de 8, 16, 32 ou 64 bits. Maintenant, si je dis &quot; J'ai mis la valeure 1110011000101101 &agrave; l'adresse 0110010011011000:1111011010100101&quot;, vous me r&eacute;pondrez que vous n'aimer pas la cuisine japonaise car vous vous &ecirc;tes d&eacute;ja cass&eacute;s les dents en mangeant les baguettes. C'est pour cela que des personnes tr&egrave;s sens&eacute;es ont d&eacute;cid&eacute; d'utiliser l'hexadecimal (ou base 16). En effet, chaque chiffre permet de stocker autant d'informations que quatres bits. Je vous vois d&eacute;j&agrave; venir. Vous vous dites &quot;Mais qu'est-ce qui va nous sortir... J'connais que 10 chiffres moi. Comment il veut faire une base 16 avec 10 chiffres ???&quot; He ben les m&ecirc;mes gars pas b&ecirc;tes que tout &agrave; l'heure ont utilis&eacute;s les lettres. On &agrave; donc:</p>
 
@@ -195,8 +195,8 @@ l'hexadecimal. On peut aussi utiliser le binaire et le decimal.
 En fait, on peut pr&eacute;ciser la base utilis&eacute;e en
 faisant suivre le nombre d'un b en binaire, d'un d en decimal et
 d'un h en hexadecimal (ainsi que d'un o en octal). 
-Certains assembleurs ont d'autres mani&egrave;res possibles (un nombre commençant par 0
-est en octal, un nombre commençant par 0x en hexadecimal ...), mais ces notations
+Certains assembleurs ont d'autres mani&egrave;res possibles (un nombre commenÃ§ant par 0
+est en octal, un nombre commenÃ§ant par 0x en hexadecimal ...), mais ces notations
 sont g&eacute;n&eacute;ralement admises par tous les assembleurs. Ainsi, 243
 s'&eacute;crit :</p>
 
@@ -331,7 +331,7 @@ s'&eacute;crit :</p>
 
 <p>Pourquoi 1024 au lieu de 1000? C'est simple, en informatique, tout tourne autour de la base 2. La valeure 1024 correspond &agrave; 2^10, c'est la puissance de 2 la plus proche de 1000.</p>
 
-<h4>La m&eacute;moire (ou plutôt les m&eacute;moires)</h4>
+<h4>La m&eacute;moire (ou plutÃ´t les m&eacute;moires)</h4>
 
 <p>La memoire sert &agrave; stocker des informations en vue d'un traitement ulterieur. Certaines memoires permettent de modifier ces informations, d'autres seulement de les consulter.  La <abbr title="Random Access Memory">RAM</abbr>, aussi appel&eacute;e m&eacute;moire vive, est une m&eacute;moire &agrave; laquelle on peut acc&eacute;der soit en lecture, soit en ecriture. C'est dans cette m&eacute;moire que seront charg&eacute;s les programmes et les donn&eacute;es. Elle pr&eacute;sente l'inconvenient de se vider de son contenu d&egrave;s qu'on ne l'alimente plus (interruption du courant).</p> 
 
@@ -343,7 +343,7 @@ s'&eacute;crit :</p>
 
 <h4>La pile</h4>
 
-<p>C'est un tableau de type <abbr title="Last In First Out">LIFO</abbr>. On peut le comparer &agrave; une pile d'assiettes o&ugrave; chaque assiette serait une donn&eacute;e. On peut empiler les assiettes, et les desempiler. On est donc obliger de poser et de prendre les assiettes sur le haut de la pile. Pour prendre une assiette au milieu de cette pile, il faut d'abord enlever toutes celles qui sont au dessus (En fait, moi je fais pas comme ça, mais bon ce n'est qu'une image). Le registre de segment SS (<em>voir plus loin</em>) pointe au d&eacute;but de la pile et le registre SP indique le premier emplacement libre de la pile.</p>
+<p>C'est un tableau de type <abbr title="Last In First Out">LIFO</abbr>. On peut le comparer &agrave; une pile d'assiettes o&ugrave; chaque assiette serait une donn&eacute;e. On peut empiler les assiettes, et les desempiler. On est donc obliger de poser et de prendre les assiettes sur le haut de la pile. Pour prendre une assiette au milieu de cette pile, il faut d'abord enlever toutes celles qui sont au dessus (En fait, moi je fais pas comme Ã§a, mais bon ce n'est qu'une image). Le registre de segment SS (<em>voir plus loin</em>) pointe au d&eacute;but de la pile et le registre SP indique le premier emplacement libre de la pile.</p>
 
 <p>Ainsi, quand on rajoute un element sur la pile, le registre SP est decr&eacute;ment&eacute; de 2 (pour un mot) ou 4 (double-mot) afin de pointer apres ce dernier element. De m&ecirc;me, quand on enleve un element de la pile, SP est incr&eacute;ment&eacute; de 2 ou 4. On ne peut pas placer des donn&eacute;es plus petites que des mots sur la pile. Le registre SP sera donc toujours pair.</p>
 

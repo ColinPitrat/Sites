@@ -4,7 +4,7 @@
 
   ?>
     <h1>Espace membres</h1>
-    <h3 class="centre">CrÈation d'une identitÈ</h3>
+    <h3 class="centre">Cr√©ation d'une identit√©</h3>
     <br />
   <?php
 
@@ -29,7 +29,7 @@
     $query = "SELECT * FROM users";
     $res = SqlQuery($query);
     
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     
     while($row != FALSE)
     {
@@ -37,7 +37,7 @@
       {
         $libre = 0;
       }
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
     }
 
     if(($libre == 1) && ($identiques == 1) && ($vide == 0))
@@ -46,7 +46,7 @@
       $pwd = md5($_POST["password"]);
       $query = "INSERT INTO users(nick,password) VALUES (\"$name\",\"$pwd\");";
       SqlQuery($query);
-      echo("Inscription rÈussie. Cliquez <a href=\"membres.php\">ici</a> pour retourner ‡ l'entrÈe de l'espace membre.");
+      echo("Inscription r√©ussie. Cliquez <a href=\"membres.php\">ici</a> pour retourner √† l'entr√©e de l'espace membre.");
       bottom();
       exit();
     }
@@ -79,7 +79,7 @@
           <td> <input type="password" name="password" /></td>
         </tr>
         <tr>
-          <td align="right"> VÈrification du mot de passe : </td>
+          <td align="right"> V√©rification du mot de passe : </td>
           <td> <input type="password" name="password2" /></td>
         </tr>
         <tr>

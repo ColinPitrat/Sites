@@ -1,23 +1,23 @@
-<h1>La bibliothèque GTK</h1>
+<h1>La bibliothÃ¨que GTK</h1>
 
-<p>GTK est une bibliothèque permettant de créer des interfaces graphiques en C. Nous allons voir pas à pas comment l'utiliser.</p> 
+<p>GTK est une bibliothÃ¨que permettant de crÃ©er des interfaces graphiques en C. Nous allons voir pas Ã  pas comment l'utiliser.</p> 
 
-<p>Il faut bien sûr, avant de commencer, vous assurer que les bibliothèque de GTK (si possible une version récente) est installée. Pour cela, utilisez la commande suivante : <span class="commande">pkg-config --modversion gtk+-2.0</span> qui devrait vous renvoyer un numéro de version. Si ce n'est pas le cas, installez GTK.</p>
+<p>Il faut bien sÃ»r, avant de commencer, vous assurer que les bibliothÃ¨que de GTK (si possible une version rÃ©cente) est installÃ©e. Pour cela, utilisez la commande suivante : <span class="commande">pkg-config --modversion gtk+-2.0</span> qui devrait vous renvoyer un numÃ©ro de version. Si ce n'est pas le cas, installez GTK.</p>
 
-<p>Avant de commencer, quelques rappels sur les commandes qui pourront être utiles :</p> 
+<p>Avant de commencer, quelques rappels sur les commandes qui pourront Ãªtre utiles :</p> 
 <ul>
-<li>Pour désarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
+<li>Pour dÃ©sarchiver les sources : <span class="commande">tar -xvzf Archive.tar.gz</span></li>
 <li>Pour compiler lorsqu'il y a un Makefile : <span class="commande">make</span></li>
 <li>Pour nettoyer les sources (supprimer les fichiers objets) : <span class="commande">make clean</span></li>
 </ul>
 
-<h2>1 - Une simple fenêtre</h2>
+<h2>1 - Une simple fenÃªtre</h2>
 
-<p>Ne perdons pas de temps, et attaquons tout de suite par la création d'une simple fenêtre. GTK utilise des structures pour décrire les élements composants l'interface. En général, les élements sont déclarés de type pointeur sur une structure GTKWidget. Lorsqu'il y'a besoin d'acceder à des fonctions propres à un objet, il faut alors utiliser une fonction assurant le transtypage.</p>
+<p>Ne perdons pas de temps, et attaquons tout de suite par la crÃ©ation d'une simple fenÃªtre. GTK utilise des structures pour dÃ©crire les Ã©lements composants l'interface. En gÃ©nÃ©ral, les Ã©lements sont dÃ©clarÃ©s de type pointeur sur une structure GTKWidget. Lorsqu'il y'a besoin d'acceder Ã  des fonctions propres Ã  un objet, il faut alors utiliser une fonction assurant le transtypage.</p>
 
-<p>Une deuxième notion importante est la notion de signal. Un signal est émis par un Widget lorsque l'utilisateur execute une certaine action sur ce Widget (clic de souris sur un bouton par exemple). Ce signal peut alors déclencher une fonction appelée fonction callback. On relie le signal à cette fonction fgraçe à la fonction g_signal_connect</p>
+<p>Une deuxiÃ¨me notion importante est la notion de signal. Un signal est Ã©mis par un Widget lorsque l'utilisateur execute une certaine action sur ce Widget (clic de souris sur un bouton par exemple). Ce signal peut alors dÃ©clencher une fonction appelÃ©e fonction callback. On relie le signal Ã  cette fonction fgraÃ§e Ã  la fonction g_signal_connect</p>
 
-<p>Voici donc le code commenté permettant de créer une fenêtre. Je vous conseil de télécharger <a href="src/GTK-Ex1.tar.gz">l'archive de cet exemple</a> (contient un makefile).</p>
+<p>Voici donc le code commentÃ© permettant de crÃ©er une fenÃªtre. Je vous conseil de tÃ©lÃ©charger <a href="src/GTK-Ex1.tar.gz">l'archive de cet exemple</a> (contient un makefile).</p>
 
 <p class="code">
 #include &lt;gtk/gtk.h&gt;<br />
@@ -26,12 +26,12 @@ int main (int argc, char *argv[])<br />
 {<br />
 &nbsp;&nbsp;  <span class="comment">// Initialisation de GTK<br /></span>
 &nbsp;&nbsp;  gtk_init (&amp;argc, &amp;argv);<br /><br />
-&nbsp;&nbsp;  <span class="comment">// Création de la fenêtre principale<br /></span>
+&nbsp;&nbsp;  <span class="comment">// CrÃ©ation de la fenÃªtre principale<br /></span>
 &nbsp;&nbsp;  GtkWidget *mainwin;<br />
 &nbsp;&nbsp;  mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);<br /><br />
-&nbsp;&nbsp;  <span class="comment">// Liaison du bouton de fermeture de la fenêtre avec la fin de l'application<br /></span>
+&nbsp;&nbsp;  <span class="comment">// Liaison du bouton de fermeture de la fenÃªtre avec la fin de l'application<br /></span>
 &nbsp;&nbsp;  g_signal_connect (GTK_OBJECT(mainwin), "destroy", G_CALLBACK (gtk_main_quit), NULL);<br /><br />
-&nbsp;&nbsp;  <span class="comment">// Affichage de la fenêtre principale<br /></span>
+&nbsp;&nbsp;  <span class="comment">// Affichage de la fenÃªtre principale<br /></span>
 &nbsp;&nbsp;  gtk_widget_show_all (mainwin);<br /><br />
 &nbsp;&nbsp;  <span class="comment">// Boucle principale<br /></span>
 &nbsp;&nbsp;  gtk_main ();<br /><br />

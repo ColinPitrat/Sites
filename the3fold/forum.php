@@ -15,10 +15,10 @@
   switch($action)
   {
   case 1:
-    // Créer salon
+    // CrÃ©er salon
     if($level < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
 
@@ -48,13 +48,13 @@
       }
       if(file_exists("./images/".$newname))
       {
-        echo("Le nom de fichier spécifié est déja utilisé.");
+        echo("Le nom de fichier spÃ©cifiÃ© est dÃ©ja utilisÃ©.");
         exit;
       }
       $img="./images/".$newname;
       if(!move_uploaded_file($userfile, $img))
       {
-        echo("Probleme rencontré lors du telechargement. Veuillez réessayer.");
+        echo("Probleme rencontrÃ© lors du telechargement. Veuillez rÃ©essayer.");
         exit;
       }
       chmod($img, 0644);
@@ -70,7 +70,7 @@
     {
       $query="INSERT INTO forumsalons (nom,img,date,lvl) VALUES ('".$titre."','".$img."','".$date."','".$lvl."')";
       SqlQuery($query);
-      mail("colin.pitrat@gmail.com", "Salon '$titre' créé sur the3fold", "Le salon '$titre' a été créé sur the3fold. Il est visible depuis http://the3fold.free.fr/forum.php.");
+      mail("colin.pitrat@gmail.com", "Salon '$titre' crÃ©Ã© sur the3fold", "Le salon '$titre' a Ã©tÃ© crÃ©Ã© sur the3fold. Il est visible depuis http://the3fold.free.fr/forum.php.");
     }
     else      
     {
@@ -80,17 +80,17 @@
     }
     break;
   case 2:
-    // Créer thread
+    // CrÃ©er thread
     $msg=parseMsgToSave($_POST["msg"]);
     $titre=htmlentities($_POST["titre"]);
     $salon=$_POST["salon"];
     $query="INSERT INTO forumthreads (nom,auteur,date,salon) VALUES ('".$titre."','".$_SESSION["login"]."','".$date."','".$salon."')";
     SqlQuery($query);
-    mail("colin.pitrat@gmail.com", "Thread '$titre' créé sur the3fold", "Le thread '$titre' a été créé sur the3fold. Il est visible depuis http://the3fold.free.fr/forum.php?salon=$salon. Contenu: $msg");
+    mail("colin.pitrat@gmail.com", "Thread '$titre' crÃ©Ã© sur the3fold", "Le thread '$titre' a Ã©tÃ© crÃ©Ã© sur the3fold. Il est visible depuis http://the3fold.free.fr/forum.php?salon=$salon. Contenu: $msg");
 
     $query="SELECT id FROM forumthreads WHERE nom='".$titre."'";
     $res=SqlQuery($query);
-    $row=mysql_fetch_object($res);
+    $row=mysqli_fetch_object($res);
     $thread=$row->id;
 
     $query="INSERT INTO forummessages (auteur,message,thread) VALUES ('".$_SESSION["login"]."','".$msg."','".$thread."')";
@@ -100,13 +100,13 @@
     SqlQuery($query);
     break;
   case 3:
-    // Créer message
+    // CrÃ©er message
     $msg=parseMsgToSave($_POST["msg"]);      
     $thread=$_POST["thread"];
     $salon=$_POST["salon"];
     $query="INSERT INTO forummessages (auteur,message,thread) VALUES ('".$_SESSION["login"]."','".$msg."','".$thread."')";
     SqlQuery($query);
-    mail("colin.pitrat@gmail.com", "Message posté sur the3fold", "Un message a été posté sur the3fold. Il est visible depuis http://the3fold.free.fr/forum.php?salon=$thread. Contenu: $msg");
+    mail("colin.pitrat@gmail.com", "Message postÃ© sur the3fold", "Un message a Ã©tÃ© postÃ© sur the3fold. Il est visible depuis http://the3fold.free.fr/forum.php?salon=$thread. Contenu: $msg");
     $query="UPDATE forumthreads SET date='".$date."' WHERE id=".$thread;
     SqlQuery($query);
     $query="UPDATE forumsalons SET date='".$date."' WHERE id=".$salon;
@@ -116,7 +116,7 @@
     // Modifier un salon
     if($level < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
 
@@ -147,13 +147,13 @@
       }
       if(file_exists("./images/".$newname))
       {
-        echo("Le nom de fichier spécifié est déja utilisé.");
+        echo("Le nom de fichier spÃ©cifiÃ© est dÃ©ja utilisÃ©.");
         exit;
       }
       $img="./images/".$newname;
       if(!move_uploaded_file($userfile, $img))
       {
-        echo("Probleme rencontré lors du telechargement. Veuillez réessayer.");
+        echo("Probleme rencontrÃ© lors du telechargement. Veuillez rÃ©essayer.");
         exit;
       }
       chmod($img, 0644);
@@ -184,25 +184,25 @@
     $msg = parseMsgToSave($_POST["msg"]);
     $query = "SELECT auteur,thread FROM forummessages WHERE id=\"$idmsg\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $thread = $row->thread;
     if($_SESSION["login"] != $row->auteur)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     $query = "UPDATE forummessages SET message='".$msg."' WHERE id=$idmsg";
     SqlQuery($query);
     $query = "SELECT salon FROM forumthreads WHERE id=\"$thread\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;
     break;
   case 6:
     // Supprimer un salon
     if($level < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     $query = "DELETE FROM forumsalons WHERE id=\"".$_POST["salon"]."\"";
@@ -213,13 +213,13 @@
     // Supprimer une discussion
     if($level < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     SqlConnect();
     $query = "SELECT salon FROM forumthreads WHERE id=\"".$_POST["thread"]."\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;
     $query = "DELETE FROM forumthreads WHERE id=\"".$_POST["thread"]."\"";
     SqlQuery($query);
@@ -229,25 +229,25 @@
     // Supprimer un message
     $query = "SELECT auteur,thread FROM forummessages WHERE id=\"".$_POST["idmsg"]."\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $thread = $row->thread;
     if(($level < $const_levelforumadmin) && ($_SESSION["login"] != $row->auteur))
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     $query = "DELETE FROM forummessages WHERE id=\"".$_POST["idmsg"]."\"";
     SqlQuery($query);
     $query = "SELECT salon FROM forumthreads WHERE id=\"$thread\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;
     break;
   case 9:
     // Epingler une discussion
     if($level < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     SqlConnect();
@@ -255,7 +255,7 @@
     SqlQuery($query);
     $query = "SELECT salon FROM forumthreads WHERE id=\"".$_POST["thread"]."\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;
     unset($thread);
     break;
@@ -263,7 +263,7 @@
     // Desepingler une discussion
     if($level < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     SqlConnect();
@@ -271,7 +271,7 @@
     SqlQuery($query);
     $query = "SELECT salon FROM forumthreads WHERE id=\"".$_POST["thread"]."\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;
     unset($thread);
     break;
@@ -282,23 +282,23 @@
     if($thread)
     {
       // Afficher messages
-      echo("<p class=\"quickmenu\"><a href=\"post.php?action=3&salon=$salon&thread=$thread\">Nouveau message</a> | <a href=\"profil.php\">Modifier son profil</a> | <a href=\"forum.php?salon=$salon\">Retour aux discussions</a> | <a href=\"forum.php\">Retour aux salons</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se déconnecter</a></p>\n");
+      echo("<p class=\"quickmenu\"><a href=\"post.php?action=3&salon=$salon&thread=$thread\">Nouveau message</a> | <a href=\"profil.php\">Modifier son profil</a> | <a href=\"forum.php?salon=$salon\">Retour aux discussions</a> | <a href=\"forum.php\">Retour aux salons</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se dÃ©connecter</a></p>\n");
       
       $query = "SELECT lvl FROM forumsalons WHERE id='".$salon."'";
       $res = SqlQuery($query);
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
 
       if($row->lvl <= $level)
       {
         $query = "SELECT * FROM forummessages WHERE thread='".$thread."' ORDER BY id";
         $res = SqlQuery($query);
-        $row = mysql_fetch_object($res);
+        $row = mysqli_fetch_object($res);
       
         while($row)
         {
           $query = "SELECT * FROM users WHERE nick='".$row->auteur."'";
           $res2 = SqlQuery($query);
-          $row2 = mysql_fetch_object($res2);
+          $row2 = mysqli_fetch_object($res2);
           echo("<br/><table class=\"forumliste\"><tr><td class=\"auteur\">");
           if($row2->skin)
           {
@@ -314,20 +314,20 @@
             echo("<br /><br />[ <a href=\"post.php?action=8&idmsg=".$row->id."\">Supprimer</a> ]");
           }
           echo("</td></tr></table>");
-          $row = mysql_fetch_object($res);
+          $row = mysqli_fetch_object($res);
         }
       }
       
-      echo("<br/><p class=\"quickmenu\"><a href=\"post.php?action=3&salon=$salon&thread=$thread\">Nouveau message</a> | <a href=\"profil.php\">Modifier son profil</a> | <a href=\"forum.php?salon=$salon\">Retour aux discussions</a> | <a href=\"forum.php\">Retour aux salons</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se déconnecter</a></p>\n");
+      echo("<br/><p class=\"quickmenu\"><a href=\"post.php?action=3&salon=$salon&thread=$thread\">Nouveau message</a> | <a href=\"profil.php\">Modifier son profil</a> | <a href=\"forum.php?salon=$salon\">Retour aux discussions</a> | <a href=\"forum.php\">Retour aux salons</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se dÃ©connecter</a></p>\n");
     }
     else
     {
       // Afficher threads
-      echo("<p class=\"quickmenu\"><a href=\"post.php?action=2&salon=$salon\">Nouvelle discussion</a> | <a href=\"profil.php\">Modifier son profil</a> | <a href=\"forum.php\">Retour aux salons</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se déconnecter</a></p>\n");
+      echo("<p class=\"quickmenu\"><a href=\"post.php?action=2&salon=$salon\">Nouvelle discussion</a> | <a href=\"profil.php\">Modifier son profil</a> | <a href=\"forum.php\">Retour aux salons</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se dÃ©connecter</a></p>\n");
       
       $query = "SELECT lvl FROM forumsalons WHERE id='".$salon."'";
       $res = SqlQuery($query);
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
 
       echo("<br/><table class=\"forumliste\"><tr><th width=\"85%\" align=\"center\"");
       if($level >= $const_levelforumadmin)
@@ -340,7 +340,7 @@
       {
         $query = "SELECT * FROM forumthreads WHERE salon='".$salon."' ORDER BY id";
         $res = SqlQuery($query);
-        $row = mysql_fetch_object($res);
+        $row = mysqli_fetch_object($res);
       
         while($row)
         {
@@ -357,7 +357,7 @@
             }
           }
           echo("<td class=\"date\">".$row->date."</td></tr>");
-          $row = mysql_fetch_object($res);
+          $row = mysqli_fetch_object($res);
         }
       }
       
@@ -372,11 +372,11 @@
     {
       echo("<a href=\"post.php?action=1\">Nouveau Salon</a> | ");
     }
-    echo("<a href=\"profil.php\">Modifier son profil</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se déconnecter</a></p>\n");
+    echo("<a href=\"profil.php\">Modifier son profil</a> | <a href=\"forumhelp.php\">Aide</a> | <a href=\"logout.php\">Se dÃ©connecter</a></p>\n");
     
     $query = "SELECT * FROM forumsalons WHERE lvl<='".$level."' ORDER BY lvl ASC";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
 
     echo("<br/><table class=\"forumliste\" cellpadding=\"2\"><tr><th width=\"85%\" align=\"center\"");
     if($level >= $const_levelforumadmin)
@@ -394,7 +394,7 @@
         echo("<td class=\"action\"> [ <a href=\"post.php?action=4&salon=".$row->id."\">Modifier</a> ] [ <a href=\"post.php?action=6&salon=".$row->id."\">Supprimer</a> ]</td>");
       }
       echo("<td class=\"date\">".$row->date."</td></tr>");
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
     }
     
     echo("</table>");

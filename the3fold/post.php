@@ -11,11 +11,11 @@
   case 1:
     if(!isset($_SESSION["level"]) || $_SESSION["level"] < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     ?>
-    <h3 class="centre">Créer un nouveau salon</h3>
+    <h3 class="centre">CrÃ©er un nouveau salon</h3>
     <center>
     <form action="forum.php" method="post" enctype="multipart/form-data">
     <?php
@@ -55,14 +55,14 @@
     Image :
     <input type="file" name="userfile" size="40" maxlength="400">
     <br /><br />
-    <input type="submit" value="Créer">
+    <input type="submit" value="CrÃ©er">
     </form>
     <br /><br /><a href="forum.php">Retour au forum</a></center>
     <?php
     break;
   case 2:
     ?>
-    <center><h3>Créer une nouvelle discussion</h3>
+    <center><h3>CrÃ©er une nouvelle discussion</h3>
     <form action="forum.php" method="post">
     <?php
     echo('<input type="hidden" name="salon" value="'.$salon.'">');
@@ -98,13 +98,13 @@
   case 4:
     if(!isset($_SESSION["level"]) || $_SESSION["level"] < $const_levelforumadmin)
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     SqlConnect();
     $query = "SELECT * FROM forumsalons WHERE id=$salon";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $lvl = $row->lvl;
     $img = $row->img;
     $titre = $row->nom;
@@ -160,10 +160,10 @@
     SqlConnect();
     $query = "SELECT auteur,message,thread FROM forummessages WHERE id=$idmsg";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     if($row->auteur != $_SESSION["login"])
     {
-      echo("<b>Vous n'avez pas le statut nécessaire pour afficher cette page</b>");
+      echo("<b>Vous n'avez pas le statut nÃ©cessaire pour afficher cette page</b>");
       break;
     }
     $thread = $row->thread;
@@ -181,7 +181,7 @@
     <?php
     $query = "SELECT salon FROM forumthreads WHERE id=$thread";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;
     
     echo("<br /><br /><a href=\"forum.php?salon=$salon&thread=$thread\">Retour au forum</a></center>");    
@@ -218,7 +218,7 @@
     SqlConnect();
     $query = "SELECT salon FROM forumthreads WHERE id=\"$thread\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;                            
     echo("<a href=\"forum.php?salon=$salon\">Retour au forum</a></center>");
     break;
@@ -238,17 +238,17 @@
     SqlConnect();
     $query = "SELECT thread FROM forummessages WHERE id=\"$idmsg\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $thread = $row->thread;
     $query = "SELECT salon FROM forumthreads WHERE id=\"$thread\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;                            
     echo("<a href=\"forum.php?salon=$salon&thread=$thread\">Retour au forum</a></center>");
     break;
   case 9:
     ?>
-    <center><h3>Etes vous sur de vouloir épingler cette discussion ?</h3>
+    <center><h3>Etes vous sur de vouloir Ã©pingler cette discussion ?</h3>
     <br /><br />
     <form action="forum.php" method="post">
     <input type="hidden" value="9" name="action"/>
@@ -262,27 +262,27 @@
     SqlConnect();
     $query = "SELECT salon FROM forumthreads WHERE id=\"$thread\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;                            
     echo("<a href=\"forum.php?salon=$salon\">Retour au forum</a></center>");
     break;
   case 10:
     ?>
-    <center><h3>Etes vous sur de vouloir desépingler cette discussion ?</h3>
+    <center><h3>Etes vous sur de vouloir desÃ©pingler cette discussion ?</h3>
     <br /><br />
     <form action="forum.php" method="post">
     <input type="hidden" value="10" name="action"/>
     <?php
     echo('<input type="hidden" value="'.$thread.'" name="thread">');
     ?>
-    <input type="submit" value="Desépingler">
+    <input type="submit" value="DesÃ©pingler">
     </form>
     <br /><br />
     <?php
     SqlConnect();
     $query = "SELECT salon FROM forumthreads WHERE id=\"$thread\"";
     $res = SqlQuery($query);
-    $row = mysql_fetch_object($res);
+    $row = mysqli_fetch_object($res);
     $salon = $row->salon;                            
     echo("<a href=\"forum.php?salon=$salon\">Retour au forum</a></center>");
     break;

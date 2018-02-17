@@ -61,9 +61,9 @@
       <?php
       break;
     case 4:
-      // Créer news
+      // CrÃ©er news
       ?>
-      <center><h3>Créer une nouvelle news</h3>
+      <center><h3>CrÃ©er une nouvelle news</h3>
       <br/><br/>
       <form action="admin.php?page=2" method="post">
       <input type="hidden" value="4" name="action"/>
@@ -80,7 +80,7 @@
           <td width="50%"><textarea name="texte" cols="30" rows="5"></textarea></td>
         </tr>
         <tr>
-          <td style="text-align: right" width="50%">Date de début (YYYY-MM-JJ) : </td>
+          <td style="text-align: right" width="50%">Date de dÃ©but (YYYY-MM-JJ) : </td>
           <td width="50%"><input type="text" name="datedebut" maxlength="10"/></td>
         </tr>
         <tr>
@@ -88,7 +88,7 @@
           <td width="50%"><input type="text" name="datefin" maxlength="10"/></td>
         </tr>
       </table>
-      <input type="submit" value="Créer"/>
+      <input type="submit" value="CrÃ©er"/>
       </form>
       <br/><br/>
       <a href="admin.php?page=2">Retour</a>
@@ -117,7 +117,7 @@
       SqlConnect();
       $query = "SELECT * FROM news WHERE id=$id";
       $res = SqlQuery($query);
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
       ?>
       <center><h3>Modifier une news</h3>
       <br/><br/>
@@ -142,7 +142,7 @@
           <td width="50%"><textarea name="texte" cols="30" rows="5"><?php echo($row->texte)?></textarea></td>
         </tr>
         <tr>
-          <td style="text-align: right" width="50%">Date de début (YYYY-MM-JJ) : </td>
+          <td style="text-align: right" width="50%">Date de dÃ©but (YYYY-MM-JJ) : </td>
           <td width="50%"><input type="text" value="<?php echo($row->datedebut);?>" name="datedebut" maxlength="10"/></td>
         </tr>
         <tr>

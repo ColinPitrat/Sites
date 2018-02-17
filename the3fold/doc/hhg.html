@@ -59,25 +59,25 @@ Copyright (C) 2001, 2002 Wolfgang J&auml;hrling <A HREF="mailto:wolfgang@pro-lin
 </P><P>
 
 Vous avez le droit de copier, distribuer et/ou modifier ce document selon les termes
-de la GNU Free Documentation License, Version 1.1 ou supérieure, publiée par la Free
-Software Foundation. Pour plus de détails, consultez
+de la GNU Free Documentation License, Version 1.1 ou supÃ©rieure, publiÃ©e par la Free
+Software Foundation. Pour plus de dÃ©tails, consultez
 <A HREF="http://www.gnu.org/copyleft/fdl.html">http://www.gnu.org/copyleft/fdl.html</A>.
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC1">1. A propos de ce document</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Information importante (?)</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC5">2. Prérequis</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Ce que vous devriez savoir</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC6">3. Courte introduction au Hurd et à Mach</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les raisons pour lesquelles le Hurd rox</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC5">2. PrÃ©requis</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Ce que vous devriez savoir</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC6">3. Courte introduction au Hurd et Ã  Mach</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les raisons pour lesquelles le Hurd rox</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC7">4. Les bases de Mach et MiG</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Hurd utilise le micro-noyau Mach</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC11">5. Les interfaces du Hurd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les fichiers *.defs</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC12">6. A quoi ça ressemble vraiment ?</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Exemples de codes source</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC16">7. Les librairies du Hurd (Aperçu)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les librairies facilitent la vie</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC12">6. A quoi Ã§a ressemble vraiment ?</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Exemples de codes source</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC16">7. Les librairies du Hurd (AperÃ§u)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les librairies facilitent la vie</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC17">8. Un exemple utilisant trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Notre premier translator</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC23">9. Debugger un translator</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Comment debugger un translator</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC24">10. Un exemple comprehensible de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire.</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC25">11. Un exemple utilisant netfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire.</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC26">12. Un exemple utilisant diskfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">A faire.</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC27">13. Foire Aux Questions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les questions souvent posées par les nouveaux hackers.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC27">13. Foire Aux Questions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les questions souvent posÃ©es par les nouveaux hackers.</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC28">14. Annexes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Annexes originales : non traduites</TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
@@ -101,9 +101,9 @@ Software Foundation. Pour plus de détails, consultez
 <P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC2">1.1 Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les conventions utilisées dans ce document.</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC2">1.1 Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Les conventions utilisÃ©es dans ce document.</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC3">1.2 Sujet</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Sujet de ce document</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC4">1.3 Contributions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">N'hésitez pas à contribuer</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC4">1.3 Contributions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">N'hÃ©sitez pas Ã  contribuer</TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -123,17 +123,17 @@ Software Foundation. Pour plus de détails, consultez
 </TR></TABLE>
 <H2> 1.1 Conventions </H2>
 <!--docid::SEC2::-->
-Le numéro de version de ce document suit la convention 
+Le numÃ©ro de version de ce document suit la convention 
 &#60;hurd version&#62;_&#60;document release&#62;.
-Cela signifie que la version 0.2_7 est la septième version depuis le Hurd 0.2 et que
-la version 0.4_1 serait la première version pour Hurd 0.4 (qui n'est bien sûr pas encore
+Cela signifie que la version 0.2_7 est la septiÃ¨me version depuis le Hurd 0.2 et que
+la version 0.4_1 serait la premiÃ¨re version pour Hurd 0.4 (qui n'est bien sÃ»r pas encore
 disponible :)).
 <P>
 
-<CODE>$(HURD)</CODE>     désigne le repertoire des sources du `Hurd'.
-<CODE>$(GNUMACH)</CODE>  désigne le repertoire des sources de `GNU Mach'.
-<CODE>$(MIG)</CODE>      désigne le repertoire des sources de `MiG'.
-<CODE>$(GLIBC)</CODE>    désigne le repertoire des sources de la `GNU Libc'.
+<CODE>$(HURD)</CODE>     dÃ©signe le repertoire des sources du `Hurd'.
+<CODE>$(GNUMACH)</CODE>  dÃ©signe le repertoire des sources de `GNU Mach'.
+<CODE>$(MIG)</CODE>      dÃ©signe le repertoire des sources de `MiG'.
+<CODE>$(GLIBC)</CODE>    dÃ©signe le repertoire des sources de la `GNU Libc'.
 </P><P>
 
 Une commande du shell commence par <CODE>$</CODE> pour une commande d'un utilisateur normal et par
@@ -144,9 +144,9 @@ Une commande du shell commence par <CODE>$</CODE> pour une commande d'un utilisa
 # reboot
 </pre></td></tr></table></P><P>
 
-Les prompts des autres programmes sont représentés de la manière dont
+Les prompts des autres programmes sont reprÃ©sentÃ©s de la maniÃ¨re dont
 ils apparaissent dans l'application. Par exemple, le prompt de GDB est
-représenté par <CODE>(gdb)</CODE>:
+reprÃ©sentÃ© par <CODE>(gdb)</CODE>:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>(gdb) break trivfs_S_io_write
@@ -174,38 +174,38 @@ J'essaierai de suivre les GNU Coding Standards dans mes exemples en C :
 <!--docid::SEC3::-->
 <P>
 
-Ce document est une introduction à la programmation pour Hurd et GNU/Mach.
-Le but de ce guide est d'aider les personnes interessées pour débuter à hacker le Hurd 
+Ce document est une introduction Ã  la programmation pour Hurd et GNU/Mach.
+Le but de ce guide est d'aider les personnes interessÃ©es pour dÃ©buter Ã  hacker le Hurd 
 ou pour l'etendre (en ecrivant des translators). Il utilise beaucoup de references aux
-sources de Hurd et de GNU/Mach. Il est donc reccomandé de les parcourir avant de le lire.
-En fait, les sources du Hurd sont bien écrites et suffisement commentées pour pouvoir être lues
-sans trop de difficultées.
+sources de Hurd et de GNU/Mach. Il est donc reccomandÃ© de les parcourir avant de le lire.
+En fait, les sources du Hurd sont bien Ã©crites et suffisement commentÃ©es pour pouvoir Ãªtre lues
+sans trop de difficultÃ©es.
 </P><P>
 
-Le Hurd semble très compliqué et difficile à maitriser au premier coup d'oeil.
-Mais il ne l'est pas car vous n'avez pas besoin de tout comprendre pour débuter, vous
-pouvez le faire petit à petit at utiliser à chaque étape ce que vous savez.
-Il y a aussi des librairies qui rendent la création de certain translators classique
-assez facile. Je pense que le seul problème est l'abscence d'une bonne documentation comme
-"Linux Module Programming Guide" ou autre, qui rend possible l'apprentissage étape par étape.
+Le Hurd semble trÃ¨s compliquÃ© et difficile Ã  maitriser au premier coup d'oeil.
+Mais il ne l'est pas car vous n'avez pas besoin de tout comprendre pour dÃ©buter, vous
+pouvez le faire petit Ã  petit at utiliser Ã  chaque Ã©tape ce que vous savez.
+Il y a aussi des librairies qui rendent la crÃ©ation de certain translators classique
+assez facile. Je pense que le seul problÃ¨me est l'abscence d'une bonne documentation comme
+"Linux Module Programming Guide" ou autre, qui rend possible l'apprentissage Ã©tape par Ã©tape.
 Ce document tente de combler ce manque.
 </P><P>
 
-Mach et MiG ne sont pas décrits en détail ici, donc si vous désirez des informations spécifiques
+Mach et MiG ne sont pas dÃ©crits en dÃ©tail ici, donc si vous dÃ©sirez des informations spÃ©cifiques
 les concernant, je vous reccomande la lecture du GNU Mach Reference Manual
 <A NAME="DOCF1" HREF="hhg.html#FOOT1">(1)</A>
 et la documentation sur MiG disponible sur internet.
 </P><P>
 
-Le Hurd Hacking Guide n'est pas supposé être une réference complete mais
-aider à débuter. La seule veritable reference pour l'instant est ce que l'on peut
-trouver d'écrit dans les sources du Hurd.
+Le Hurd Hacking Guide n'est pas supposÃ© Ãªtre une rÃ©ference complete mais
+aider Ã  dÃ©buter. La seule veritable reference pour l'instant est ce que l'on peut
+trouver d'Ã©crit dans les sources du Hurd.
 </P><P>
 
-L'ordre des chapitres de ce document était à l'origine basé sur un mail de
+L'ordre des chapitres de ce document Ã©tait Ã  l'origine basÃ© sur un mail de
 Farid Hajji
 <A NAME="DOCF2" HREF="hhg.html#FOOT2">(2)</A>,
-qui semble basé sur <CODE>$(HURD)/doc/navigating</CODE>.
+qui semble basÃ© sur <CODE>$(HURD)/doc/navigating</CODE>.
 </P><P>
 
 <A NAME="Contributions"></A>
@@ -226,17 +226,17 @@ qui semble basé sur <CODE>$(HURD)/doc/navigating</CODE>.
 <!--docid::SEC4::-->
 <P>
 
-N'hésitez pas à m'envoyer vos améliorations, corrections et extensions.
-(NdT : Vous êtes bien sûr invités à corriger mes erreurs de traduction, et il y en a surement).
-Merci à Alfred M. Szmidt pour ses corrections.
+N'hÃ©sitez pas Ã  m'envoyer vos amÃ©liorations, corrections et extensions.
+(NdT : Vous Ãªtes bien sÃ»r invitÃ©s Ã  corriger mes erreurs de traduction, et il y en a surement).
+Merci Ã  Alfred M. Szmidt pour ses corrections.
 </P><P>
 
-Je serais heureux d'avoir des retour quand à la compréhensibilité de ce document (NdT : Moi aussi !!)
+Je serais heureux d'avoir des retour quand Ã  la comprÃ©hensibilitÃ© de ce document (NdT : Moi aussi !!)
 Avez vous tout compris ? Quels points vous semblent confus ?
 </P><P>
 
-En fait, j'ai écrit ce document pour expliquer tout ce que je sais à propos du Hurd
-afin que plus tard, je puisse rapidement me rappeler ce qu j'aurai oublié.
+En fait, j'ai Ã©crit ce document pour expliquer tout ce que je sais Ã  propos du Hurd
+afin que plus tard, je puisse rapidement me rappeler ce qu j'aurai oubliÃ©.
 Cela signifie que si vous m'envoyez des extensions, j'en profiterai aussi ;)
 </P><P>
 
@@ -247,7 +247,7 @@ Cela signifie que si vous m'envoyez des extensions, j'en profiterai aussi ;)
    |     +------+    v
 </pre></td></tr></table></P><P>
 
-<A NAME="Prérequis"></A>
+<A NAME="PrÃ©requis"></A>
 <HR SIZE="6">
 <A NAME="SEC5"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
@@ -261,7 +261,7 @@ Cela signifie que si vous m'envoyez des extensions, j'en profiterai aussi ;)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 2. Prérequis </H1>
+<H1> 2. PrÃ©requis </H1>
 <!--docid::SEC5::-->
 <P>
 
@@ -272,7 +272,7 @@ Vous devriez avoir quelques bases concernant le Hurd
 <P>
 
 <LI>
-Des connaissances plus précises sont bien sûr les bienvenues.
+Des connaissances plus prÃ©cises sont bien sÃ»r les bienvenues.
 <A NAME="DOCF4" HREF="hhg.html#FOOT4">(4)</A>.
 <P>
 
@@ -302,14 +302,14 @@ done
 </pre></td></tr></table></P><P>
 
 <LI>
-Avoir GNU/Hurd installé sur votre ordinateur pourrait aider aussi
+Avoir GNU/Hurd installÃ© sur votre ordinateur pourrait aider aussi
 <A NAME="DOCF6" HREF="hhg.html#FOOT6">(6)</A>.
 <P>
 
 <LI>
-Se plonger dans les fichiers d'en-tête des librairies du Hurd est dangereux
+Se plonger dans les fichiers d'en-tÃªte des librairies du Hurd est dangereux
 parceque vous pouvez vous noyer facilemment car vous ne trouverez pas la logique de
-toutes ces structures. Peut-être qu'une liste de où trouver quoi aidera :
+toutes ces structures. Peut-Ãªtre qu'une liste de oÃ¹ trouver quoi aidera :
 <P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>$ cd $(HURD) &#38;&#38; egrep '^struct [^;*]+$' */*.h
@@ -317,7 +317,7 @@ toutes ces structures. Peut-être qu'une liste de où trouver quoi aidera :
 
 <LI>
 Si vous connaissez les principes de Mach, ce qu'est MiG, etc..., alors cela vous
-aidera certainement beaucoup, mais ça ne devrait pas être indispensable. Connaitre un peu
+aidera certainement beaucoup, mais Ã§a ne devrait pas Ãªtre indispensable. Connaitre un peu
 le noyau de Linux peut aussi aider dans une certaine mesure.
 <P>
 
@@ -326,7 +326,7 @@ Oh, vous devez aussi connaitre un peu le langage de programmation C ;)
 </OL>
 <P>
 
-<A NAME="Courte introduction au Hurd et à Mach"></A>
+<A NAME="Courte introduction au Hurd et Ã  Mach"></A>
 <HR SIZE="6">
 <A NAME="SEC6"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
@@ -340,46 +340,46 @@ Oh, vous devez aussi connaitre un peu le langage de programmation C ;)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. Courte introduction au Hurd et à Mach </H1>
+<H1> 3. Courte introduction au Hurd et Ã  Mach </H1>
 <!--docid::SEC6::-->
 <P>
 
 <BLOCKQUOTE>
 "We're way ahead of you here. The Hurd has always been on the cutting
 edge of not being good for anything."("Nous avons un train d'avance sur vous.
-Le Hurd a toujours été à la limite de n'être bon à rien.") (Roland McGrath)
+Le Hurd a toujours Ã©tÃ© Ã  la limite de n'Ãªtre bon Ã  rien.") (Roland McGrath)
 </BLOCKQUOTE>
 <P>
 
 <BLOCKQUOTE>
 "In short: just say NO TO DRUGS, and maybe you won't end up like the
-Hurd people."("Pour faire simple: dites juste non à la drogue, et peut-être
+Hurd people."("Pour faire simple: dites juste non Ã  la drogue, et peut-Ãªtre
 que vous ne finirez pas comme les fans du Hurd.") (Linus Torvalds)
 </BLOCKQUOTE>
 <P>
 
-Tout logiciel digne de ce nom nécessite un moyen de communication entre 
+Tout logiciel digne de ce nom nÃ©cessite un moyen de communication entre 
 ses composants. Actuellement, des moyens comme CORBA ou les composants XPCOM de
-Mozilla sont utilisés à cette fin. L'avantage du Hurd sur les autres systèmes est qu'il
-fournit un tel moyen et ne nécessite pas de modifier les applications existantes pour
+Mozilla sont utilisÃ©s Ã  cette fin. L'avantage du Hurd sur les autres systÃ¨mes est qu'il
+fournit un tel moyen et ne nÃ©cessite pas de modifier les applications existantes pour
 en tirer partie. Comment fait-il ?
 </P><P>
 
-Comme vous le savez peut-être déjà, le Hurd est une collection de serveurs
+Comme vous le savez peut-Ãªtre dÃ©jÃ , le Hurd est une collection de serveurs
 tournant avec Mach. Dans un environement Mach, les communications entre programmes
-sont principalement faites par l'envoi de messages à travers ce que l'on appelle des 
+sont principalement faites par l'envoi de messages Ã  travers ce que l'on appelle des 
 "ports", et qui sont en fait une sorte du file de message. Pour chaque port, il y a
-une tache ayant la receive-permission (cette tache reçois les message envoyés sur ce port).
-D'autres taches peuvent avoir la send-permission (possibilité d'envoyer des messages sur ce port)
-ou la send-once-permission (qui est utilisé pour avoir la réponse d'un serveur car les ports
-sont unidirectionnels) pour ce port, ou même aucune permission.
+une tache ayant la receive-permission (cette tache reÃ§ois les message envoyÃ©s sur ce port).
+D'autres taches peuvent avoir la send-permission (possibilitÃ© d'envoyer des messages sur ce port)
+ou la send-once-permission (qui est utilisÃ© pour avoir la rÃ©ponse d'un serveur car les ports
+sont unidirectionnels) pour ce port, ou mÃªme aucune permission.
 </P><P>
 
 Si vous lisez <CODE>$(GNUMACH)/include/mach/port.h</CODE>, vous pourrez noter qu'il y a
 d'autres droits sur les ports: une authorisation send ou send-onceend-once devient
-une "dead name" si la tache ayant le droit de reception est détruite. Ce droit ne peut
-donc être utilisé pour rien d'autre. C'est seulement un remplaçant.
-Un autre droit est le "port set", que Marcus Brinkmann définit comme suit <A NAME="DOCF7" HREF="hhg.html#FOOT7">(7)</A>:
+une "dead name" si la tache ayant le droit de reception est dÃ©truite. Ce droit ne peut
+donc Ãªtre utilisÃ© pour rien d'autre. C'est seulement un remplaÃ§ant.
+Un autre droit est le "port set", que Marcus Brinkmann dÃ©finit comme suit <A NAME="DOCF7" HREF="hhg.html#FOOT7">(7)</A>:
 </P><P>
 
 <BLOCKQUOTE>
@@ -389,58 +389,58 @@ les quels vous avez la receive-permission. Dans le Hurd, on utilise aussi les cl
 de ports fournies par libports.
 <P>
 
-En fait, on est pas très strict au niveau du vocabulaire lorsque l'on parle de ports.
-[...] Vous pouvez voir les droits sur les ports comme des capacités associées aux ports
-et aux groupes de ports, si vous préferez."
+En fait, on est pas trÃ¨s strict au niveau du vocabulaire lorsque l'on parle de ports.
+[...] Vous pouvez voir les droits sur les ports comme des capacitÃ©s associÃ©es aux ports
+et aux groupes de ports, si vous prÃ©ferez."
 </BLOCKQUOTE>
 <P>
 
-Comment fait un processus pour trouver un port particulier ? C'est très simple:
-En passant par le système de fichiers. Par exemple, l'utilisation d'un serveur
-pour l'ext2 se fait à travers le noeud ou le système de fichier est "monté"
+Comment fait un processus pour trouver un port particulier ? C'est trÃ¨s simple:
+En passant par le systÃ¨me de fichiers. Par exemple, l'utilisation d'un serveur
+pour l'ext2 se fait Ã  travers le noeud ou le systÃ¨me de fichier est "montÃ©"
 (remarquez qu'il n'y a pas la notion de montage dans le monde du Hurd,
-c'est juste la façon dont ce serait nommé sous Unix; le terme correct sous Hurd
+c'est juste la faÃ§on dont ce serait nommÃ© sous Unix; le terme correct sous Hurd
 est "mettre en place un translator".
 </P><P>
 
-Votre client mail favoris ne supporte pas les signatures aléatoires ? Ecrivez
-un translator pour signature aléatoire <A NAME="DOCF8" HREF="hhg.html#FOOT8">(8)</A> (qui retourne une nouvelle signature à chaque fois que
+Votre client mail favoris ne supporte pas les signatures alÃ©atoires ? Ecrivez
+un translator pour signature alÃ©atoire <A NAME="DOCF8" HREF="hhg.html#FOOT8">(8)</A> (qui retourne une nouvelle signature Ã  chaque fois que
 vous le lisez). Et le mieux est : tous les clients mail peuvent utiliser cette fonction !
-Voyez-vous comment le Hurd encourage la réutilisation du code ? Comprenez vous pourquoi
-GNU/Hurd ne nécessite pas de modification des programmes pour profiter des avantages qu'il
+Voyez-vous comment le Hurd encourage la rÃ©utilisation du code ? Comprenez vous pourquoi
+GNU/Hurd ne nÃ©cessite pas de modification des programmes pour profiter des avantages qu'il
 procure ?
 </P><P>
 
-Si vous désirez en savoir plus à propos du système de fichier du Hurd, je vous reccomande chaudement
-de lire cette présentation du Hurd :
+Si vous dÃ©sirez en savoir plus Ã  propos du systÃ¨me de fichier du Hurd, je vous reccomande chaudement
+de lire cette prÃ©sentation du Hurd :
 <A NAME="DOCF9" HREF="hhg.html#FOOT9">(9)</A>
 </P><P>
 
-On peut dire que le système de fichier est l'espace de nom pour les services,
+On peut dire que le systÃ¨me de fichier est l'espace de nom pour les services,
 ce qui est aussi vrai dans l'autre sens : l'espace de nom pour les services est
-le système de fichiers. C'est une chose très importante à comprendre. Bien que le
-système de fichiers soit la voie la plus courante pour atteindre un port, il y'en
+le systÃ¨me de fichiers. C'est une chose trÃ¨s importante Ã  comprendre. Bien que le
+systÃ¨me de fichiers soit la voie la plus courante pour atteindre un port, il y'en
 a d'autres; par exemple, vous pouvez obtenir le port dans un message.
 </P><P>
 
 Si vous vous demandez pourquoi je compare ce genre de communication
 avec CORBA, la citation suivante provenant de la publication "Vers 
-une nouvelle stratégie de conception des OS" pourrait vous aider à comprendre.
+une nouvelle stratÃ©gie de conception des OS" pourrait vous aider Ã  comprendre.
 </P><P>
 
 <BLOCKQUOTE>
-"Avec des translators, le système de fichier peut agir en tant que « point de 
-rendez-vous » pour des applications qui ne sont pas similaires à des fichiers. 
-Considérez un service qui met en oeuvre une certaine version du protocole de X, 
+"Avec des translators, le systÃ¨me de fichier peut agir en tant que Â« point de 
+rendez-vous Â» pour des applications qui ne sont pas similaires Ã  des fichiers. 
+ConsidÃ©rez un service qui met en oeuvre une certaine version du protocole de X, 
 et utiliserait des messages Mach comme mode de transport fondamental. Pour chaque 
-affichage de X, un fichier peut être créé avec le programme approprié en tant que 
-translator. Les clients X ouvriraient simplement ce fichier. Peu d'opération sur 
-les fichiers seraient utiles (lire et écrire, par exemple, serait inutile), mais 
-les nouvelles opérations (XCreateWindow ou XDrawText) pourraient devenir signicatives. 
-Dans ce cas, le protocole fichier est uniquement utilisé pour manipuler les 
-caractéristiques du node servant de « point de rendez-vous ». Ce node n'a pas 
-besoin de supporter d'opérations E/S, mais il peut répondre à de tels messages 
-par un code « message_not_understood »."
+affichage de X, un fichier peut Ãªtre crÃ©Ã© avec le programme appropriÃ© en tant que 
+translator. Les clients X ouvriraient simplement ce fichier. Peu d'opÃ©ration sur 
+les fichiers seraient utiles (lire et Ã©crire, par exemple, serait inutile), mais 
+les nouvelles opÃ©rations (XCreateWindow ou XDrawText) pourraient devenir signicatives. 
+Dans ce cas, le protocole fichier est uniquement utilisÃ© pour manipuler les 
+caractÃ©ristiques du node servant de Â« point de rendez-vous Â». Ce node n'a pas 
+besoin de supporter d'opÃ©rations E/S, mais il peut rÃ©pondre Ã  de tels messages 
+par un code Â« message_not_understood Â»."
 </BLOCKQUOTE>
 <P>
 
@@ -483,40 +483,40 @@ par un code « message_not_understood »."
 </TR></TABLE>
 <H2> 4.1 Les ports de Mach </H2>
 <!--docid::SEC8::-->
-Nous allons maintenant nous pencher de plus près sur Mach.
-Je sais que vous voudriez commencer à écrire des translators aussi vite que possible
+Nous allons maintenant nous pencher de plus prÃ¨s sur Mach.
+Je sais que vous voudriez commencer Ã  Ã©crire des translators aussi vite que possible
 mais vous aurez vraiment besoin de quelques bases sur Mach
-Les ports de Mach sont beaucoup utilisés dans le Hurd, ce sera donc
-notre point de départ.
+Les ports de Mach sont beaucoup utilisÃ©s dans le Hurd, ce sera donc
+notre point de dÃ©part.
 <P>
 
 Tout d'abord, faisons bien la distinction entre les ports, les droits sur les ports
-et les noms de ports. Marcus Brinkmann à écrit (sur IRC):
+et les noms de ports. Marcus Brinkmann Ã  Ã©crit (sur IRC):
 </P><P>
 
 <BLOCKQUOTE>
-"<CODE>mach_port_t</CODE> est un nom de port, il désigne une entrée dans l'espace de nom
-des ports, qui est associée à un droit dead name, un droit send-once ou une combinaison 
-de droits receive et send avec éventuellement plusieurs utilisateurs.
+"<CODE>mach_port_t</CODE> est un nom de port, il dÃ©signe une entrÃ©e dans l'espace de nom
+des ports, qui est associÃ©e Ã  un droit dead name, un droit send-once ou une combinaison 
+de droits receive et send avec Ã©ventuellement plusieurs utilisateurs.
 <P>
 
 Suposons que vous ayez un <CODE>mach_port_t 5</CODE>, et que vous vouliez lui envoyer un
 message. Pour ce faire, vous passez la tache <CODE>mach_task_self()</CODE>, le nom de port, 
-l'id du message et les arguments. La tache est utilisée pour récupérer l'espace de nom
-IPC, le nom de port est utilisé pour trouver l'entrée dans cet espace de nom.
-L'entrée renseigne Mach sur les droits que vous avez sur le port qui porte ce nom.
+l'id du message et les arguments. La tache est utilisÃ©e pour rÃ©cupÃ©rer l'espace de nom
+IPC, le nom de port est utilisÃ© pour trouver l'entrÃ©e dans cet espace de nom.
+L'entrÃ©e renseigne Mach sur les droits que vous avez sur le port qui porte ce nom.
 </P><P>
 
 Il n'y a qu'un seul nom de port pour tous les droits receive/send que vous
 pouvez avoir sur un port. Mais il y a des noms differents pour les droits send-once,
-parceque ça facilite la gestion par le Mach - et par les programmes utilisateurs aussi."
+parceque Ã§a facilite la gestion par le Mach - et par les programmes utilisateurs aussi."
 </BLOCKQUOTE>
 <P>
 
-Mach définit le type natural_t, qui est le type natif pour la machine,
+Mach dÃ©finit le type natural_t, qui est le type natif pour la machine,
 par exemple 32 bits pour processeur 32-bit. natural_t est toujours
-non-signé, mais il y a une version signée qui s'appelle integer_t. La 
-definition pour une plateforme i386 peut être touvée dans
+non-signÃ©, mais il y a une version signÃ©e qui s'appelle integer_t. La 
+definition pour une plateforme i386 peut Ãªtre touvÃ©e dans
 <CODE>$(GNUMACH)/i386/include/mach/i386/vm_types.h</CODE>. Dans ce fichier se
 trouvent d'autres types interessants, mais ils ne nous seront pas utiles 
 pour l'instant.
@@ -524,16 +524,16 @@ pour l'instant.
 
 Comme les descripteurs de fichiers Unix, les noms de port de Mach sont
 de simples et ennuyeux entiers. Dans le fichier <CODE>$(GNUMACH)/include/mach/port.h</CODE> 
-vous pouvez trouver les définitions suivantes :
+vous pouvez trouver les dÃ©finitions suivantes :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef natural_t mach_port_t;
 typedef mach_port_t *mach_port_array_t;
 </pre></td></tr></table></P><P>
 
-(Pour la plupart des types de données fournits par le Mach, il existe un type
-*_array_t.) Le numéros de port identifie un unique port (dans l'espace de nom de 
-la tache), ainsi une valeur de mach_port_t est souvent désignée comme un nom de port.
+(Pour la plupart des types de donnÃ©es fournits par le Mach, il existe un type
+*_array_t.) Le numÃ©ros de port identifie un unique port (dans l'espace de nom de 
+la tache), ainsi une valeur de mach_port_t est souvent dÃ©signÃ©e comme un nom de port.
 </P><P>
 
 Une valeure de <CODE>MACH_PORT_DEAD</CODE> (i.e. ~0) represente un droit de port
@@ -541,7 +541,7 @@ qui est mort, alors que <CODE>MACH_PORT_NULL</CODE> (cf port.h)
 "indique l'absence de port ou de droit sur le port."
 </P><P>
 
-Vous pouvez vérifier avec <CODE>MACH_PORT_VALID (port)</CODE> si un port n'a pas l'une
+Vous pouvez vÃ©rifier avec <CODE>MACH_PORT_VALID (port)</CODE> si un port n'a pas l'une
 de ces valeurs.
 </P><P>
 
@@ -558,8 +558,8 @@ qui sont de type <CODE>mach_port_right_t</CODE>:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef natural_t mach_port_right_t;
 </pre></td></tr></table></P><P>
 
-Ce type est utile lorsque l'on désire agir sur un droit paritculier d'un port.
-Souvent cependant, on désire utiliser un groupe de droits car on peut avoir
+Ce type est utile lorsque l'on dÃ©sire agir sur un droit paritculier d'un port.
+Souvent cependant, on dÃ©sire utiliser un groupe de droits car on peut avoir
 plusieurs droits sur un seul port. Pour cela, on utilisera le type suivant :
 </P><P>
 
@@ -568,9 +568,9 @@ typedef mach_port_type_t *mach_port_type_array_t;
 </pre></td></tr></table></P><P>
 
 Une variable mach_port_type_t peut soit porter la valeur <CODE>MACH_PORT_TYPE_NONE</CODE>,
-qui représente bien sûr un groupe de droits vide, ou un ensemble de macros
-<CODE>MACH_PORT_TYPE_SEND</CODE>, <CODE>MACH_PORT_TYPE_RECEIVE</CODE> etc. combinées avec un 
-OR bit à bit. IL y a aussi plusieurs combinaisons prédéfinies :
+qui reprÃ©sente bien sÃ»r un groupe de droits vide, ou un ensemble de macros
+<CODE>MACH_PORT_TYPE_SEND</CODE>, <CODE>MACH_PORT_TYPE_RECEIVE</CODE> etc. combinÃ©es avec un 
+OR bit Ã  bit. IL y a aussi plusieurs combinaisons prÃ©dÃ©finies :
 </P><P>
 
 <TABLE>
@@ -610,8 +610,8 @@ Ne confondez pas les <CODE>MACH_PORT_RIGHT_*</CODE> avec les macros <CODE>MACH_P
 Leurs noms sont similaires, mais ont une signification et une valeure differente.
 </P><P>
 
-Vous pourrez trouver plus de détails sur l'IPC (Inter Process Communication : Communication
-Inter Processus) du Mach dans le Manuel de Reference de GNU Mach, Chapître 4
+Vous pourrez trouver plus de dÃ©tails sur l'IPC (Inter Process Communication : Communication
+Inter Processus) du Mach dans le Manuel de Reference de GNU Mach, ChapÃ®tre 4
 <A NAME="DOCF10" HREF="hhg.html#FOOT10">(10)</A>.
 </P><P>
 
@@ -655,19 +655,19 @@ Faire des RPCs (Remote Procedure Calls : Appel de procedures distantes)
 en envoyant des messages Mach n'est pas trivial. Rendre la tache plus simple
 est le but de MiG (Mach Interface Generator : Generateur d'interfaces pour Mach).
 Vous devez ecrire un fichier de definition de l'interface, le faire traiter par MiG
-et il fournit deux fichiers source C et un fichier d'en-tête, qui s'occupe de la 
-mécanique des ports de Mach pour vous. Dès lors vous pouvez envoyer des messages par
+et il fournit deux fichiers source C et un fichier d'en-tÃªte, qui s'occupe de la 
+mÃ©canique des ports de Mach pour vous. DÃ¨s lors vous pouvez envoyer des messages par
 de simples appels de fonction.
 </P><P>
 
-Bien sûr, vous n'avez à le faire que si vous désirez mettre en place
-votre propre interface. Le Hurd contient déja plusieurs interfaces.
-Les fonctions appropriées sont dans la glibc, et vous n'avez donc rien
-à faire avant de vous en servir.
+Bien sÃ»r, vous n'avez Ã  le faire que si vous dÃ©sirez mettre en place
+votre propre interface. Le Hurd contient dÃ©ja plusieurs interfaces.
+Les fonctions appropriÃ©es sont dans la glibc, et vous n'avez donc rien
+Ã  faire avant de vous en servir.
 </P><P>
 
 La syntaxe des fichiers MiG est similaire au Pascal et ne devrait pas
-être dure à comprendre. Nous verrons quelques détails plus loin.
+Ãªtre dure Ã  comprendre. Nous verrons quelques dÃ©tails plus loin.
 </P><P>
 
 <A NAME="Les interfaces du Hurd"></A>
@@ -688,23 +688,23 @@ La syntaxe des fichiers MiG est similaire au Pascal et ne devrait pas
 <!--docid::SEC11::-->
 <P>
 
-Comprendre les conceptes est une chose importante, mais ça ne suffira pas
-pour faire quoi que ce soit. Vous avez aussi besoin de connaître quelques
-choses à propos des interfaces qui rendent possible l'usage de ces concepts.
+Comprendre les conceptes est une chose importante, mais Ã§a ne suffira pas
+pour faire quoi que ce soit. Vous avez aussi besoin de connaÃ®tre quelques
+choses Ã  propos des interfaces qui rendent possible l'usage de ces concepts.
 </P><P>
 
 Vous trouverez les definitions des interfaces dans les fichiers
 <CODE>$(HURD)/hurd/*.defs</CODE>. Les plus importantes sont io.defs,
 password.defs, fsys.defs, fs.defs et auth.defs. L'interface login.defs
-est interessante, mais pas encore implémentée et ne le sera peut être jamais
-Les interfaces *_reply.defs sont - bien sûr - pour les réponses.
+est interessante, mais pas encore implÃ©mentÃ©e et ne le sera peut Ãªtre jamais
+Les interfaces *_reply.defs sont - bien sÃ»r - pour les rÃ©ponses.
 </P><P>
 
 Vous devriez vraiment jeter un oeil aux interfaces du Hurd maintenant. Dans le
-prochain chapître, nous verrons comment les utiliser.
+prochain chapÃ®tre, nous verrons comment les utiliser.
 </P><P>
 
-<A NAME="A quoi ça ressemble vraiment ?"></A>
+<A NAME="A quoi Ã§a ressemble vraiment ?"></A>
 <HR SIZE="6">
 <A NAME="SEC12"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
@@ -718,14 +718,14 @@ prochain chapître, nous verrons comment les utiliser.
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 6. A quoi ça ressemble vraiment ? </H1>
+<H1> 6. A quoi Ã§a ressemble vraiment ? </H1>
 <!--docid::SEC12::-->
 <P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC13">6.1 Ecrire un fichier sur la sortie standard</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">dump.c</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC14">6.2 Créer une copie d'un fichier</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">copy.c</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC15">6.3 Notes finales</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Informations supplémentaires</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC14">6.2 CrÃ©er une copie d'un fichier</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">copy.c</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC15">6.3 Notes finales</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Informations supplÃ©mentaires</TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -747,11 +747,11 @@ prochain chapître, nous verrons comment les utiliser.
 <!--docid::SEC13::-->
 <P>
 
-Regardons d'un peu plus près un programme qui affiche le contenu d'un fichier
-sur la sortie standard d'une manière "hurdiste". Notez que la manière habituelle
+Regardons d'un peu plus prÃ¨s un programme qui affiche le contenu d'un fichier
+sur la sortie standard d'une maniÃ¨re "hurdiste". Notez que la maniÃ¨re habituelle
 est toujours utilisable. Glibc fournit toujours les functions comme <CODE>write ()</CODE> 
 pour le Hurd. Les parties specifiques au hurd de la glibc sont dans
-<CODE>$(GLIBC)/hurd/</CODE>, les parties dépendante du Mach sont dans
+<CODE>$(GLIBC)/hurd/</CODE>, les parties dÃ©pendante du Mach sont dans
 <CODE>$(GLIBC)/sysdeps/mach/hurd/</CODE>.
 </P><P>
 
@@ -822,11 +822,11 @@ Penchons nous sur les parties interessantes de ce programme :
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#define _GNU_SOURCE 1
 </pre></td></tr></table></P><P>
 
-Je vous conseille de toujours définir cette macro pour les programmes
-spécifiques a GNU/Hurd, sans quoi vous ne pourrez même pas les compiler.
-Definissez la avant d'inclure un quelconque fichier d'en-tête. Pour des 
-programmes plus important, vous serez plutôt tentés de passer
-<CODE>-D_GNU_SOURCE</CODE> à gcc.
+Je vous conseille de toujours dÃ©finir cette macro pour les programmes
+spÃ©cifiques a GNU/Hurd, sans quoi vous ne pourrez mÃªme pas les compiler.
+Definissez la avant d'inclure un quelconque fichier d'en-tÃªte. Pour des 
+programmes plus important, vous serez plutÃ´t tentÃ©s de passer
+<CODE>-D_GNU_SOURCE</CODE> Ã  gcc.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>file_t f;
@@ -839,14 +839,14 @@ clairement que nous allons l'utiliser pour ouvrir un fichier.
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>char *buf;
 </pre></td></tr></table></P><P>
 
-Vous aurez peut-être noté que nous allons utiliser ce buffer dans une situation
-où nous devrions passer un data_t (qui est définit comme un char *), mais
+Vous aurez peut-Ãªtre notÃ© que nous allons utiliser ce buffer dans une situation
+oÃ¹ nous devrions passer un data_t (qui est dÃ©finit comme un char *), mais
 <CODE>$(HURD)/hurd/hurd_types.h</CODE> affirme pour data_t et quelques autres types:
 </P><P>
 
 <BLOCKQUOTE>
 "Ces noms n'existent qu'a cause de defaillances de MiG. Vous ne devriez pas les utiliser
-dans des sources C; utilisez les types C standard à la place."
+dans des sources C; utilisez les types C standard Ã  la place."
 </BLOCKQUOTE>
 <P>
 
@@ -859,7 +859,7 @@ le meilleur choix. Marcus Brinkmann explique pourquoi:
 
 <BLOCKQUOTE>
 "kern_return_t est le type d'erreur mach pour mach_msg par exemple, donc
-si vous faîtes un RPC, et désirez le faire d'une manière compatible avec le
+si vous faÃ®tes un RPC, et dÃ©sirez le faire d'une maniÃ¨re compatible avec le
 Mach, utilisez kern_return_t. MAIS pour le Hurd, utilisez error_t, car c'est
 compatible avec les types d'erreur de la glibc. Vous pouvez toujours convertir
 depuis kern_return_t vers un error_t sur les systemes GNU."
@@ -870,7 +870,7 @@ depuis kern_return_t vers un error_t sur les systemes GNU."
   error (1, 0, "Usage: %s <filename>", argv[0]);
 </pre></td></tr></table></P><P>
 
-Juste au cas où vous ne seriez pas familier avec la fonction
+Juste au cas oÃ¹ vous ne seriez pas familier avec la fonction
 <CODE>error ()</CODE> je citerai <CODE>/include/error.h</CODE> (Souvenez vous que l'on utilise pas
 /usr dans le Hurd :-)):
 </P><P>
@@ -883,8 +883,8 @@ extern void error (int status, int errnum, const char *format, ...);
 
 Maintenant l'action arrive vraiment. On essaie d'ouvrir un fichier avec
 la fonction de la glibc <CODE>file_name_lookup ()</CODE>. Cette fonction retourne
-<CODE>MACH_PORT_NULL</CODE> si la tentative à échoué. O_READ est une extension de GNU 
-et est identique à la constante POSIX O_RDONLY. De même, O_WRITE est identique à O_WRONLY.
+<CODE>MACH_PORT_NULL</CODE> si la tentative Ã  Ã©chouÃ©. O_READ est une extension de GNU 
+et est identique Ã  la constante POSIX O_RDONLY. De mÃªme, O_WRITE est identique Ã  O_WRONLY.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Open file */
@@ -893,12 +893,12 @@ if (f == MACH_PORT_NULL)
   error (1, errno, "Could not open %s", argv[1]);
 </pre></td></tr></table></P><P>
 
-Bien sûr, nous pourrions lire le fichier caractère par caractère, mais
+Bien sÃ»r, nous pourrions lire le fichier caractÃ¨re par caractÃ¨re, mais
 dans cette exemple, nous supposons que c'est un fichier "normal" et
 que nous pouvons le lire en une fois, donc nous utilisons <CODE>io_readable ()</CODE> 
-pour connaître la taille du fichier (ça ne marchera pas pour des fichiers comme /dev/random !
-<CODE>io_readable ()</CODE> nous dit seulement quelle quantité de donnée est disponible à l'instant
-de son appel). On crée alors un buffer pour le fichier complet:
+pour connaÃ®tre la taille du fichier (Ã§a ne marchera pas pour des fichiers comme /dev/random !
+<CODE>io_readable ()</CODE> nous dit seulement quelle quantitÃ© de donnÃ©e est disponible Ã  l'instant
+de son appel). On crÃ©e alors un buffer pour le fichier complet:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Get size of file */
@@ -912,10 +912,10 @@ if (buf == NULL)
   error (1, 0, "Out of memory");
 </pre></td></tr></table></P><P>
 
-Maintenant, tout ce que nous avons à faire est de lire le fichier dans le buffer.
-On ajoute un octet nul à la fin, afin de pouvoir l'utiliser comme une chaine (on 
-suppose que le fichier ne contient pas de caractère nul, ce qui n'est pas parfait,
-mais pour l'exemple on ne s'en préoccupe pas).
+Maintenant, tout ce que nous avons Ã  faire est de lire le fichier dans le buffer.
+On ajoute un octet nul Ã  la fin, afin de pouvoir l'utiliser comme une chaine (on 
+suppose que le fichier ne contient pas de caractÃ¨re nul, ce qui n'est pas parfait,
+mais pour l'exemple on ne s'en prÃ©occupe pas).
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Read */
@@ -926,20 +926,20 @@ buf[amount] = '\0';
 </pre></td></tr></table></P><P>
 
 Remarquez que l'on passe "&#38;buf", qui est un poiteur de pointeur. "buf"
-pourrait être modifié, mais cette décision doit être laissée au receveur 
+pourrait Ãªtre modifiÃ©, mais cette dÃ©cision doit Ãªtre laissÃ©e au receveur 
 du message io_read.
 </P><P>
 
 Si vous regardez <CODE>$(HURD)/hurd/io.defs</CODE>, vous vous demanderez sans doute
-pourquoi on passe 5 arguments à io_read qui n'en attend que 4. io_object, data,
-offset et amount sont écrit dans le fichier .defs, alors que 
-<CODE>/include/hurd/io.h</CODE> a un argument supplémentaire (appelé dataCnt)
-après data, qui est tout a fait logique : Nous avons aussi besoin de connaître
-la quantité de données que nous avons. Ajouter cet argument est fait automatiquement
+pourquoi on passe 5 arguments Ã  io_read qui n'en attend que 4. io_object, data,
+offset et amount sont Ã©crit dans le fichier .defs, alors que 
+<CODE>/include/hurd/io.h</CODE> a un argument supplÃ©mentaire (appelÃ© dataCnt)
+aprÃ¨s data, qui est tout a fait logique : Nous avons aussi besoin de connaÃ®tre
+la quantitÃ© de donnÃ©es que nous avons. Ajouter cet argument est fait automatiquement
 par MiG.
 </P><P>
 
-Nous en avons terminé avec le fichier, nous pouvons donc le fermer. Cela
+Nous en avons terminÃ© avec le fichier, nous pouvons donc le fermer. Cela
 se fait en desallouant le port:
 </P><P>
 
@@ -949,7 +949,7 @@ se fait en desallouant le port:
 C'est tout.
 </P><P>
 
-<A NAME="Créer une copie d'un fichier"></A>
+<A NAME="CrÃ©er une copie d'un fichier"></A>
 <HR SIZE="6">
 <A NAME="SEC14"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
@@ -963,16 +963,16 @@ C'est tout.
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 6.2 Créer une copie d'un fichier </H2>
+<H2> 6.2 CrÃ©er une copie d'un fichier </H2>
 <!--docid::SEC14::-->
 <P>
 
 Nous allons maintenant essayer de copier un fichier. Mais cette fois, 
 nous allons le faire correctement: si le translator qui fournit le fichier
-prend un certain temps pour fournir ses données, nous attendrons. Nous allons
-donc lire jusqu'à rencontrer un EOF. Nous saurons que nous aurons atteint
-la fin du fichier si notre appel à <CODE>io_read ()</CODE> nous donne zero octets de
-données.
+prend un certain temps pour fournir ses donnÃ©es, nous attendrons. Nous allons
+donc lire jusqu'Ã  rencontrer un EOF. Nous saurons que nous aurons atteint
+la fin du fichier si notre appel Ã  <CODE>io_read ()</CODE> nous donne zero octets de
+donnÃ©es.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* copy.c - Copy a file in a "hurdish" way.
@@ -1053,8 +1053,8 @@ Les parties interessantes sont :
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>out = file_name_lookup (argv[2], O_WRITE | O_CREAT | O_TRUNC, 0640);
 </pre></td></tr></table></P><P>
 
-Ici, nous créons un fichier avec la permission 640 si il n'existe pas, 
-et récupérons sa sortie.
+Ici, nous crÃ©ons un fichier avec la permission 640 si il n'existe pas, 
+et rÃ©cupÃ©rons sa sortie.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Read */
@@ -1068,10 +1068,10 @@ if (rd_amount == 0)
 
 Comme nous l'avons dit plus haut: si on ne peut lire aucun octet, cela
 signifie que nous avons atteint la fin du fichier. Ca ne veut pas dire
-qu'il n'y a pas de donnée disponible à cet instant: Si nous lisions depuis
-/dev/random par exemple, et qu'il n'y aurait pas de données à lire à cet
-instant, l'appel ne nous dirait pas qu'il n'y a pas de données, mais bloquerait
-jusqu'à l'arrivée de nouvelle donnée.
+qu'il n'y a pas de donnÃ©e disponible Ã  cet instant: Si nous lisions depuis
+/dev/random par exemple, et qu'il n'y aurait pas de donnÃ©es Ã  lire Ã  cet
+instant, l'appel ne nous dirait pas qu'il n'y a pas de donnÃ©es, mais bloquerait
+jusqu'Ã  l'arrivÃ©e de nouvelle donnÃ©e.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Write */
@@ -1087,9 +1087,9 @@ do
 while (rd_amount);
 </pre></td></tr></table></P><P>
 
-Il n'y a pas de certitude que <CODE>io_write ()</CODE> acceptera immediatement toutes les données
-que nous essaierons de lui envoyer, donc nous devrons sans doute réessayer, mais
-seulement avec les données qui n'ont pas été acceptées.
+Il n'y a pas de certitude que <CODE>io_write ()</CODE> acceptera immediatement toutes les donnÃ©es
+que nous essaierons de lui envoyer, donc nous devrons sans doute rÃ©essayer, mais
+seulement avec les donnÃ©es qui n'ont pas Ã©tÃ© acceptÃ©es.
 </P><P>
 
 <A NAME="Notes finales"></A>
@@ -1110,10 +1110,10 @@ seulement avec les données qui n'ont pas été acceptées.
 <!--docid::SEC15::-->
 <P>
 
-Finalement, je voudrais préciser que sur GNU/Hurd, il n'y a pas
+Finalement, je voudrais prÃ©ciser que sur GNU/Hurd, il n'y a pas
 de raison de ne pas utiliser l'excellente extension non standard de GCC.
-Par exemple, les fonctions imbriquées sont fréquement utilisées dans les
-sources du Hurd. Il peut être très utile d'en savoir un peu sur ces extensions,
+Par exemple, les fonctions imbriquÃ©es sont frÃ©quement utilisÃ©es dans les
+sources du Hurd. Il peut Ãªtre trÃ¨s utile d'en savoir un peu sur ces extensions,
 donc vous devriez sans doute faire :
 </P><P>
 
@@ -1121,12 +1121,12 @@ donc vous devriez sans doute faire :
 </pre></td></tr></table></P><P>
 
 Un bon exemple de code "hurdiste" est <CODE>$(HURD)/init/init.c</CODE>, donc vous devriez
-y jeter un coup d'oeil. Vous ne comprendrez sans doute pas tout, mais ça n'est
-pas genant. Vous trouverez d'autres sources que vous voudrez peut-être lire 
+y jeter un coup d'oeil. Vous ne comprendrez sans doute pas tout, mais Ã§a n'est
+pas genant. Vous trouverez d'autres sources que vous voudrez peut-Ãªtre lire 
 dans <CODE>$(HURD)/utils/</CODE> et <CODE>$(HURD)/sutils/</CODE>.
 </P><P>
 
-<A NAME="Les librairies du Hurd (Aperçu)"></A>
+<A NAME="Les librairies du Hurd (AperÃ§u)"></A>
 <HR SIZE="6">
 <A NAME="SEC16"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
@@ -1140,7 +1140,7 @@ dans <CODE>$(HURD)/utils/</CODE> et <CODE>$(HURD)/sutils/</CODE>.
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="hhg.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 7. Les librairies du Hurd (Aperçu) </H1>
+<H1> 7. Les librairies du Hurd (AperÃ§u) </H1>
 <!--docid::SEC16::-->
 <P>
 
@@ -1148,60 +1148,60 @@ Il y a un certain nombre de librairies qui rendent l'ecriture d'un
 translator plus facile.
 </P><P>
 
-Libtrivfs est utilisée pour les translators "triviaux". Dans ce cas,
-un translator trivial est un translator qui ne donne accès qu'à un seul 
-fichier (noeud), et non à un répertoire complet ou même un système de 
-fichiers. Comme les premiers translators qu'écrivent tous les nouveaux
-hacker sous le Hurd sont de ce type, cette librairie est la première que 
-vous devriez étudier.
+Libtrivfs est utilisÃ©e pour les translators "triviaux". Dans ce cas,
+un translator trivial est un translator qui ne donne accÃ¨s qu'Ã  un seul 
+fichier (noeud), et non Ã  un rÃ©pertoire complet ou mÃªme un systÃ¨me de 
+fichiers. Comme les premiers translators qu'Ã©crivent tous les nouveaux
+hacker sous le Hurd sont de ce type, cette librairie est la premiÃ¨re que 
+vous devriez Ã©tudier.
 </P><P>
 
-Libnetfs est la librairie pour des translators donnant accès à un système
-de fichiers complet, et contrôlant pas directement les données sous jacentes, 
+Libnetfs est la librairie pour des translators donnant accÃ¨s Ã  un systÃ¨me
+de fichiers complet, et contrÃ´lant pas directement les donnÃ©es sous jacentes, 
 comme c'est le cas dans ftpfs, nfs et shadowfs<A NAME="DOCF11" HREF="hhg.html#FOOT11">(11)</A>, 
-par exemple. Libnetfs sera probablement renommée libfsserver.
+par exemple. Libnetfs sera probablement renommÃ©e libfsserver.
 </P><P>
 
-Libdiskfs est aussi destinée aux systèmes de fichiers complets, mais
-est utilisée dans les cas ou le translator controle les données sous 
+Libdiskfs est aussi destinÃ©e aux systÃ¨mes de fichiers complets, mais
+est utilisÃ©e dans les cas ou le translator controle les donnÃ©es sous 
 jacentes, comme par exemple ext2fs, UFS et tmpfs.
 </P><P>
 
-Libtreefs est morte. Elle n'a jamais été terminée, et personne ne l'utilise.
+Libtreefs est morte. Elle n'a jamais Ã©tÃ© terminÃ©e, et personne ne l'utilise.
 Vous ne devriez pas non plus.
 </P><P>
 
 Libports fournit des fonctions pour travailler avec les ports. Elle
-peut aussi être vu comme une abstraction des fonctionnalités que le 
+peut aussi Ãªtre vu comme une abstraction des fonctionnalitÃ©s que le 
 Hurd attend d'un system transmettant des messages.
 </P><P>
 
-Libstore: L'explication suivante peut être trouvée dans le fichier
-d'en-tête de libstore : "Un `store' (une réserve) est un block de 
-stockage de taille fixe, qui peut être lu et éventuellement écrit. 
-Cette librairie implémente plusieurs interfaces différentes qui autorisent 
-la réserve à être utilisé avec plusieurs types de stockage -- fichiers, 
-mémoire, taches, etc. Elle permet aussi de combiner et de filtrer les 
-réserves de différentes manières."
+Libstore: L'explication suivante peut Ãªtre trouvÃ©e dans le fichier
+d'en-tÃªte de libstore : "Un `store' (une rÃ©serve) est un block de 
+stockage de taille fixe, qui peut Ãªtre lu et Ã©ventuellement Ã©crit. 
+Cette librairie implÃ©mente plusieurs interfaces diffÃ©rentes qui autorisent 
+la rÃ©serve Ã  Ãªtre utilisÃ© avec plusieurs types de stockage -- fichiers, 
+mÃ©moire, taches, etc. Elle permet aussi de combiner et de filtrer les 
+rÃ©serves de diffÃ©rentes maniÃ¨res."
             
 </P><P>
 
 Libiohelp: "Librairie fournissant des fonctions utiles aux serveurs 
-d'entrées/sorties."
+d'entrÃ©es/sorties."
 </P><P>
 
 Libthreads est la librairie des cthreads. Cette librairie viens du
-micronoyau Mach et à été dévelopée avant que le standard des threads 
-POSIX existe. Les threads POSIX seront disponibles à l'avenir, mais 
-pour l'instant, l'instant, cette librairie est utilisée poru le 
+micronoyau Mach et Ã  Ã©tÃ© dÃ©velopÃ©e avant que le standard des threads 
+POSIX existe. Les threads POSIX seront disponibles Ã  l'avenir, mais 
+pour l'instant, l'instant, cette librairie est utilisÃ©e poru le 
 multithreading.
 </P><P>
 
-Libihash fournit des fonctions destinées aux hash-table à clefs
-entières.
+Libihash fournit des fonctions destinÃ©es aux hash-table Ã  clefs
+entiÃ¨res.
 </P><P>
 
-Libps: "Routines pour récupérer et afficher des informations sur
+Libps: "Routines pour rÃ©cupÃ©rer et afficher des informations sur
 les processus."
 </P><P>
 
@@ -1225,9 +1225,9 @@ Libshouldbeinlibc: Nomen est omen. :-)
 <H1> 8. Un exemple utilisant trivfs </H1>
 <!--docid::SEC17::-->
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC18">8.1 GNU/Linux et GNU/Hurd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Quelle différence ?</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC18">8.1 GNU/Linux et GNU/Hurd</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Quelle diffÃ©rence ?</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC19">8.2 Implementer les fonctions de rappel de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Implementer une interface hurdiste</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC20">8.3 Autres fonctions de rappel de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Variables qu'il faut définir</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC20">8.3 Autres fonctions de rappel de trivfs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Variables qu'il faut dÃ©finir</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC21">8.4 The main function</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Mise en place du translator</TD></TR>
 <TR><TD ALIGN="left" VALIGN="TOP"><A HREF="hhg.html#SEC22">8.5 La source complete</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">hurd-one.c</TD></TR>
 </TABLE></BLOCKQUOTE>
@@ -1251,19 +1251,19 @@ Libshouldbeinlibc: Nomen est omen. :-)
 <!--docid::SEC18::-->
 <P>
 
-Avant de regarder de plus prêt comment utiliser trivfs, regardons
-comment ce serait fait dans un système GNU/Linux. Je ne vais pas 
-entrer dans les détails de cette exemple, car ce n'est pas très 
+Avant de regarder de plus prÃªt comment utiliser trivfs, regardons
+comment ce serait fait dans un systÃ¨me GNU/Linux. Je ne vais pas 
+entrer dans les dÃ©tails de cette exemple, car ce n'est pas trÃ¨s 
 important pour nous, mais comme beaucoup sont familiers avec la
-programmation (noyau) sous Linux, il pourrait être interessant de 
-comparer la façon dont les choses sont faites sous GNU/Linux par
-rapport à GNU/Hurd.
+programmation (noyau) sous Linux, il pourrait Ãªtre interessant de 
+comparer la faÃ§on dont les choses sont faites sous GNU/Linux par
+rapport Ã  GNU/Hurd.
 </P><P>
 
-Ecrire un module pour le noyau de Linux, pour un périphérique comme
-/dev/one (qui bien sur, donne une infinité de 1 si vous la lisez :))
-est facile en théorie. Un module pour le noyau 2.4.x dans un
-fichier dédié ressemblerait à ça :
+Ecrire un module pour le noyau de Linux, pour un pÃ©riphÃ©rique comme
+/dev/one (qui bien sur, donne une infinitÃ© de 1 si vous la lisez :))
+est facile en thÃ©orie. Un module pour le noyau 2.4.x dans un
+fichier dÃ©diÃ© ressemblerait Ã  Ã§a :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* linux-one.c - Linux kernel module for /dev/one.
@@ -1375,46 +1375,46 @@ cleanup_module (void)
 }
 </pre></td></tr></table></P><P>
 
-Nous implémentons simplement les opérations habituelles come <CODE>read ()</CODE>,
-<CODE>close ()</CODE> et <CODE>open ()</CODE>, plaçons des pointeurs sur ces fonctions
-dans une structure et enregistrons le tout comme un périphérique de caractères.
+Nous implÃ©mentons simplement les opÃ©rations habituelles come <CODE>read ()</CODE>,
+<CODE>close ()</CODE> et <CODE>open ()</CODE>, plaÃ§ons des pointeurs sur ces fonctions
+dans une structure et enregistrons le tout comme un pÃ©riphÃ©rique de caractÃ¨res.
 </P><P>
 
-Dans l'étape suivante, nous compilerions ce fichier source en un fichier objet
-que nous chargerions en root grace à insmod(8) et créerions le fichier /dev/one
+Dans l'Ã©tape suivante, nous compilerions ce fichier source en un fichier objet
+que nous chargerions en root grace Ã  insmod(8) et crÃ©erions le fichier /dev/one
 avec 
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre># cd /dev &#38;&#38; mknod one c 100 1
 </pre></td></tr></table></P><P>
 
-C'est simple à comprendre - mais difficile à mettre en pratique, pour
-(au moins) quatre raisons : Premièrement, une petite erreur dans le code
-peut causer un kernel panic; deuxièmement, vous avez besoin d'être root
-pour faire tout cela; troisièmement, vous ne pouvez utiliser les fonctions
+C'est simple Ã  comprendre - mais difficile Ã  mettre en pratique, pour
+(au moins) quatre raisons : PremiÃ¨rement, une petite erreur dans le code
+peut causer un kernel panic; deuxiÃ¨mement, vous avez besoin d'Ãªtre root
+pour faire tout cela; troisiÃ¨mement, vous ne pouvez utiliser les fonctions
 de la GNU C librairie, et d'autres librairies utiles comme la GLib; 
-quatrièmement, vous devez utiliser un numéro de périphérique non utilisé
-(J'ai utilisé 100 ci-dessus en esperant que personne n'avait fait de même
+quatriÃ¨mement, vous devez utiliser un numÃ©ro de pÃ©riphÃ©rique non utilisÃ©
+(J'ai utilisÃ© 100 ci-dessus en esperant que personne n'avait fait de mÃªme
  avant).
 </P><P>
 
-Avec le Hurd, les choses fonctionnent différement. Bien sûr, la structure
-globale est un peu différente, mais aussi (et c'est plus important) 
+Avec le Hurd, les choses fonctionnent diffÃ©rement. Bien sÃ»r, la structure
+globale est un peu diffÃ©rente, mais aussi (et c'est plus important) 
 l'enfironment du code est plus sympathique : C'est l'environment `normal'
 (user space) que nous connaissons tous. Cela signifie que vous pouvez 
-développer un translator comme n'importe quel autre programme. Le seul 
-désavantage est que l'interface de programmation est un peu plus complexe
+dÃ©velopper un translator comme n'importe quel autre programme. Le seul 
+dÃ©savantage est que l'interface de programmation est un peu plus complexe
 que celle du noyau Linux. Mais si vous comprenez l'exemple ci-dessus, vous
-n'aurez pas de problème à suivre le translator qui vient, qui implémente 
-la même fonctionnalité.
+n'aurez pas de problÃ¨me Ã  suivre le translator qui vient, qui implÃ©mente 
+la mÃªme fonctionnalitÃ©.
 </P><P>
 
-En fait, il fournit plus de fonctionalités, car libtrivfs nous force
-à en implémenter plus; quand vous implémenterez un vrai translator, 
-vous devriez aussi vous préoccuper des options passées, car parfois,
-l'utilisateur demande seulement "--help", mais j'ai essayé de conserver
-cette exemple aussi simple que possible. Lorsque vous écrivez des 
-programmes pour le système GNU, il est reccomandé de parser les options 
+En fait, il fournit plus de fonctionalitÃ©s, car libtrivfs nous force
+Ã  en implÃ©menter plus; quand vous implÃ©menterez un vrai translator, 
+vous devriez aussi vous prÃ©occuper des options passÃ©es, car parfois,
+l'utilisateur demande seulement "--help", mais j'ai essayÃ© de conserver
+cette exemple aussi simple que possible. Lorsque vous Ã©crivez des 
+programmes pour le systÃ¨me GNU, il est reccomandÃ© de parser les options 
 avec la fonction argp. <A NAME="DOCF12" HREF="hhg.html#FOOT12">(12)</A>
 </P><P>
 
@@ -1438,12 +1438,12 @@ avec la fonction argp. <A NAME="DOCF12" HREF="hhg.html#FOOT12">(12)</A>
 
 Dans le systeme GNU/Hurd, les appels systemes usuels d'Unix sont
 fournis par la GNU C librairie qui les transforme en messages transmis 
-aux ports respectifs. Cela signifie que vous n'écrirez pas 
-d'implémentations directes pour des fonctions comme <CODE>read ()</CODE>, 
+aux ports respectifs. Cela signifie que vous n'Ã©crirez pas 
+d'implÃ©mentations directes pour des fonctions comme <CODE>read ()</CODE>, 
 mais des fonctions utilisant des arguments comme par exemple 
 <CODE>io_read ()</CODE>. Lorsque l'on utilise la librairie trivfs,
 nous devons implementer des routines avec des arguments quelque peu 
-différents. Par exemple, les arguments de <CODE>trivfs_S_io_read ()</CODE>,
+diffÃ©rents. Par exemple, les arguments de <CODE>trivfs_S_io_read ()</CODE>,
 sont :
 </P><P>
 
@@ -1484,11 +1484,11 @@ if the object is not seekable.
 
 La fonction <CODE>trivfs_S_io_read ()</CODE> du translator "Hello, world"
 (cf <CODE>$(HURD)/trans/hello.c</CODE>) est un bon exemple de comment 
-implémenter une telle fonction. L'implémentation de notre "one" translator
+implÃ©menter une telle fonction. L'implÃ©mentation de notre "one" translator
 sera un exemple un peu moins complet.
 </P><P>
 
-Voilà à quoi ressemble notre fonction :
+VoilÃ  Ã  quoi ressemble notre fonction :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>error_t
@@ -1526,24 +1526,24 @@ C'est la fonction de rappel la plus complexe de notre translator.
 Les autres sont plus simples.
 </P><P>
 
-Vous devriez toujours retourner EOPNOTSUPP (Operation non supportée) si
+Vous devriez toujours retourner EOPNOTSUPP (Operation non supportÃ©e) si
 "cred" est mauvais, et EBADF (Mauvais descripteur de fichier) se le
-bit nécessaire n'est pas en place.
+bit nÃ©cessaire n'est pas en place.
 </P><P>
 
 Si l'utilisateur veut lire plus d'octets (le nombre dans "amount") que
-le buffer peut contenir, nous devons allouer de la mémoire supplémentaire.
-Souvenez vous que nous avons eu à passer un pointeur sur le pointeur sur 
-notre buffer, lorsque nous avons appelé <CODE>io_read ()</CODE>. C'était pour
-cette raison. Nous allouons de la mémoire avec <CODE>mmap ()</CODE> car nous
-voulons un block mémoire aligné. Maintenant que nous sommes sûrs d'avoir
-assez d'espace où écrire les données, nous pouvons commencer à la remplir
+le buffer peut contenir, nous devons allouer de la mÃ©moire supplÃ©mentaire.
+Souvenez vous que nous avons eu Ã  passer un pointeur sur le pointeur sur 
+notre buffer, lorsque nous avons appelÃ© <CODE>io_read ()</CODE>. C'Ã©tait pour
+cette raison. Nous allouons de la mÃ©moire avec <CODE>mmap ()</CODE> car nous
+voulons un block mÃ©moire alignÃ©. Maintenant que nous sommes sÃ»rs d'avoir
+assez d'espace oÃ¹ Ã©crire les donnÃ©es, nous pouvons commencer Ã  la remplir
 de uns. Notez que "*data" est une vm_address_t et que nous devons
-déréférencer le pointeur pour pouvoir l'utiliser.
+dÃ©rÃ©fÃ©rencer le pointeur pour pouvoir l'utiliser.
 </P><P>
 
 Si vous comprenez la fonction ci-dessus, je doute que vous ayez un 
-problème avec la routine d'écriture suivante, qui ne fait presque rien :
+problÃ¨me avec la routine d'Ã©criture suivante, qui ne fait presque rien :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>kern_return_t
@@ -1561,36 +1561,36 @@ trivfs_S_io_write (struct trivfs_protid *cred,
 }
 </pre></td></tr></table></P><P>
 
-Mis à part pour l'habituel vérification d'erreurs, cette fonction ne
-fait qu'indiquer que toute donnée que l'utilisateur voulait écrire l'a
-été avec succès - ce qui est logique car nous ignorons toute écriture
+Mis Ã  part pour l'habituel vÃ©rification d'erreurs, cette fonction ne
+fait qu'indiquer que toute donnÃ©e que l'utilisateur voulait Ã©crire l'a
+Ã©tÃ© avec succÃ¨s - ce qui est logique car nous ignorons toute Ã©criture
 sur notre fichier.
 </P><P>
 
-Il y a plusieurs fonctions de rappel que nous implémenterons d'une manière
-similaire à la fonction write. Vous pouvez trouvez ces fonctions
+Il y a plusieurs fonctions de rappel que nous implÃ©menterons d'une maniÃ¨re
+similaire Ã  la fonction write. Vous pouvez trouvez ces fonctions
 dans la source complete de notre translator.
 </P><P>
 
 Une autre fonction de rappel est <CODE>trivfs_S_io_readable ()</CODE>. 
-Elle sera appelée si quelqu'un veut savoir quelle quantité de donnée nous
-pouvons fournir immédiatement. Bien sûr, cette quantitée est infinie, et comme
+Elle sera appelÃ©e si quelqu'un veut savoir quelle quantitÃ© de donnÃ©e nous
+pouvons fournir immÃ©diatement. Bien sÃ»r, cette quantitÃ©e est infinie, et comme
 l'a dit Marcus Brinkmann <A NAME="DOCF13" HREF="hhg.html#FOOT13">(13)</A>:
 </P><P>
 
 <BLOCKQUOTE>
-"Si vous pouvez délivrez une quantité illimitée d'octets sans délai,
-  je pense que la valeur la plus élevée possible qui tiens dans 
-  mach_msg_type_number_t est la plus appropriée. (J'éspère que les
-  applications peuvent s'arranger avec ça)."
+"Si vous pouvez dÃ©livrez une quantitÃ© illimitÃ©e d'octets sans dÃ©lai,
+  je pense que la valeur la plus Ã©levÃ©e possible qui tiens dans 
+  mach_msg_type_number_t est la plus appropriÃ©e. (J'Ã©spÃ¨re que les
+  applications peuvent s'arranger avec Ã§a)."
 </BLOCKQUOTE>
 <P>
 
-Souvenons nous que si quelque chose peut aller mal, ça ira mal. Par
-exemple, notre programme d'exemple dump.c ci dessus gérerait assez mal
-une telle situation. C'est pourquoi j'ai écrit l'implementation suivante
-qui est un peu paranoïaque et ne cause pas de problème si une application
-n'est pas capable de gérer une grande valeur correctement :
+Souvenons nous que si quelque chose peut aller mal, Ã§a ira mal. Par
+exemple, notre programme d'exemple dump.c ci dessus gÃ©rerait assez mal
+une telle situation. C'est pourquoi j'ai Ã©crit l'implementation suivante
+qui est un peu paranoÃ¯aque et ne cause pas de problÃ¨me si une application
+n'est pas capable de gÃ©rer une grande valeur correctement :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>kern_return_t
@@ -1608,8 +1608,8 @@ trivfs_S_io_readable (struct trivfs_protid *cred,
 }
 </pre></td></tr></table></P><P>
 
-La dernière fonction de rappel interessante est <CODE>trivfs_S_io_select
-()</CODE>, qui est bien commentée dans la source complète ci-dessous.
+La derniÃ¨re fonction de rappel interessante est <CODE>trivfs_S_io_select
+()</CODE>, qui est bien commentÃ©e dans la source complÃ¨te ci-dessous.
 </P><P>
 
 <A NAME="Autres fonctions de rappel de trivfs"></A>
@@ -1631,7 +1631,7 @@ La dernière fonction de rappel interessante est <CODE>trivfs_S_io_select
 <P>
 
 Nous devons travailler un peu plus avant d'avoir un translator trivfs complet :
-Nous devons définir des symboles qui contiennent l'information générale à propos
+Nous devons dÃ©finir des symboles qui contiennent l'information gÃ©nÃ©rale Ã  propos
 de notre translator.
 </P><P>
 
@@ -1641,7 +1641,7 @@ int trivfs_fsid = 0;              /* Should always be 0 on startup */
 </pre></td></tr></table></P><P>
 
 Dans la plupart des cas, vous utiliserez FSTYPE_MISC pour trivfs_fstype.
-Les autres valeurs possibles sont (d'après
+Les autres valeurs possibles sont (d'aprÃ¨s
 <CODE>$(HURD)/hurd/hurd_types.h</CODE>):
 </P><P>
 
@@ -1655,15 +1655,15 @@ FSTYPE_TERM   - GNU Terminal driver
 </OL>
 <P>
 
-Dans <CODE>trivfs_allow_open</CODE>, vous spécifiez les permissions initiales
+Dans <CODE>trivfs_allow_open</CODE>, vous spÃ©cifiez les permissions initiales
 pour votre translator :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>int trivfs_allow_open = O_READ | O_WRITE;
 </pre></td></tr></table></P><P>
 
-Et avec les variables suivantes, vous spécifiez quels types d'acces
-sont réellement implémentés :
+Et avec les variables suivantes, vous spÃ©cifiez quels types d'acces
+sont rÃ©ellement implÃ©mentÃ©s :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/* Actual supported modes: */
@@ -1691,17 +1691,17 @@ int trivfs_support_exec  = 0;
 <P>
 
 Les translators sont des programmes normaux, et en tant que tels, ils
-nécessitent une fonction <CODE>main ()</CODE>. La librairie trivfs ne définit
-pas de telle fonction, donc nous devons le faire nous même. Notre programme
-peut être lancé en tant que programme normal, ou en tant que translator donc
-nous devons faire la différence entre ces deux cas. Cela peut se faire en 
+nÃ©cessitent une fonction <CODE>main ()</CODE>. La librairie trivfs ne dÃ©finit
+pas de telle fonction, donc nous devons le faire nous mÃªme. Notre programme
+peut Ãªtre lancÃ© en tant que programme normal, ou en tant que translator donc
+nous devons faire la diffÃ©rence entre ces deux cas. Cela peut se faire en 
 testant si le port de bootstrap vaut MACH_PORT_NULL. Si c'est le cas, le 
-programme n'a pas été lancé en tant que translator. Généralement, un 
+programme n'a pas Ã©tÃ© lancÃ© en tant que translator. GÃ©nÃ©ralement, un 
 translator terminera dans ce cas. Si, cependant, notre port ne vaut pas
-MACH_PORT_NULL, nous devrions initialiser libtrivfs et désallouer le 
+MACH_PORT_NULL, nous devrions initialiser libtrivfs et dÃ©sallouer le 
 port de bootstrap. Enfin, nous mettrons en place le translator. Notre
-fonction <CODE>main ()</CODE> (qui ne s'occupe pas des arguments passés en
-ligne de commande) ressemble à cela :
+fonction <CODE>main ()</CODE> (qui ne s'occupe pas des arguments passÃ©s en
+ligne de commande) ressemble Ã  cela :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>int
@@ -1729,25 +1729,25 @@ main (void)
 }
 </pre></td></tr></table></P><P>
 
-Vous vous demandez peut-être pourquoi nos fonctions on des noms comme
+Vous vous demandez peut-Ãªtre pourquoi nos fonctions on des noms comme
 <CODE>trivfs_S_io_read ()</CODE>. La raison est simple : nous n'avons pas besoin
 d'enregistrer nos fonctions de rappel. Nous leur donnons juste le nom
-adéquat, et libtrivfs fera le reste pour nous. Bien sûr, ces noms de fonctions
+adÃ©quat, et libtrivfs fera le reste pour nous. Bien sÃ»r, ces noms de fonctions
 ont un sens, comme l'explique Marcus Brinkmann :
 </P><P>
 
 <BLOCKQUOTE>
-"io_read est le nom de la RPC dans le fichier .defs. Le préfixe S_
-précise qu c'est l'accès au serveur qui est implémenté ici, plutôt
-que l'encapsulation/decapsulation des messages. Le préfixe trivfs_ 
+"io_read est le nom de la RPC dans le fichier .defs. Le prÃ©fixe S_
+prÃ©cise qu c'est l'accÃ¨s au serveur qui est implÃ©mentÃ© ici, plutÃ´t
+que l'encapsulation/decapsulation des messages. Le prÃ©fixe trivfs_ 
 signifie que ce n'est pas la RPC de base, mais que le mach_port_t est
 en fait converti en une autre structure. C'est fait dans intran.
 <P>
 
-Généralement, on récupère le mach_port_t en premier argument, mais
-dans l'accès libtrivfs, c'est un autre. Utilisez un grep pour intran
+GÃ©nÃ©ralement, on rÃ©cupÃ¨re le mach_port_t en premier argument, mais
+dans l'accÃ¨s libtrivfs, c'est un autre. Utilisez un grep pour intran
 dans <CODE>$(HURD)/libtrivfs/*</CODE> pour voir comment les ports sont
-reliés aux structures de libtrivfs."
+reliÃ©s aux structures de libtrivfs."
 </BLOCKQUOTE>
 <P>
 
@@ -1769,7 +1769,7 @@ reliés aux structures de libtrivfs."
 <!--docid::SEC22::-->
 <P>
 
-Arretons nous là. Je laisse de coté des détails peux importants, que
+Arretons nous lÃ . Je laisse de cotÃ© des dÃ©tails peux importants, que
 vous devriez trouver dans le code complet ci-dessous. Vous pouvez compiler
 ce fichier avec
 </P><P>
@@ -2037,19 +2037,19 @@ main (void)
 <!--docid::SEC23::-->
 <P>
 
-Ce chapitre nécessite des connaissances sur l'utilisation de GDB, le
-debugger GNU. Si vous n'avez pas utilisé GDB avant, je vous recomande
+Ce chapitre nÃ©cessite des connaissances sur l'utilisation de GDB, le
+debugger GNU. Si vous n'avez pas utilisÃ© GDB avant, je vous recomande
 la lecture de la session d'exemple dans la documentation Texinfo de GDB.
-Si info et la documentation sont installées sur votre système, faites
+Si info et la documentation sont installÃ©es sur votre systÃ¨me, faites
 simplement
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>$ info gdb "Sample Session"
 </pre></td></tr></table></P><P>
 
-Maintenant, comment debugger un translator ? C'est plutôt simple, mais
-je vais vous expliquer quand même. :-) La manière la plus simple est
-de démarrer votre programme en tant que translator actif :
+Maintenant, comment debugger un translator ? C'est plutÃ´t simple, mais
+je vais vous expliquer quand mÃªme. :-) La maniÃ¨re la plus simple est
+de dÃ©marrer votre programme en tant que translator actif :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>$ gcc -g -o one one.c -ltrivfs -lfshelp
@@ -2064,14 +2064,14 @@ liste des processus :
 </pre></td></tr></table></P><P>
 
 (Le `ps' POSIX n'est pas encore disponible, donc `ps aux' ne fonctionnera 
- pas, désolé.) Maintenant, nous avons besoin de nous rattacher au processus
-lancé. Par exemple, si le PID était 357, nous ferions :
+ pas, dÃ©solÃ©.) Maintenant, nous avons besoin de nous rattacher au processus
+lancÃ©. Par exemple, si le PID Ã©tait 357, nous ferions :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>$ gdb one 357
 </pre></td></tr></table></P><P>
 
-On peut alors insérer des points d'arret, puis laisser le translator continuer :
+On peut alors insÃ©rer des points d'arret, puis laisser le translator continuer :
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>(gdb) break trivfs_S_io_read
@@ -2086,28 +2086,28 @@ comme
 </pre></td></tr></table></P><P>
 
 puis retournez au terminal contenant GDB. Vous verrez qu'il s'est 
-arreté au point d'arrêt. Vous pouvez maintenant debugger comme d'habitude.
+arretÃ© au point d'arrÃªt. Vous pouvez maintenant debugger comme d'habitude.
 Facile n'est-ce pas ?
 </P><P>
 
-Une fois terminé, utilisez
+Une fois terminÃ©, utilisez
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>(gdb) quit
 </pre></td></tr></table></P><P>
 
-et dites que vous voulez détacher le processus. Nous pouvons conclure en
-disant que vous n'avez pas besoin de technique spécifique pour debugger
+et dites que vous voulez dÃ©tacher le processus. Nous pouvons conclure en
+disant que vous n'avez pas besoin de technique spÃ©cifique pour debugger
 un translator.
 </P><P>
 
-Maintenant, vous avez sans doute une idée de la façon dont on
-peut développer des serveurs pour le Hurd (des translators). Souvent,
+Maintenant, vous avez sans doute une idÃ©e de la faÃ§on dont on
+peut dÃ©velopper des serveurs pour le Hurd (des translators). Souvent,
 vous aurez besoin de plus que ce que fournit libtrivfs. Pour des information
-(pas forcément à jour) sur les autres librairies, vous pouvez regardez le
+(pas forcÃ©ment Ã  jour) sur les autres librairies, vous pouvez regardez le
 Hurd Reference Manual ("info hurd"), aussi disponible dans 
-<CODE>$(HURD)/doc/hurd.texi</CODE>. Pour des informations plus à jour, il faut
-se référer aux fichiers d'en-tête apropriés.
+<CODE>$(HURD)/doc/hurd.texi</CODE>. Pour des informations plus Ã  jour, il faut
+se rÃ©fÃ©rer aux fichiers d'en-tÃªte apropriÃ©s.
 </P><P>
 
 <A NAME="Un exemple comprehensible de trivfs"></A>
@@ -2128,7 +2128,7 @@ se référer aux fichiers d'en-tête apropriés.
 <!--docid::SEC24::-->
 <P>
 
-TODO: Peut-être un translator "cat".
+TODO: Peut-Ãªtre un translator "cat".
 </P><P>
 
 <A NAME="Un exemple utilisant netfs"></A>
@@ -2204,7 +2204,7 @@ Q: Comment un translator peut-il acceder aux noeuds sous jacents ? Un
 translator gzip doit le faire par exemple.
 </P><P>
 
-R: Le noeud sous jacent est renvoyé par <CODE>fsys_startup ()</CODE>. (cf
+R: Le noeud sous jacent est renvoyÃ© par <CODE>fsys_startup ()</CODE>. (cf
 <CODE>$(HURD)/hurd/fsys.defs</CODE>).
 </P><P>
 
@@ -2218,44 +2218,44 @@ avec les translators passifs.
 Q: Qu'est-ce qu'un `protid' ?
 </P><P>
 
-R: `prot' signifie protection. Toute structure protid défini un client
+R: `prot' signifie protection. Toute structure protid dÃ©fini un client
 unique de notre translator. Vous pouvez acceder aux informations respectives
 par le champs `po' (per-open) de la structure.
 </P><P>
 
-Q: Quel type de threads devrais-je utiliser si je veux écrire un programme 
-fonctionnant à la fois sous GNU/Linux et GNU/Hurd ?
+Q: Quel type de threads devrais-je utiliser si je veux Ã©crire un programme 
+fonctionnant Ã  la fois sous GNU/Linux et GNU/Hurd ?
 </P><P>
 
-R: Utilisez plutôt les pthreads, nous les aurons bientôt ...
+R: Utilisez plutÃ´t les pthreads, nous les aurons bientÃ´t ...
 </P><P>
 
 Q: Comment peut-on dire que l'on est POSIX compliant sans avoir de pthreads ?
 </P><P>
 
-R: Premièrement, les pthreads sont optionels dans les spécifications POSIX.
-Deuxièmement, nous avons des pthreads. Par exemple, GNU Portable Threads (pth)
-fournissent une émulation non préemptive des pthreads. Cela semble etre en
+R: PremiÃ¨rement, les pthreads sont optionels dans les spÃ©cifications POSIX.
+DeuxiÃ¨mement, nous avons des pthreads. Par exemple, GNU Portable Threads (pth)
+fournissent une Ã©mulation non prÃ©emptive des pthreads. Cela semble etre en
 accord avec les standards, mais certes assez peu utile puisque la majeure partie
-des programmes supposent que le multi-thread est préemptif. Jeroen Dekkers travaille
+des programmes supposent que le multi-thread est prÃ©emptif. Jeroen Dekkers travaille
 sur de vrais pthreads, qui fonctionnent partiellement pour l'instant.
 </P><P>
 
-Q: Dans le manifeste GNU, RMS écrit que C et LISP seront des langages system.
+Q: Dans le manifeste GNU, RMS Ã©crit que C et LISP seront des langages system.
 Qu'en est-il ?
 </P><P>
 
 R: L'interpreteur de Scheme Guile est une partie du projet GNU. Pour l'instant
-il ne fournit que les fonctionnalités POSIX, mais il n'y a pas de raison que
-personne n'ajoute de choses spécifiques à GNU. Ajouter le support pour divers
+il ne fournit que les fonctionnalitÃ©s POSIX, mais il n'y a pas de raison que
+personne n'ajoute de choses spÃ©cifiques Ã  GNU. Ajouter le support pour divers
 langages serait bien en fait. Ce n'est cependant pas urgent.
 </P><P>
 
-Q: Pourquoi apprendre à utiliser Mach si le Hurd change pour L4 bientôt ?
+Q: Pourquoi apprendre Ã  utiliser Mach si le Hurd change pour L4 bientÃ´t ?
 </P><P>
 
-R: Pour l'instant, Hurd utilise Mach, et vous avez besoin d'en connaître les
-bases pour travailler sous Hurd. Peut-être que le hurd tournera sur L4 dans
+R: Pour l'instant, Hurd utilise Mach, et vous avez besoin d'en connaÃ®tre les
+bases pour travailler sous Hurd. Peut-Ãªtre que le hurd tournera sur L4 dans
 quelque temps, mais ce n'est pas encore le cas.
 </P><P>
 
@@ -2418,19 +2418,19 @@ should be added. If you want to help, please contact me.
 for the complete discussion
 <H3><A NAME="FOOT8" HREF="hhg.html#DOCF8">(8)</A></H3>
 <P>Ou mieux, utilisez-en un qui existe :
-celui écrit par Marcus Brinkmann et qui est plus souple; utiliser le translator filemux
-est encore une autre possibilité
+celui Ã©crit par Marcus Brinkmann et qui est plus souple; utiliser le translator filemux
+est encore une autre possibilitÃ©
 <H3><A NAME="FOOT9" HREF="hhg.html#DOCF9">(9)</A></H3>
 <P><A HREF="http://www.gnu.org/software/hurd/hurd-talk.html">http://www.gnu.org/software/hurd/hurd-talk.html</A>
 <H3><A NAME="FOOT10" HREF="hhg.html#DOCF10">(10)</A></H3>
 <P><A HREF="http://www.gnu.org/software/hurd/gnumach-doc/mach_4.html">http://www.gnu.org/software/hurd/gnumach-doc/mach_4.html</A>
 <H3><A NAME="FOOT11" HREF="hhg.html#DOCF11">(11)</A></H3>
 <P>Shadowfs ne fait pas 
-encore partie intégrante du Hurd, mais une implementation partielle existe
+encore partie intÃ©grante du Hurd, mais une implementation partielle existe
 <H3><A NAME="FOOT12" HREF="hhg.html#DOCF12">(12)</A></H3>
 <P>see "info libc Argp"
 <H3><A NAME="FOOT13" HREF="hhg.html#DOCF13">(13)</A></H3>
-<P> Le mail complet est disponible à
+<P> Le mail complet est disponible Ã 
 <A HREF="http://mail.gnu.org/pipermail/help-hurd/2001-August/004747.html">http://mail.gnu.org/pipermail/help-hurd/2001-August/004747.html</A>
 <HR SIZE=1>
 <A NAME="SEC_Contents"></A>
@@ -2452,9 +2452,9 @@ encore partie intégrante du Hurd, mais une implementation partielle existe
 <A NAME="TOC4" HREF="hhg.html#SEC4">1.3 Contributions</A>
 <BR>
 </UL>
-<A NAME="TOC5" HREF="hhg.html#SEC5">2. Prérequis</A>
+<A NAME="TOC5" HREF="hhg.html#SEC5">2. PrÃ©requis</A>
 <BR>
-<A NAME="TOC6" HREF="hhg.html#SEC6">3. Courte introduction au Hurd et à Mach</A>
+<A NAME="TOC6" HREF="hhg.html#SEC6">3. Courte introduction au Hurd et Ã  Mach</A>
 <BR>
 <A NAME="TOC7" HREF="hhg.html#SEC7">4. Les bases de Mach et MiG</A>
 <BR>
@@ -2468,17 +2468,17 @@ encore partie intégrante du Hurd, mais une implementation partielle existe
 </UL>
 <A NAME="TOC11" HREF="hhg.html#SEC11">5. Les interfaces du Hurd</A>
 <BR>
-<A NAME="TOC12" HREF="hhg.html#SEC12">6. A quoi ça ressemble vraiment ?</A>
+<A NAME="TOC12" HREF="hhg.html#SEC12">6. A quoi Ã§a ressemble vraiment ?</A>
 <BR>
 <UL>
 <A NAME="TOC13" HREF="hhg.html#SEC13">6.1 Ecrire un fichier sur la sortie standard</A>
 <BR>
-<A NAME="TOC14" HREF="hhg.html#SEC14">6.2 Créer une copie d'un fichier</A>
+<A NAME="TOC14" HREF="hhg.html#SEC14">6.2 CrÃ©er une copie d'un fichier</A>
 <BR>
 <A NAME="TOC15" HREF="hhg.html#SEC15">6.3 Notes finales</A>
 <BR>
 </UL>
-<A NAME="TOC16" HREF="hhg.html#SEC16">7. Les librairies du Hurd (Aperçu)</A>
+<A NAME="TOC16" HREF="hhg.html#SEC16">7. Les librairies du Hurd (AperÃ§u)</A>
 <BR>
 <A NAME="TOC17" HREF="hhg.html#SEC17">8. Un exemple utilisant trivfs</A>
 <BR>
@@ -2525,17 +2525,17 @@ encore partie intégrante du Hurd, mais une implementation partielle existe
 <BLOCKQUOTE>
 <A NAME="TOC1" HREF="hhg.html#SEC1">1. A propos de ce document</A>
 <BR>
-<A NAME="TOC5" HREF="hhg.html#SEC5">2. Prérequis</A>
+<A NAME="TOC5" HREF="hhg.html#SEC5">2. PrÃ©requis</A>
 <BR>
-<A NAME="TOC6" HREF="hhg.html#SEC6">3. Courte introduction au Hurd et à Mach</A>
+<A NAME="TOC6" HREF="hhg.html#SEC6">3. Courte introduction au Hurd et Ã  Mach</A>
 <BR>
 <A NAME="TOC7" HREF="hhg.html#SEC7">4. Les bases de Mach et MiG</A>
 <BR>
 <A NAME="TOC11" HREF="hhg.html#SEC11">5. Les interfaces du Hurd</A>
 <BR>
-<A NAME="TOC12" HREF="hhg.html#SEC12">6. A quoi ça ressemble vraiment ?</A>
+<A NAME="TOC12" HREF="hhg.html#SEC12">6. A quoi Ã§a ressemble vraiment ?</A>
 <BR>
-<A NAME="TOC16" HREF="hhg.html#SEC16">7. Les librairies du Hurd (Aperçu)</A>
+<A NAME="TOC16" HREF="hhg.html#SEC16">7. Les librairies du Hurd (AperÃ§u)</A>
 <BR>
 <A NAME="TOC17" HREF="hhg.html#SEC17">8. Un exemple utilisant trivfs</A>
 <BR>

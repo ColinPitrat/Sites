@@ -22,7 +22,7 @@
     }
     if(isset($_POST["texte"]) && isset($_POST["captcha_id"]) && $_POST["texte"])
     {
-      $antispam_row = mysql_fetch_array(mysql_query("SELECT answer FROM captcha WHERE id = ".$_POST["captcha_id"]));
+      $antispam_row = mysqli_fetch_array(SqlQuery("SELECT answer FROM captcha WHERE id = ".$_POST["captcha_id"]));
       if($_POST["captcha_ans"] == $antispam_row["answer"])
       {
         if(!$_POST["name"])
@@ -36,12 +36,12 @@
       }
       else
       {
-	echo("<p>Vous n'avez pas passé le test anti-robots.</p>");
+	echo("<p>Vous n'avez pas passÃ© le test anti-robots.</p>");
       }
     }
     else
     {
-      $antispam_row = mysql_fetch_array(mysql_query("SELECT id, question FROM captcha ORDER BY rand() LIMIT 1"));
+      $antispam_row = mysqli_fetch_array(SqlQuery("SELECT id, question FROM captcha ORDER BY rand() LIMIT 1"));
       echo("<center><h3>Poster un $name</h3>");
       ?>
       <form action="" method="post">
@@ -55,7 +55,7 @@
           <td><textarea name="texte" rows="10" cols="60"></textarea><br/>
         </tr>
         <tr>
-	<td align="right">Prouvez que vous n'êtes pas un robot. <br/><?php echo $antispam_row["question"] ?></td>
+	<td align="right">Prouvez que vous n'Ãªtes pas un robot. <br/><?php echo $antispam_row["question"] ?></td>
 	<td><input type="hidden" name="captcha_id" value="<?php echo $antispam_row["id"] ?>"/><input type="text" name="captcha_ans"/><br/>
         </tr>
       </table>
@@ -75,15 +75,15 @@
   
       $query = "SELECT * FROM news ORDER BY id DESC";
       $res = SqlQuery($query);
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
   
       while($row)
       {
         if(strcmp($date,$row->datedebut) >= 0 && strcmp($date,$row->datefin) < 0)
         {
-          echo("<div class=\"newstitle\">".$row->titre."</div><div class=\"newsauthor\">Posté par ".$row->auteur."</div><div class=\"newstexte\">".$row->texte."</div><br/>");
+          echo("<div class=\"newstitle\">".$row->titre."</div><div class=\"newsauthor\">PostÃ© par ".$row->auteur."</div><div class=\"newstexte\">".$row->texte."</div><br/>");
         }
-        $row = mysql_fetch_object($res);
+        $row = mysqli_fetch_object($res);
       }
     }
     else
@@ -119,12 +119,12 @@
             {
               $query = "SELECT * FROM comments WHERE subject='".$matches[1]."' ORDER BY id";
               $res = SqlQuery($query);
-              $row = mysql_fetch_object($res);
+              $row = mysqli_fetch_object($res);
               echo("<blockquote>");
               while($row)
               {
                 echo("<p class=\"comment\"><span class=\"author\">".$row->name."</span><br/><span class=\"date\">".$row->date."</span><br/>".$row->texte."</p>");
-                $row = mysql_fetch_object($res);
+                $row = mysqli_fetch_object($res);
               }
               echo("</blockquote>");
               $buffer = str_replace($matches[0],"",$buffer);
@@ -133,12 +133,12 @@
             {
               $query = "SELECT * FROM bugs WHERE subject='".$matches[1]."' ORDER BY id";
               $res = SqlQuery($query);
-              $row = mysql_fetch_object($res);
+              $row = mysqli_fetch_object($res);
               echo("<blockquote>");
               while($row)
               {
                 echo("<p class=\"comment\"><span class=\"author\">".$row->name."</span><br/><span class=\"date\">".$row->date."</span><br/>".$row->texte."</p>");
-                $row = mysql_fetch_object($res);
+                $row = mysqli_fetch_object($res);
               }
               echo("</blockquote>");
               $buffer = str_replace($matches[0],"",$buffer);
@@ -151,7 +151,7 @@
       else
       {
         echo("<h1>Erreur 404</h1>");
-        echo("<br /><p>Le fichier spécifié n'a pu etre trouvé. Si vous etes arrivé ici en cliquant sur un lien, veuillez envoyer le contenu de la barre d'adresse à <a href=\"mailto://colin.pitrat@libertysurf.fr\">colin.pitrat@libertysurf.fr</a>.</p>");
+        echo("<br /><p>Le fichier spÃ©cifiÃ© n'a pu etre trouvÃ©. Si vous etes arrivÃ© ici en cliquant sur un lien, veuillez envoyer le contenu de la barre d'adresse Ã  <a href=\"mailto://colin.pitrat@libertysurf.fr\">colin.pitrat@libertysurf.fr</a>.</p>");
         echo("\$src : $src<br/>dirname(realpath(\$src)) : ".dirname(realpath($src)));
       }
     }

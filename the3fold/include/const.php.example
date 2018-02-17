@@ -1,31 +1,31 @@
 <?php
-// Ce fichier contient toutes les variables prévues pour
-// pouvoir être parametrées.
+// Ce fichier contient toutes les variables prÃ©vues pour
+// pouvoir Ãªtre parametrÃ©es.
 
-// Langue utilisée (pour <html lang="">);
+// Langue utilisÃ©e (pour <html lang="">);
 $const_lang = "fr";
 $const_css = "default.css";
 $const_ico = "t3f.ico";
 
-// Données pour la base
-$hostname = `hostname`;
+// DonnÃ©es pour la base
+$db_link = null
 $const_SQLhost = "sql.free.fr";
 $const_SQLuser = "the3fold";
 $const_SQLpassword = "<password>";
 $const_SQLbase = "the3fold";
 
-// Déconseiller IE par du javascript 
+// DÃ©conseiller IE par du javascript 
 $const_alertIE = 1;
-$const_alertIEmsg = "Votre navigateur est obsolète. Il est possible que vous rencontriez des problèmes d\'affichage.";
+$const_alertIEmsg = "Votre navigateur est obsolÃ¨te. Il est possible que vous rencontriez des problÃ¨mes d\'affichage.";
 
-// Image cochée par défaut pour la création de salons
+// Image cochÃ©e par dÃ©faut pour la crÃ©ation de salons
 $const_defaultimg="t3f.png";
 
 // Niveau maximum pour les utilisateurs
 $const_levelmax = 10;
 
-// Nom associés à chaque niveau
-$const_levelnames = array ( "Touriste" , "Visiteur" , "Initié" , "Initié" , "Hacker" , "Hacker" , "Elite" , "Forum Administrateur" , "Administrateur" , "Super Administrateur" );
+// Nom associÃ©s Ã  chaque niveau
+$const_levelnames = array ( "Touriste" , "Visiteur" , "InitiÃ©" , "InitiÃ©" , "Hacker" , "Hacker" , "Elite" , "Forum Administrateur" , "Administrateur" , "Super Administrateur" );
 
 // Niveau minimum d'administrateur (gestion des utilisateurs)
 $const_leveladmin = 10;

@@ -29,7 +29,7 @@
         SqlQuery($query);
         break;
     case 4:
-        // Créer une news
+        // CrÃ©er une news
         $query = "INSERT INTO news(titre, auteur, texte, datedebut, datefin) VALUES ('".$_POST["titre"]."','".$_POST["auteur"]."','".$_POST["texte"]."','".$_POST["datedebut"]."','".$_POST["datefin"]."')";
         SqlQuery($query);
         break;
@@ -46,7 +46,7 @@
     }
 ?>
     <center><h1>Administration</h1>
-    <font size="1"><a href="admin.php?page=1">Gestion des membres</a> | <a href="admin.php?page=2">Gestion des news</a> | <a href="logout.php">Se déconnecter</a></font> 
+    <font size="1"><a href="admin.php?page=1">Gestion des membres</a> | <a href="admin.php?page=2">Gestion des news</a> | <a href="logout.php">Se dÃ©connecter</a></font> 
     <br /><br />
     <?php
     switch($page)
@@ -54,19 +54,19 @@
     case 2:
       ?>
       <h2>Gestion des news</h2>
-      <font size=\"1\"><a href="modif.php?action=4">Créer une news</a></font><br/><br/>
+      <font size=\"1\"><a href="modif.php?action=4">CrÃ©er une news</a></font><br/><br/>
       <table border="1" cellspacing="0" width="95%">
         <tr><th>Titre</th><th>Texte</th><th>Debut</th><th>Fin</th><th>Actions</th></tr>
       <?php
       $query = "SELECT * FROM news ORDER by id DESC";
       $res = SqlQuery($query);
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
       while($row)
       {
         echo('<tr><td align="center">'.$row->titre.'</td><td align="center">'.substr($row->texte,0,255).'</td><td align="center" nowrap>'.$row->datedebut.'</td><td align="center" nowrap>'.$row->datefin.'</td><td align="center" nowrap> [ <a href="modif.php?action=6&id='.$row->id.'">Modifier</a> ]<br/> [ <a href="modif.php?action=5&id='.$row->id.'">Supprimer</a> ]</td>');
-        $row = mysql_fetch_object($res);
+        $row = mysqli_fetch_object($res);
       }
-      echo('</table><br/><font size=\"1\"><a href="modif.php?action=4">Créer une news</a></font>');
+      echo('</table><br/><font size=\"1\"><a href="modif.php?action=4">CrÃ©er une news</a></font>');
       break;
     default:
       ?>
@@ -77,7 +77,7 @@
       <?php
       $query="SELECT nick,skin,level FROM users ORDER BY level DESC";
       $res = SqlQuery($query);
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
       while($row)
       {
         echo('<tr><td align="center">');
@@ -92,7 +92,7 @@
         echo('</td>');
         echo('<td align="center">'.$row->level.'<br/><font size=\"1\">'.$const_levelnames[$row->level-1].'</font></td>');
         echo('<td align="center">[<a href="modif.php?action=1&nick='.$row->nick.'">Modifier grade</a>] <br /> [<a href="modif.php?action=2&nick='.$row->nick.'">Changer mot de passe</a>] <br /> [<a href="modif.php?action=3&nick='.$row->nick.'">Supprimer</a>]</td></tr>');
-        $row = mysql_fetch_object($res);
+        $row = mysqli_fetch_object($res);
       }  
       echo('</table>');
       break;

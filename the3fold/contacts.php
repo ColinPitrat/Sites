@@ -7,7 +7,7 @@
       SqlConnect();
       mail("colin.pitrat@gmail.com", "Message de ".$_POST['mail']." sur the3fold", $_POST['message']);
       $res = SqlQuery('select * from captcha where id = '.$_POST['captcha_id'].' limit 0,1');
-      $row = mysql_fetch_object($res);
+      $row = mysqli_fetch_object($res);
       if($row->answer == $_POST['captcha_ans'])
       {
           SqlQuery('insert into comments(subject, name, date, texte, captcha) values ("'.$_POST['subject'].'", "'.$_POST['name'].'", "'.date('Y-m-d H:i:s').'", "'.$_POST['comment'].'", '.$_POST['captcha_id'].')');
@@ -28,13 +28,13 @@
   <table>
   <tr>
   <td>
-  <?
+  <?php
   SqlConnect();
   $res = SqlQuery('select max(id) from captcha;');
-  $maxid = mysql_fetch_row($res);
+  $maxid = mysqli_fetch_row($res);
   $cid = rand(0, $maxid[0]);
   $res = SqlQuery('select * from captcha where id >= '.$cid.' limit 0,1');
-  if($row = mysql_fetch_object($res))
+  if($row = mysqli_fetch_object($res))
   {
   ?>
       <table>

@@ -3,7 +3,7 @@
   // Repertoire contenant la partie statique du site.
   $contenu="contenu";
 
-  // Crée l'en-tête de la page
+  // CrÃ©e l'en-tÃªte de la page
   function top($refresh = "")
   {
     global $const_lang;
@@ -55,7 +55,7 @@
        }
   }
 
-  // Crée le menu
+  // CrÃ©e le menu
   function menu()
   {
     global $contenu;
@@ -70,7 +70,7 @@
     ?>
     <li><h2 class="men"><a href="annexes.php">Annexes</a></h2></li>
     <li><ul>
-    <li><h3 class="men"><a href="downloads.php" accesskey="T">Téléchargements</a></h3></li>
+    <li><h3 class="men"><a href="downloads.php" accesskey="T">TÃ©lÃ©chargements</a></h3></li>
     <li><h3 class="men"><a href="doc.php" accesskey="D">Documents</a></h3></li>
     <li><h3 class="men"><a href="liens.php" accesskey="L">Liens</a></h3></li>
     </ul></li>
@@ -116,7 +116,7 @@
     return $msg;
   }
 
-  // Crée la partie dynamique du menu
+  // CrÃ©e la partie dynamique du menu
   function parseDir($dir,$lvl = 0)
   {
     global $accesskey;
@@ -155,27 +155,28 @@
     return $chaine;
   }
 
-  // Se connecte à la base SQL
+  // Se connecte Ã  la base SQL
   function SqlConnect()
   {
     global $const_SQLhost;
     global $const_SQLuser;
     global $const_SQLpassword;
     global $const_SQLbase;
+    global $db_link;
 
-    mysql_connect($const_SQLhost,$const_SQLuser,$const_SQLpassword)
-      or die("Could not connect : " . mysql_error());
-    mysql_select_db($const_SQLbase) or die("Could not select database");
+    $db_link = mysqli_connect($const_SQLhost, $const_SQLuser, $const_SQLpassword, $const_SQLbase)
+      or die("Could not connect : " . mysqli_error());
   }
 
-  // Lance une requête SQL
+  // Lance une requÃªte SQL
   function SqlQuery($query)
   {
-    $res = mysql_query($query) or die("Query failed : " . mysql_error());
+    global $db_link;
+    $res = mysqli_query($db_link, $query) or die("Query failed : " . mysqli_error());
     return $res;
   }
   
-  // Crée le pied de page
+  // CrÃ©e le pied de page
   function bottom()
   {
     ?>
@@ -187,9 +188,6 @@
       <?php
         menu();
       ?>
-	<p class="centre">
-	  <a href="http://www.spreadfirefox.com/?q=affiliates&amp;t=85"><img alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/80x15/firefox_80x15.png"/></a>&nbsp;<a href="http://www.spreadfirefox.com/?q=affiliates&amp;t=178"><img alt="Get Thunderbird!" title="Get Thunderbird!" src="http://sfx-images.mozilla.org/affiliates/thunderbird/thunderbird_blog2.png"/></a>
-	</p>
       </div>
       <div id="basmenu">
       </div>
