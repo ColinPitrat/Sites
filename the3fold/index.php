@@ -151,7 +151,7 @@
       else
       {
         echo("<h1>Erreur 404</h1>");
-        echo("<br /><p>Le fichier spécifié n'a pu etre trouvé. Si vous etes arrivé ici en cliquant sur un lien, veuillez envoyer le contenu de la barre d'adresse à <a href=\"mailto://colin.pitrat@libertysurf.fr\">colin.pitrat@libertysurf.fr</a>.</p>");
+        echo("<br /><p>Le fichier spécifié n'a pu etre trouvé. Si vous etes arrivé ici en cliquant sur un lien, veuillez envoyer le contenu de la barre d'adresse à <a href=\"mailto://colin.pitrat@gmail.com\">colin.pitrat@gmail.com</a>.</p>");
         echo("\$src : $src<br/>dirname(realpath(\$src)) : ".dirname(realpath($src)));
       }
     }

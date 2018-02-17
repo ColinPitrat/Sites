@@ -78,7 +78,7 @@ d'autres fonction qui sont implémentés par le noyau Unix ou des noyaux similai
 @end ifinfo
 
 Copyright @copyright{} 2001, 2002 Wolfgang J@"ahrling @email{wolfgang@@pro-linux.de}
-@*Traduction 2004 Colin Pitrat @email{colin.pitrat@@rez-gif.supelec.fr}
+@*Traduction 2004 Colin Pitrat @email{colin.pitrat@@gmail.com}
 
 Vous avez le droit de copier, distribuer et/ou modifier ce document selon les termes
 de la GNU Free Documentation License, Version 1.1 ou supérieure, publiée par la Free
