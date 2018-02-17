@@ -15,7 +15,8 @@
       }
       else
       {
-          print "La verification du captcha a &eacute;chou&eacute;. Seriez vous un robot ?! (".$row->answer.", ".$_POST['captcha_ans'].")";
+          print "La verification du captcha a &eacute;chou&eacute;. Seriez vous un robot ?!";
+          #print "<br/>Question: ".$row->question." - Votre réponse: ".$_POST['captcha_ans']." - Attendu: ".$row->answer;
       }
   }
 ?>
