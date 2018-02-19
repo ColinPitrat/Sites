@@ -397,7 +397,7 @@ div.indent
   margin: 0px;
   padding: 10px 10px 10px 110px;
   background-color: #000000;
-  background-image: url("../images/t3f.png");
+  background-image: url("default/t3f.png");
   background-repeat: no-repeat;
   background-position: 250px 50%;
   border-bottom: 1px dotted #555555;
@@ -427,7 +427,7 @@ div.indent
   margin: 0px;
   padding: 0px;
   border: none;
-  background-image: url("../images/hautmenu.png");
+  background-image: url("default/hautmenu.png");
   background-position: top left;
   background-color: #CCCCCC;
 }
